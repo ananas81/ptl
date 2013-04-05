@@ -14,6 +14,7 @@ Filename:    TutorialApplication.cpp
 */
 #include "TutorialApplication.h"
 
+
 //-------------------------------------------------------------------------------------
 TutorialApplication::TutorialApplication(void)
 {
@@ -22,35 +23,6 @@ TutorialApplication::TutorialApplication(void)
 TutorialApplication::~TutorialApplication(void)
 {
 }
-
-//void TutorialApplication::createScene(void)
-//{
-//    mSceneMgr->setAmbientLight(Ogre::ColourValue(0, 0, 0));
-//    mSceneMgr->setShadowTechnique(Ogre::SHADOWTYPE_STENCIL_ADDITIVE);
-// 
-//    Ogre::Entity* entNinja = mSceneMgr->createEntity("Ninja", "ninja.mesh");
-//    entNinja->setCastShadows(true);
-//    mSceneMgr->getRootSceneNode()->createChildSceneNode()->attachObject(entNinja);
-// 
-//    Ogre::Plane plane(Ogre::Vector3::UNIT_Y, 0);
-// 
-//    Ogre::MeshManager::getSingleton().createPlane("ground", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,
-//        plane, 1500, 1500, 20, 20, true, 1, 5, 5, Ogre::Vector3::UNIT_Z);
-// 
-//    Ogre::Entity* entGround = mSceneMgr->createEntity("GroundEntity", "ground");
-//    mSceneMgr->getRootSceneNode()->createChildSceneNode()->attachObject(entGround);
-// 
-//    entGround->setMaterialName("Examples/Rockwall");
-//    entGround->setCastShadows(false);
-//
-//    Ogre::Light* pointLight = mSceneMgr->createLight("pointLight");
-//    pointLight->setType(Ogre::Light::LT_POINT);
-//    pointLight->setPosition(Ogre::Vector3(0, 150, 250));
-//
-//    pointLight->setDiffuseColour(1.0, 0.0, 0.0);
-//    pointLight->setSpecularColour(1.0, 0.0, 0.0);
-// 
-//}
 
 //-------------------------------------------------------------------------------------
 void TutorialApplication::createScene(void)
@@ -118,6 +90,45 @@ void TutorialApplication::createScene(void)
  
     entGround->setMaterialName("Examples/Rockwall");
     entGround->setCastShadows(false);
+
+    preparePhysics(mEntity, mNode);
+}
+
+void TutorialApplication::preparePhysics(Ogre::Entity* entity, Ogre::SceneNode* node){
+        btBroadphaseInterface* broadphase = new btDbvtBroadphase();
+
+        btDefaultCollisionConfiguration* collisionConfiguration = new btDefaultCollisionConfiguration();
+        btCollisionDispatcher* dispatcher = new btCollisionDispatcher(collisionConfiguration);
+
+        btSequentialImpulseConstraintSolver* solver = new btSequentialImpulseConstraintSolver;
+
+        btDiscreteDynamicsWorld* mWorld = new btDiscreteDynamicsWorld(dispatcher,broadphase,solver,collisionConfiguration);
+
+        mWorld->setGravity(btVector3(0,-10,0));
+
+
+        btCollisionShape* groundShape = new btStaticPlaneShape(btVector3(0,1,0),1);
+
+	//Create shape.
+	BtOgre::StaticMeshToShapeConverter converter(entity);
+	btCollisionShape* fallShape = converter.createConvex(); //You can also just use btSphereShape(1.2) or something.
+	
+	//Create BtOgre MotionState (connects Ogre and Bullet).
+        btDefaultMotionState* groundMotionState = new btDefaultMotionState(btTransform(btQuaternion(0,0,0,1),btVector3(0,-1,0)));
+        btRigidBody::btRigidBodyConstructionInfo
+                groundRigidBodyCI(0,groundMotionState,groundShape,btVector3(0,0,0));
+        btRigidBody* groundRigidBody = new btRigidBody(groundRigidBodyCI);
+        mWorld->addRigidBody(groundRigidBody);
+
+        mFallMotionState =
+                new MyMotionState(btTransform(btQuaternion(0,0,0,1),btVector3(25,150,0)), node);
+        btScalar mass = 5;
+        btVector3 fallInertia(0,0,0);
+        fallShape->calculateLocalInertia(mass,fallInertia);
+        btRigidBody::btRigidBodyConstructionInfo fallRigidBodyCI(mass,mFallMotionState,fallShape,fallInertia);
+        btRigidBody* fallRigidBody = new btRigidBody(fallRigidBodyCI);
+        mWorld->addRigidBody(fallRigidBody);
+
 }
 
 void TutorialApplication::createFrameListener(void){
@@ -138,27 +149,9 @@ bool TutorialApplication::nextLocation(void){
 
 
 bool TutorialApplication::frameRenderingQueued(const Ogre::FrameEvent &evt){
-        if (mDirection == Ogre::Vector3::ZERO) {
-                if (nextLocation()) {
-                }//if
-        }else{
-                Ogre::Real move = mWalkSpeed * evt.timeSinceLastFrame;
-                mDistance -= move;
-                if (mDistance <= 0.0f){
-                        mNode->setPosition(mDestination);
-                        mDirection = Ogre::Vector3::ZERO;
-                        // Set animation based on if the robot has another point to walk to. 
-                        if (!nextLocation()){
-                        }else{
-                                // Rotation Code will go here later
-                                Ogre::Vector3 src = mNode->getOrientation() * Ogre::Vector3::UNIT_X;
-                        }//else
-                }else{
-                        mNode->translate(mDirection * move);
-                } // else
-        } // if
+	mWorld->stepSimulation(1/60.f,10);
+	
         return BaseApplication::frameRenderingQueued(evt);
-
 }
  
 
