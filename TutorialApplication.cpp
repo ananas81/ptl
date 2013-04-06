@@ -121,8 +121,8 @@ void TutorialApplication::preparePhysics(Ogre::Entity* entity, Ogre::SceneNode* 
         mWorld->addRigidBody(groundRigidBody);
 
         mFallMotionState =
-                new MyMotionState(btTransform(btQuaternion(70,100,150,1),btVector3(25,150,0)), node);
-        btScalar mass = 50;
+                new MyMotionState(btTransform(btQuaternion(70,100,150,1),btVector3(25,450,0)), node);
+        btScalar mass = 5;
         btVector3 fallInertia(0,0,0);
         fallShape->calculateLocalInertia(mass,fallInertia);
         btRigidBody::btRigidBodyConstructionInfo fallRigidBodyCI(mass,mFallMotionState,fallShape,fallInertia);
