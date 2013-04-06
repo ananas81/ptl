@@ -82,7 +82,9 @@ void BaseApplication::createCamera(void)
 
     // Position it at 500 in Z direction
 
-    mCamera->setPosition(Ogre::Vector3(25,481,826));
+//    mCamera->setPosition(Ogre::Vector3(25,481,826));
+    mCamera->setPosition(Ogre::Vector3(-42,78,380));
+
     // Look back along -Z
     mCamera->lookAt(Ogre::Vector3(0,0,-1300));
     mCamera->setNearClipDistance(5);
@@ -363,8 +365,8 @@ bool BaseApplication::keyPressed( const OIS::KeyEvent &arg )
     }
 
     mCameraMan->injectKeyDown(arg);
-//    Ogre::Vector3 pos = mCamera->getPosition();
-//    printf("cam pos: x=%.f, y=%.f, z=%.f\n", pos.x, pos.y, pos.z);
+    Ogre::Vector3 pos = mCamera->getPosition();
+    printf("cam pos: x=%.f, y=%.f, z=%.f\n", pos.x, pos.y, pos.z);
     return true;
 }
 

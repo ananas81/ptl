@@ -102,7 +102,7 @@ void TutorialApplication::preparePhysics(Ogre::Entity* entity, Ogre::SceneNode* 
 
         btSequentialImpulseConstraintSolver* solver = new btSequentialImpulseConstraintSolver;
 
-        btDiscreteDynamicsWorld* mWorld = new btDiscreteDynamicsWorld(dispatcher,broadphase,solver,collisionConfiguration);
+        mWorld = new btDiscreteDynamicsWorld(dispatcher,broadphase,solver,collisionConfiguration);
 
         mWorld->setGravity(btVector3(0,-10,0));
 
@@ -121,8 +121,8 @@ void TutorialApplication::preparePhysics(Ogre::Entity* entity, Ogre::SceneNode* 
         mWorld->addRigidBody(groundRigidBody);
 
         mFallMotionState =
-                new MyMotionState(btTransform(btQuaternion(0,0,0,1),btVector3(25,150,0)), node);
-        btScalar mass = 5;
+                new MyMotionState(btTransform(btQuaternion(70,100,150,1),btVector3(25,150,0)), node);
+        btScalar mass = 50;
         btVector3 fallInertia(0,0,0);
         fallShape->calculateLocalInertia(mass,fallInertia);
         btRigidBody::btRigidBodyConstructionInfo fallRigidBodyCI(mass,mFallMotionState,fallShape,fallInertia);
@@ -149,7 +149,8 @@ bool TutorialApplication::nextLocation(void){
 
 
 bool TutorialApplication::frameRenderingQueued(const Ogre::FrameEvent &evt){
-	mWorld->stepSimulation(1/60.f,10);
+//	mWorld->stepSimulation(1/60.f,10);
+	mWorld->stepSimulation(evt.timeSinceLastFrame,50);
 	
         return BaseApplication::frameRenderingQueued(evt);
 }

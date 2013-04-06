@@ -22,6 +22,7 @@ This source file is part of the
 #include "BtOgrePG.h"
 #include "BtOgreGP.h"
 #include "BtOgreExtras.h"
+#include <stdio.h>
 
 
 class MyMotionState : public btMotionState {
@@ -40,11 +41,14 @@ public:
 
     virtual void getWorldTransform(btTransform &worldTrans) const {
         worldTrans = mPos1;
+	printf(">>>>>getWorldTransform\n");
     }
 
     virtual void setWorldTransform(const btTransform &worldTrans) {
+	printf(">>>>>setWorldTransform1\n");
         if(NULL == mVisibleobj)
             return; // silently return before we set a node
+	printf(">>>>>setWorldTransform2\n");
         btQuaternion rot = worldTrans.getRotation();
         mVisibleobj->setOrientation(rot.w(), rot.x(), rot.y(), rot.z());
         btVector3 pos = worldTrans.getOrigin();
