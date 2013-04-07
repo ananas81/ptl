@@ -45,16 +45,16 @@ void TutorialApplication::createScene(void)
     mNode->roll(Ogre::Degree(80));
 //    headNode->scale( .5, 1, 2 );
 
-    Ogre::Entity* ogreHead2 = mSceneMgr->createEntity( "Head2", "Cylinder.mesh" );
-    ogreHead2->setCastShadows(true);
+    mEntity2 = mSceneMgr->createEntity( "Head2", "Cylinder.mesh" );
+    mEntity2->setCastShadows(true);
     //Ogre::SceneNode* headNode2 = headNode->createChildSceneNode( "HeadNode2", Ogre::Vector3( 100, 0, 0 ) );
-    Ogre::SceneNode* headNode2 = mSceneMgr->getRootSceneNode()->createChildSceneNode( "HeadNode2", Ogre::Vector3( 100, 0, 0 ) );
-    headNode2->attachObject( ogreHead2 );
+    mNode2 = mSceneMgr->getRootSceneNode()->createChildSceneNode( "HeadNode2", Ogre::Vector3( 25, 0, 0 ) );
+    mNode2->attachObject(mEntity2);
 //    headNode2->translate( Ogre::Vector3( 10, 0, 10 ) );
 
-    headNode2->yaw(Ogre::Degree(45));
-    headNode2->pitch(Ogre::Degree(45));
-    headNode2->roll(Ogre::Degree(45));
+//    mNode2->yaw(Ogre::Degree(45));
+//    mNode2->pitch(Ogre::Degree(45));
+//    mNode2->roll(Ogre::Degree(45));
  
     // Create a Light and set its position
  //   Ogre::Light* light = mSceneMgr->createLight("MainLight");
@@ -91,10 +91,14 @@ void TutorialApplication::createScene(void)
     entGround->setMaterialName("Examples/Rockwall");
     entGround->setCastShadows(false);
 
-    preparePhysics(mEntity, mNode);
+    preparePhysics(mEntity, mNode, mEntity2, mNode2);
 }
 
-void TutorialApplication::preparePhysics(Ogre::Entity* entity, Ogre::SceneNode* node){
+void TutorialApplication::preparePhysics(Ogre::Entity* entity,
+					 Ogre::SceneNode* node,
+					 Ogre::Entity* entity2,
+					 Ogre::SceneNode* node2)
+{
         btBroadphaseInterface* broadphase = new btDbvtBroadphase();
 
         btDefaultCollisionConfiguration* collisionConfiguration = new btDefaultCollisionConfiguration();
@@ -133,6 +137,20 @@ void TutorialApplication::preparePhysics(Ogre::Entity* entity, Ogre::SceneNode* 
         btRigidBody* fallRigidBody = new btRigidBody(fallRigidBodyCI);
         mWorld->addRigidBody(fallRigidBody);
 
+	//Create shape.
+	BtOgre::StaticMeshToShapeConverter converter2(entity2);
+	btCollisionShape* staticShape = converter2.createConvex(); //You can also just use btSphereShape(1.2) or something.
+
+        mStaticMotionState =
+                new MyMotionState(btTransform(btQuaternion(0,0,0,1),btVector3(25,0,0)), node2);
+        btScalar mass2 = 5;
+        btVector3 staticInertia(0,0,0);
+        staticShape->calculateLocalInertia(mass2,staticInertia);
+        btRigidBody::btRigidBodyConstructionInfo staticRigidBodyCI(mass,mStaticMotionState,staticShape,staticInertia);
+	staticRigidBodyCI.m_friction = 10;
+	staticRigidBodyCI.m_rollingFriction = 1;
+        btRigidBody* staticRigidBody = new btRigidBody(staticRigidBodyCI);
+        mWorld->addRigidBody(staticRigidBody);
 }
 
 void TutorialApplication::createFrameListener(void){
