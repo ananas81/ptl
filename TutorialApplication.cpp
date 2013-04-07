@@ -41,7 +41,7 @@ void TutorialApplication::createScene(void)
     // Create a SceneNode and attach the Entity to it
     mNode = mSceneMgr->getRootSceneNode()->createChildSceneNode("HeadNode");
     mNode->attachObject(mEntity);
-    mNode->translate( Ogre::Vector3( 25, 150, 0 ) );
+    mNode->translate( Ogre::Vector3( 25, 350, 0 ) );
     mNode->roll(Ogre::Degree(80));
 //    headNode->scale( .5, 1, 2 );
 
@@ -117,15 +117,19 @@ void TutorialApplication::preparePhysics(Ogre::Entity* entity, Ogre::SceneNode* 
         btDefaultMotionState* groundMotionState = new btDefaultMotionState(btTransform(btQuaternion(0,0,0,1),btVector3(0,-1,0)));
         btRigidBody::btRigidBodyConstructionInfo
                 groundRigidBodyCI(0,groundMotionState,groundShape,btVector3(0,0,0));
+	groundRigidBodyCI.m_friction = 10;
+	groundRigidBodyCI.m_rollingFriction = 1;
         btRigidBody* groundRigidBody = new btRigidBody(groundRigidBodyCI);
         mWorld->addRigidBody(groundRigidBody);
 
         mFallMotionState =
-                new MyMotionState(btTransform(btQuaternion(70,100,150,1),btVector3(25,450,0)), node);
+                new MyMotionState(btTransform(btQuaternion(70,100,150,1),btVector3(25,350,0)), node);
         btScalar mass = 5;
         btVector3 fallInertia(0,0,0);
         fallShape->calculateLocalInertia(mass,fallInertia);
         btRigidBody::btRigidBodyConstructionInfo fallRigidBodyCI(mass,mFallMotionState,fallShape,fallInertia);
+	fallRigidBodyCI.m_friction = 10;
+	fallRigidBodyCI.m_rollingFriction = 1;
         btRigidBody* fallRigidBody = new btRigidBody(fallRigidBodyCI);
         mWorld->addRigidBody(fallRigidBody);
 
