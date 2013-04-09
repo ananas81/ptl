@@ -43,7 +43,7 @@ void TutorialApplication::createScene(void)
     mNode->attachObject(mEntity);
     mNode->translate( Ogre::Vector3( 25, 350, 0 ) );
     mNode->roll(Ogre::Degree(80));
-//    headNode->scale( .5, 1, 2 );
+    mNode->scale( .3, .3, .3 );
 
     mEntity2 = mSceneMgr->createEntity( "Head2", "Cylinder.mesh" );
     mEntity2->setCastShadows(true);
@@ -128,7 +128,7 @@ void TutorialApplication::preparePhysics(Ogre::Entity* entity,
 
         mFallMotionState =
                 new MyMotionState(btTransform(btQuaternion(70,100,150,1),btVector3(25,350,0)), node);
-        btScalar mass = 5;
+        btScalar mass = 10;
         btVector3 fallInertia(0,0,0);
         fallShape->calculateLocalInertia(mass,fallInertia);
         btRigidBody::btRigidBodyConstructionInfo fallRigidBodyCI(mass,mFallMotionState,fallShape,fallInertia);
@@ -143,7 +143,7 @@ void TutorialApplication::preparePhysics(Ogre::Entity* entity,
 
         mStaticMotionState =
                 new MyMotionState(btTransform(btQuaternion(0,0,0,1),btVector3(25,0,0)), node2);
-        btScalar mass2 = 5;
+        btScalar mass2 = 1;
         btVector3 staticInertia(0,0,0);
         staticShape->calculateLocalInertia(mass2,staticInertia);
         btRigidBody::btRigidBodyConstructionInfo staticRigidBodyCI(mass,mStaticMotionState,staticShape,staticInertia);
