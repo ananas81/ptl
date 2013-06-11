@@ -14,6 +14,7 @@ Filename:    TutorialApplication.cpp
 */
 #include "TutorialApplication.h"
 
+#define BULLET_TRIANGLE_COLLISION 1
 
 //-------------------------------------------------------------------------------------
 TutorialApplication::TutorialApplication(void)
@@ -110,12 +111,16 @@ void TutorialApplication::preparePhysics(Ogre::Entity* entity,
 
         mWorld->setGravity(btVector3(0,-10,0));
 
-
         btCollisionShape* groundShape = new btStaticPlaneShape(btVector3(0,1,0),1);
 
 	//Create shape.
-	BtOgre::StaticMeshToShapeConverter converter(entity);
-	btCollisionShape* fallShape = converter.createConvex(); //You can also just use btSphereShape(1.2) or something.
+	btBulletWorldImporter importer;
+	importer.loadFile("mugCollisionShape.bcs");
+	btCollisionShape * fallShape = importer.getCollisionShapeByIndex(0);
+//	BtOgre::StaticMeshToShapeConverter converter(entity);
+//	btCollisionShape* fallShape = converter.createTrimesh(); //You can also just use btSphereShape(1.2) or something.
+
+	fallShape->setMargin(1.1f);
 	
 	//Create BtOgre MotionState (connects Ogre and Bullet).
         btDefaultMotionState* groundMotionState = new btDefaultMotionState(btTransform(btQuaternion(0,0,0,1),btVector3(0,-1,0)));
@@ -124,6 +129,8 @@ void TutorialApplication::preparePhysics(Ogre::Entity* entity,
 	groundRigidBodyCI.m_friction = 10;
 	groundRigidBodyCI.m_rollingFriction = 1;
         btRigidBody* groundRigidBody = new btRigidBody(groundRigidBodyCI);
+	groundRigidBody->setContactProcessingThreshold(BT_LARGE_FLOAT);
+	groundRigidBody->setCollisionFlags(groundRigidBody->getFlags()|btCollisionObject::CF_NO_CONTACT_RESPONSE);
         mWorld->addRigidBody(groundRigidBody);
 
         mFallMotionState =
@@ -138,18 +145,23 @@ void TutorialApplication::preparePhysics(Ogre::Entity* entity,
         mWorld->addRigidBody(fallRigidBody);
 
 	//Create shape.
-	BtOgre::StaticMeshToShapeConverter converter2(entity2);
-	btCollisionShape* staticShape = converter2.createConvex(); //You can also just use btSphereShape(1.2) or something.
+	btBulletWorldImporter importer2;
+	importer2.loadFile("mugCollisionShape.bcs");
+	btCollisionShape * staticShape = importer2.getCollisionShapeByIndex(0);
+	//BtOgre::StaticMeshToShapeConverter converter2(entity2);
+	//btCollisionShape* staticShape = converter2.createTrimesh(); //You can also just use btSphereShape(1.2) or something.
+	staticShape->setMargin(1.1f);
 
         mStaticMotionState =
                 new MyMotionState(btTransform(btQuaternion(0,0,0,1),btVector3(25,0,0)), node2);
-        btScalar mass2 = 1;
+        btScalar mass2 = 0.1;
         btVector3 staticInertia(0,0,0);
         staticShape->calculateLocalInertia(mass2,staticInertia);
-        btRigidBody::btRigidBodyConstructionInfo staticRigidBodyCI(mass,mStaticMotionState,staticShape,staticInertia);
+        btRigidBody::btRigidBodyConstructionInfo staticRigidBodyCI(mass2,mStaticMotionState,staticShape,staticInertia);
 	staticRigidBodyCI.m_friction = 10;
 	staticRigidBodyCI.m_rollingFriction = 1;
         btRigidBody* staticRigidBody = new btRigidBody(staticRigidBodyCI);
+	staticRigidBody->setContactProcessingThreshold(BT_LARGE_FLOAT);
         mWorld->addRigidBody(staticRigidBody);
 }
 

@@ -26,4 +26,7 @@ include_directories(
 )
 
 add_executable(ogrePhysics ${SRC})
-target_link_libraries(ogrePhysics ${ogre_deps_LDFLAGS} ${PROJECT_SOURCE_DIR}/libBtOgre.a)
+target_link_libraries(ogrePhysics ${ogre_deps_LDFLAGS}
+		      ${PROJECT_SOURCE_DIR}/libBtOgre.a
+		      ${PROJECT_SOURCE_DIR}/libBulletWorldImporter_gmake.a
+		      ${PROJECT_SOURCE_DIR}/libBulletFileLoader.a)

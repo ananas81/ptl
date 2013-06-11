@@ -19,6 +19,7 @@ This source file is part of the
 
 #include "BaseApplication.h"
 #include <btBulletDynamicsCommon.h>
+#include <btBulletWorldImporter.h>
 #include "BtOgrePG.h"
 #include "BtOgreGP.h"
 #include "BtOgreExtras.h"
