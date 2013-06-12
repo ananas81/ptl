@@ -114,11 +114,11 @@ void TutorialApplication::preparePhysics(Ogre::Entity* entity,
         btCollisionShape* groundShape = new btStaticPlaneShape(btVector3(0,1,0),1);
 
 	//Create shape.
-	btBulletWorldImporter importer;
+/*	btBulletWorldImporter importer;
 	importer.loadFile("mugCollisionShape.bcs");
-	btCollisionShape * fallShape = importer.getCollisionShapeByIndex(0);
-//	BtOgre::StaticMeshToShapeConverter converter(entity);
-//	btCollisionShape* fallShape = converter.createTrimesh(); //You can also just use btSphereShape(1.2) or something.
+	btCollisionShape * fallShape = importer.getCollisionShapeByIndex(0);*/
+	BtOgre::StaticMeshToShapeConverter converter(entity);
+	btCollisionShape* fallShape = converter.createConvex(); //You can also just use btSphereShape(1.2) or something.
 
 	fallShape->setMargin(1.1f);
 	
@@ -145,11 +145,11 @@ void TutorialApplication::preparePhysics(Ogre::Entity* entity,
         mWorld->addRigidBody(fallRigidBody);
 
 	//Create shape.
-	btBulletWorldImporter importer2;
+	/*btBulletWorldImporter importer2;
 	importer2.loadFile("mugCollisionShape.bcs");
-	btCollisionShape * staticShape = importer2.getCollisionShapeByIndex(0);
-	//BtOgre::StaticMeshToShapeConverter converter2(entity2);
-	//btCollisionShape* staticShape = converter2.createTrimesh(); //You can also just use btSphereShape(1.2) or something.
+	btCollisionShape * staticShape = importer2.getCollisionShapeByIndex(0);*/
+	BtOgre::StaticMeshToShapeConverter converter2(entity2);
+	btCollisionShape* staticShape = converter2.createConvex(); //You can also just use btSphereShape(1.2) or something.
 	staticShape->setMargin(1.1f);
 
         mStaticMotionState =
