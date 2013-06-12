@@ -44,7 +44,7 @@ void TutorialApplication::createScene(void)
     mNode->attachObject(mEntity);
     mNode->translate( Ogre::Vector3( 25, 350, 0 ) );
     mNode->roll(Ogre::Degree(80));
-    mNode->scale( .3, .3, .3 );
+//    mNode->scale( .3, .3, .3 );
 
     mEntity2 = mSceneMgr->createEntity( "Head2", "Cylinder.mesh" );
     mEntity2->setCastShadows(true);
@@ -114,11 +114,11 @@ void TutorialApplication::preparePhysics(Ogre::Entity* entity,
         btCollisionShape* groundShape = new btStaticPlaneShape(btVector3(0,1,0),1);
 
 	//Create shape.
-/*	btBulletWorldImporter importer;
+	btBulletWorldImporter importer;
 	importer.loadFile("mugCollisionShape.bcs");
-	btCollisionShape * fallShape = importer.getCollisionShapeByIndex(0);*/
-	BtOgre::StaticMeshToShapeConverter converter(entity);
-	btCollisionShape* fallShape = converter.createConvex(); //You can also just use btSphereShape(1.2) or something.
+	btCollisionShape * fallShape = importer.getCollisionShapeByIndex(0);
+//	BtOgre::StaticMeshToShapeConverter converter(entity);
+//	btCollisionShape* fallShape = converter.createConvex(); //You can also just use btSphereShape(1.2) or something.
 
 	fallShape->setMargin(1.1f);
 	
@@ -129,8 +129,8 @@ void TutorialApplication::preparePhysics(Ogre::Entity* entity,
 	groundRigidBodyCI.m_friction = 10;
 	groundRigidBodyCI.m_rollingFriction = 1;
         btRigidBody* groundRigidBody = new btRigidBody(groundRigidBodyCI);
-	groundRigidBody->setContactProcessingThreshold(BT_LARGE_FLOAT);
-	groundRigidBody->setCollisionFlags(groundRigidBody->getFlags()|btCollisionObject::CF_NO_CONTACT_RESPONSE);
+//	groundRigidBody->setContactProcessingThreshold(BT_LARGE_FLOAT);
+//	groundRigidBody->setCollisionFlags(groundRigidBody->getFlags()|btCollisionObject::CF_NO_CONTACT_RESPONSE);
         mWorld->addRigidBody(groundRigidBody);
 
         mFallMotionState =
@@ -145,11 +145,11 @@ void TutorialApplication::preparePhysics(Ogre::Entity* entity,
         mWorld->addRigidBody(fallRigidBody);
 
 	//Create shape.
-	/*btBulletWorldImporter importer2;
+	btBulletWorldImporter importer2;
 	importer2.loadFile("mugCollisionShape.bcs");
-	btCollisionShape * staticShape = importer2.getCollisionShapeByIndex(0);*/
-	BtOgre::StaticMeshToShapeConverter converter2(entity2);
-	btCollisionShape* staticShape = converter2.createConvex(); //You can also just use btSphereShape(1.2) or something.
+	btCollisionShape * staticShape = importer2.getCollisionShapeByIndex(0);
+//	BtOgre::StaticMeshToShapeConverter converter2(entity2);
+//	btCollisionShape* staticShape = converter2.createConvex(); //You can also just use btSphereShape(1.2) or something.
 	staticShape->setMargin(1.1f);
 
         mStaticMotionState =
@@ -161,7 +161,7 @@ void TutorialApplication::preparePhysics(Ogre::Entity* entity,
 	staticRigidBodyCI.m_friction = 10;
 	staticRigidBodyCI.m_rollingFriction = 1;
         btRigidBody* staticRigidBody = new btRigidBody(staticRigidBodyCI);
-	staticRigidBody->setContactProcessingThreshold(BT_LARGE_FLOAT);
+//	staticRigidBody->setContactProcessingThreshold(BT_LARGE_FLOAT);
         mWorld->addRigidBody(staticRigidBody);
 }
 
