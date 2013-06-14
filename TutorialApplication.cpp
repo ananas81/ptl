@@ -44,7 +44,7 @@ void TutorialApplication::createScene(void)
     mNode->attachObject(mEntity);
     mNode->translate( Ogre::Vector3( 25, 350, 0 ) );
     mNode->roll(Ogre::Degree(80));
-//    mNode->scale( .3, .3, .3 );
+    mNode->scale( .3, .3, .3 );
 
     mEntity2 = mSceneMgr->createEntity( "Head2", "Cylinder.mesh" );
     mEntity2->setCastShadows(true);
@@ -114,11 +114,11 @@ void TutorialApplication::preparePhysics(Ogre::Entity* entity,
         btCollisionShape* groundShape = new btStaticPlaneShape(btVector3(0,1,0),1);
 
 	//Create shape.
-	btBulletWorldImporter importer;
+/*	btBulletWorldImporter importer;
 	importer.loadFile("mugCollisionShape.bcs");
-	btCollisionShape * fallShape = importer.getCollisionShapeByIndex(0);
-//	BtOgre::StaticMeshToShapeConverter converter(entity);
-//	btCollisionShape* fallShape = converter.createConvex(); //You can also just use btSphereShape(1.2) or something.
+	btCollisionShape * fallShape = importer.getCollisionShapeByIndex(0);*/
+	BtOgre::StaticMeshToShapeConverter converter(entity);
+	btCollisionShape* fallShape = converter.createConvex(); //You can also just use btSphereShape(1.2) or something.
 
 	fallShape->setMargin(1.1f);
 	
