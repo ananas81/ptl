@@ -44,7 +44,7 @@ void TutorialApplication::createScene(void)
     mNode->attachObject(mEntity);
     mNode->translate( Ogre::Vector3( 25, 350, 0 ) );
     mNode->roll(Ogre::Degree(80));
-    mNode->scale( .3, .3, .3 );
+    mNode->scale( .8, .8, .8 );
 
     mEntity2 = mSceneMgr->createEntity( "Head2", "Cylinder.mesh" );
     mEntity2->setCastShadows(true);
@@ -135,14 +135,24 @@ void TutorialApplication::preparePhysics(Ogre::Entity* entity,
 
         mFallMotionState =
                 new MyMotionState(btTransform(btQuaternion(70,100,150,1),btVector3(25,350,0)), node);
-        btScalar mass = 10;
+        btScalar mass = 2;
         btVector3 fallInertia(0,0,0);
         fallShape->calculateLocalInertia(mass,fallInertia);
         btRigidBody::btRigidBodyConstructionInfo fallRigidBodyCI(mass,mFallMotionState,fallShape,fallInertia);
 	fallRigidBodyCI.m_friction = 10;
 	fallRigidBodyCI.m_rollingFriction = 1;
         btRigidBody* fallRigidBody = new btRigidBody(fallRigidBodyCI);
+//	fallRigidBody->setLinearFactor(btVector3(0,0,0));
+//	fallRigidBody->setAngularFactor(btVector3(1,0,0));
         mWorld->addRigidBody(fallRigidBody);
+
+	btVector3 pivotInA(1.0, -7, 3);
+	btVector3 axisInA(0, 0, 1);
+	btHingeConstraint* hinge = new btHingeConstraint(*fallRigidBody,pivotInA, axisInA);
+	float targetVelocity = 0.f;
+	float maxMotorImpulse = 0.01;
+	hinge->enableAngularMotor(true,targetVelocity,maxMotorImpulse);
+	mWorld->addConstraint(hinge);
 
 	//Create shape.
 	btBulletWorldImporter importer2;
@@ -154,7 +164,7 @@ void TutorialApplication::preparePhysics(Ogre::Entity* entity,
 
         mStaticMotionState =
                 new MyMotionState(btTransform(btQuaternion(0,0,0,1),btVector3(25,0,0)), node2);
-        btScalar mass2 = 0.1;
+        btScalar mass2 = 0.5;
         btVector3 staticInertia(0,0,0);
         staticShape->calculateLocalInertia(mass2,staticInertia);
         btRigidBody::btRigidBodyConstructionInfo staticRigidBodyCI(mass2,mStaticMotionState,staticShape,staticInertia);
