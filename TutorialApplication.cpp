@@ -14,6 +14,7 @@ Filename:    TutorialApplication.cpp
 */
 #include "TutorialApplication.h"
 
+
 #define BULLET_TRIANGLE_COLLISION 1
 
 //-------------------------------------------------------------------------------------
@@ -173,6 +174,27 @@ void TutorialApplication::preparePhysics(Ogre::Entity* entity,
         btRigidBody* staticRigidBody = new btRigidBody(staticRigidBodyCI);
 //	staticRigidBody->setContactProcessingThreshold(BT_LARGE_FLOAT);
         mWorld->addRigidBody(staticRigidBody);
+
+
+        m_softBodyWorldInfo.m_sparsesdf.RemoveReferences(0);
+        struct  Functors
+        {
+                static btSoftBody* CtorRope(TutorialApplication* pdemo,const btVector3& p)
+                {
+                        btSoftBody*     psb=btSoftBodyHelpers::CreateRope(pdemo->m_softBodyWorldInfo,p,p+btVector3(10,0,0),8,1);
+                        psb->setTotalMass(500);
+                        pdemo->getSoftDynamicsWorld()->addSoftBody(psb);
+                        return(psb);
+                }
+        };
+        btTransform startTransform;
+        startTransform.setIdentity();
+        startTransform.setOrigin(btVector3(12,8,0));
+//        btRigidBody*            body=pdemo->localCreateRigidBody(50,startTransform,new btBoxShape(btVector3(2,6,2)));
+        btSoftBody*     psb0=Functors::CtorRope(this,btVector3(0,8,-1));
+        btSoftBody*     psb1=Functors::CtorRope(this,btVector3(0,8,+1));
+        psb0->appendAnchor(psb0->m_nodes.size()-1,staticRigidBody);
+        psb1->appendAnchor(psb1->m_nodes.size()-1,staticRigidBody);
 }
 
 void TutorialApplication::createFrameListener(void){

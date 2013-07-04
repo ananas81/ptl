@@ -23,6 +23,10 @@ This source file is part of the
 #include "BtOgrePG.h"
 #include "BtOgreGP.h"
 #include "BtOgreExtras.h"
+#include "BulletSoftBody/btSoftBody.h"
+#include "BulletSoftBody/btSoftRigidDynamicsWorld.h"
+#include "BulletSoftBody/btSoftBodyRigidBodyCollisionConfiguration.h"
+#include "BulletSoftBody/btSoftBodyHelpers.h"
 #include <stdio.h>
 
 
@@ -74,6 +78,14 @@ protected:
     virtual bool nextLocation(void);
     virtual void preparePhysics(Ogre::Entity* entity, Ogre::SceneNode* node, Ogre::Entity* entity2, Ogre::SceneNode* node2);
 
+    virtual btSoftRigidDynamicsWorld*       getSoftDynamicsWorld()
+    {
+            ///just make it a btSoftRigidDynamicsWorld please
+            ///or we will add type checking
+            return (btSoftRigidDynamicsWorld*) mWorld;
+    }
+
+
     Ogre::Real mDistance;                  // The distance the object has left to travel
     Ogre::Vector3 mDirection;              // The direction the object is moving
     Ogre::Vector3 mDestination;            // The destination the object is moving towards
@@ -86,6 +98,7 @@ protected:
     MyMotionState *mFallMotionState;
     MyMotionState *mStaticMotionState;
     btDiscreteDynamicsWorld* mWorld;
+    btSoftBodyWorldInfo m_softBodyWorldInfo;
 };
 
 #endif // #ifndef __TutorialApplication_h_
