@@ -101,16 +101,31 @@ void TutorialApplication::preparePhysics(Ogre::Entity* entity,
 					 Ogre::Entity* entity2,
 					 Ogre::SceneNode* node2)
 {
-        btBroadphaseInterface* broadphase = new btDbvtBroadphase();
+	const int maxProxies = 32766;
+	btVector3 worldAabbMin(-1000,-1000,-1000);
+        btVector3 worldAabbMax(1000,1000,1000);
+        
+        btBroadphaseInterface* broadphase = new btAxisSweep3(worldAabbMin,worldAabbMax,maxProxies);
 
-        btDefaultCollisionConfiguration* collisionConfiguration = new btDefaultCollisionConfiguration();
+        btDefaultCollisionConfiguration* collisionConfiguration = new btSoftBodyRigidBodyCollisionConfiguration();
+
         btCollisionDispatcher* dispatcher = new btCollisionDispatcher(collisionConfiguration);
+        m_softBodyWorldInfo.m_dispatcher = dispatcher;
 
-        btSequentialImpulseConstraintSolver* solver = new btSequentialImpulseConstraintSolver;
+        btConstraintSolver* solver = new btSequentialImpulseConstraintSolver;
 
-        mWorld = new btDiscreteDynamicsWorld(dispatcher,broadphase,solver,collisionConfiguration);
+        //m_dynamicsWorld->setInternalTickCallback(pickingPreTickCallback,this,true);
 
+        mWorld = new btSoftRigidDynamicsWorld(dispatcher,broadphase,solver,collisionConfiguration,NULL);
+
+//        mWorld->setGravity(btVector3(0,-10,0));
+        mWorld->getDispatchInfo().m_enableSPU = true;
         mWorld->setGravity(btVector3(0,-10,0));
+        m_softBodyWorldInfo.m_gravity.setValue(0,-10,0);
+
+        //      clientResetScene();
+
+        m_softBodyWorldInfo.m_sparsesdf.Initialize();
 
         btCollisionShape* groundShape = new btStaticPlaneShape(btVector3(0,1,0),1);
 
@@ -153,7 +168,7 @@ void TutorialApplication::preparePhysics(Ogre::Entity* entity,
 	float targetVelocity = 0.f;
 	float maxMotorImpulse = 0.01;
 	hinge->enableAngularMotor(true,targetVelocity,maxMotorImpulse);
-	mWorld->addConstraint(hinge);
+//	mWorld->addConstraint(hinge);
 
 	//Create shape.
 	btBulletWorldImporter importer2;
@@ -193,8 +208,8 @@ void TutorialApplication::preparePhysics(Ogre::Entity* entity,
 //        btRigidBody*            body=pdemo->localCreateRigidBody(50,startTransform,new btBoxShape(btVector3(2,6,2)));
         btSoftBody*     psb0=Functors::CtorRope(this,btVector3(0,8,-1));
         btSoftBody*     psb1=Functors::CtorRope(this,btVector3(0,8,+1));
-        psb0->appendAnchor(psb0->m_nodes.size()-1,staticRigidBody);
-        psb1->appendAnchor(psb1->m_nodes.size()-1,staticRigidBody);
+//        psb0->appendAnchor(psb0->m_nodes.size()-1,staticRigidBody);
+ //       psb1->appendAnchor(psb1->m_nodes.size()-1,staticRigidBody);
 }
 
 void TutorialApplication::createFrameListener(void){
