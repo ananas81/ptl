@@ -55,6 +55,7 @@ public:
             return; // silently return before we set a node
 	printf(">>>>>setWorldTransform2\n");
         btQuaternion rot = worldTrans.getRotation();
+	printf("mVisibleobj: %p\n",  mVisibleobj);
         mVisibleobj->setOrientation(rot.w(), rot.x(), rot.y(), rot.z());
         btVector3 pos = worldTrans.getOrigin();
         mVisibleobj->setPosition(pos.x(), pos.y(), pos.z());

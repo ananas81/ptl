@@ -106,6 +106,7 @@ void TutorialApplication::preparePhysics(Ogre::Entity* entity,
         btVector3 worldAabbMax(1000,1000,1000);
         
         btBroadphaseInterface* broadphase = new btAxisSweep3(worldAabbMin,worldAabbMax,maxProxies);
+	m_softBodyWorldInfo.m_broadphase = broadphase;
 
         btDefaultCollisionConfiguration* collisionConfiguration = new btSoftBodyRigidBodyCollisionConfiguration();
 
@@ -207,8 +208,8 @@ void TutorialApplication::preparePhysics(Ogre::Entity* entity,
         startTransform.setOrigin(btVector3(12,8,0));
 //        btRigidBody*            body=pdemo->localCreateRigidBody(50,startTransform,new btBoxShape(btVector3(2,6,2)));
         btSoftBody*     psb0=Functors::CtorRope(this,btVector3(0,8,-1));
-        btSoftBody*     psb1=Functors::CtorRope(this,btVector3(0,8,+1));
-//        psb0->appendAnchor(psb0->m_nodes.size()-1,staticRigidBody);
+//        btSoftBody*     psb1=Functors::CtorRope(this,btVector3(0,8,+1));
+        psb0->appendAnchor(psb0->m_nodes.size()-1,fallRigidBody);
  //       psb1->appendAnchor(psb1->m_nodes.size()-1,staticRigidBody);
 }
 
