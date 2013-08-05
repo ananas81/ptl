@@ -101,6 +101,8 @@ protected:
     btDiscreteDynamicsWorld* mWorld;
     btSoftBodyWorldInfo m_softBodyWorldInfo;
     btSoftBody *mRope;
+    Ogre::SceneNode *mRopeObjectNode;
+    Ogre::ManualObject *mRopeObject;
 };
 
 #endif // #ifndef __TutorialApplication_h_

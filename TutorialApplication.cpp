@@ -93,6 +93,20 @@ void TutorialApplication::createScene(void)
     entGround->setMaterialName("Examples/Rockwall");
     entGround->setCastShadows(false);
 
+//------------rope-------------
+    mRopeObject =  mSceneMgr->createManualObject("manual1"); 
+    mRopeObjectNode = mSceneMgr->getRootSceneNode()->createChildSceneNode("manual1_node");
+
+    Ogre::MaterialPtr myManualObjectMaterial = Ogre::MaterialManager::getSingleton().create("manual1Material","General"); 
+    myManualObjectMaterial->setReceiveShadows(false); 
+    myManualObjectMaterial->getTechnique(0)->setLightingEnabled(true); 
+    myManualObjectMaterial->getTechnique(0)->getPass(0)->setDiffuse(0,0,1,0); 
+    myManualObjectMaterial->getTechnique(0)->getPass(0)->setAmbient(0,0,1); 
+    myManualObjectMaterial->getTechnique(0)->getPass(0)->setSelfIllumination(0,0,1); 
+
+    mRopeObjectNode->attachObject(mRopeObject);
+//------------rope-------------
+
     preparePhysics(mEntity, mNode, mEntity2, mNode2);
 }
 
@@ -212,6 +226,8 @@ bool TutorialApplication::frameRenderingQueued(const Ogre::FrameEvent &evt){
 
 	btSoftBody::tLinkArray& links(mRope->m_links);
 
+	mRopeObject->clear();
+        mRopeObject->begin("manual1Material", Ogre::RenderOperation::OT_LINE_LIST); 
 	printf("rope segments:\n");
 	for(int j=0;j<links.size();++j)
 	{
@@ -220,7 +236,13 @@ bool TutorialApplication::frameRenderingQueued(const Ogre::FrameEvent &evt){
 //		mygfx->DrawLine(node_0->m_x,node_1->m_x);
 		printf("rope segment 0: x=%2.2f, y=%2.2f, z=%2.2f\n", node_0->m_x.getX(), node_0->m_x.getY(), node_0->m_x.getZ());
 		printf("rope segment 1: x=%2.2f, y=%2.2f, z=%2.2f\n", node_1->m_x.getX(), node_1->m_x.getY(), node_1->m_x.getZ());
+
+		mRopeObject->position(node_0->m_x.getX(), node_0->m_x.getY(), node_0->m_x.getZ()); 
+		mRopeObject->position(node_1->m_x.getX(), node_1->m_x.getY(), node_1->m_x.getZ()); 
+// etc 
 	}
+
+	mRopeObject->end();
 
 	mWorld->stepSimulation(evt.timeSinceLastFrame,50);
 	
