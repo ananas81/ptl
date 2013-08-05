@@ -43,9 +43,9 @@ void TutorialApplication::createScene(void)
     // Create a SceneNode and attach the Entity to it
     mNode = mSceneMgr->getRootSceneNode()->createChildSceneNode("HeadNode");
     mNode->attachObject(mEntity);
-    mNode->translate( Ogre::Vector3( 25, 350, 0 ) );
+    mNode->translate( Ogre::Vector3( 25, 150, 0 ) );
     mNode->roll(Ogre::Degree(80));
-    mNode->scale( .8, .8, .8 );
+//    mNode->scale( .8, .8, .8 );
 
     mEntity2 = mSceneMgr->createEntity( "Head2", "Cylinder.mesh" );
     mEntity2->setCastShadows(true);
@@ -151,7 +151,7 @@ void TutorialApplication::preparePhysics(Ogre::Entity* entity,
         mWorld->addRigidBody(groundRigidBody);
 
         mFallMotionState =
-                new MyMotionState(btTransform(btQuaternion(70,100,150,1),btVector3(25,350,0)), node);
+                new MyMotionState(btTransform(btQuaternion(70,100,150,1),btVector3(25,150,0)), node);
         btScalar mass = 2;
         btVector3 fallInertia(0,0,0);
         fallShape->calculateLocalInertia(mass,fallInertia);
@@ -162,14 +162,6 @@ void TutorialApplication::preparePhysics(Ogre::Entity* entity,
 //	fallRigidBody->setLinearFactor(btVector3(0,0,0));
 //	fallRigidBody->setAngularFactor(btVector3(1,0,0));
         mWorld->addRigidBody(fallRigidBody);
-
-	btVector3 pivotInA(1.0, -7, 3);
-	btVector3 axisInA(0, 0, 1);
-	btHingeConstraint* hinge = new btHingeConstraint(*fallRigidBody,pivotInA, axisInA);
-	float targetVelocity = 0.f;
-	float maxMotorImpulse = 0.01;
-	hinge->enableAngularMotor(true,targetVelocity,maxMotorImpulse);
-//	mWorld->addConstraint(hinge);
 
 	//Create shape.
 	btBulletWorldImporter importer2;
@@ -190,27 +182,6 @@ void TutorialApplication::preparePhysics(Ogre::Entity* entity,
         btRigidBody* staticRigidBody = new btRigidBody(staticRigidBodyCI);
 //	staticRigidBody->setContactProcessingThreshold(BT_LARGE_FLOAT);
         mWorld->addRigidBody(staticRigidBody);
-
-
-        m_softBodyWorldInfo.m_sparsesdf.RemoveReferences(0);
-        struct  Functors
-        {
-                static btSoftBody* CtorRope(TutorialApplication* pdemo,const btVector3& p)
-                {
-                        btSoftBody*     psb=btSoftBodyHelpers::CreateRope(pdemo->m_softBodyWorldInfo,p,p+btVector3(10,0,0),8,1);
-                        psb->setTotalMass(500);
-                        pdemo->getSoftDynamicsWorld()->addSoftBody(psb);
-                        return(psb);
-                }
-        };
-        btTransform startTransform;
-        startTransform.setIdentity();
-        startTransform.setOrigin(btVector3(12,8,0));
-//        btRigidBody*            body=pdemo->localCreateRigidBody(50,startTransform,new btBoxShape(btVector3(2,6,2)));
-        btSoftBody*     psb0=Functors::CtorRope(this,btVector3(0,8,-1));
-//        btSoftBody*     psb1=Functors::CtorRope(this,btVector3(0,8,+1));
-        psb0->appendAnchor(psb0->m_nodes.size()-1,fallRigidBody);
- //       psb1->appendAnchor(psb1->m_nodes.size()-1,staticRigidBody);
 }
 
 void TutorialApplication::createFrameListener(void){
