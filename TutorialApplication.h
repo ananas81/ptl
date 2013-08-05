@@ -100,6 +100,7 @@ protected:
     MyMotionState *mStaticMotionState;
     btDiscreteDynamicsWorld* mWorld;
     btSoftBodyWorldInfo m_softBodyWorldInfo;
+    btSoftBody *mRope;
 };
 
 #endif // #ifndef __TutorialApplication_h_

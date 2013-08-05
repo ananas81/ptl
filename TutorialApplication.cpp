@@ -183,11 +183,11 @@ void TutorialApplication::preparePhysics(Ogre::Entity* entity,
 //	staticRigidBody->setContactProcessingThreshold(BT_LARGE_FLOAT);
         mWorld->addRigidBody(staticRigidBody);
 
-        btSoftBody* rope = btSoftBodyHelpers::CreateRope(m_softBodyWorldInfo, btVector3(25, 150, 1), btVector3(25,0,1), 15, 0);
-        rope->setTotalMass(50);
-        getSoftDynamicsWorld()->addSoftBody(rope);
-        rope->appendAnchor(0, fallRigidBody);
-        rope->appendAnchor(rope->m_nodes.size()-1, staticRigidBody);
+        mRope = btSoftBodyHelpers::CreateRope(m_softBodyWorldInfo, btVector3(25, 150, 1), btVector3(25,0,1), 15, 0);
+        mRope->setTotalMass(50);
+        getSoftDynamicsWorld()->addSoftBody(mRope);
+        mRope->appendAnchor(0, fallRigidBody);
+        mRope->appendAnchor(mRope->m_nodes.size()-1, staticRigidBody);
 }
 
 void TutorialApplication::createFrameListener(void){
@@ -209,6 +209,19 @@ bool TutorialApplication::nextLocation(void){
 
 bool TutorialApplication::frameRenderingQueued(const Ogre::FrameEvent &evt){
 //	mWorld->stepSimulation(1/60.f,10);
+
+	btSoftBody::tLinkArray& links(mRope->m_links);
+
+	printf("rope segments:\n");
+	for(int j=0;j<links.size();++j)
+	{
+		btSoftBody::Node*   node_0=links[j].m_n[0];
+		btSoftBody::Node*   node_1=links[j].m_n[1];
+//		mygfx->DrawLine(node_0->m_x,node_1->m_x);
+		printf("rope segment 0: x=%2.2f, y=%2.2f, z=%2.2f\n", node_0->m_x.getX(), node_0->m_x.getY(), node_0->m_x.getZ());
+		printf("rope segment 1: x=%2.2f, y=%2.2f, z=%2.2f\n", node_1->m_x.getX(), node_1->m_x.getY(), node_1->m_x.getZ());
+	}
+
 	mWorld->stepSimulation(evt.timeSinceLastFrame,50);
 	
         return BaseApplication::frameRenderingQueued(evt);
