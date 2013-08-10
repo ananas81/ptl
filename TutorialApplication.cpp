@@ -236,7 +236,10 @@ bool TutorialApplication::frameRenderingQueued(const Ogre::FrameEvent &evt){
 		btSoftBody::Node*   node_1=links[j].m_n[1];
 
 		spline.addPoint(Ogre::Vector3(node_0->m_x.getX(), node_0->m_x.getY(), node_0->m_x.getZ()));
-		spline.addPoint(Ogre::Vector3(node_1->m_x.getX(), node_1->m_x.getY(), node_1->m_x.getZ()));
+//		spline.addPoint(Ogre::Vector3(node_1->m_x.getX(), node_1->m_x.getY(), node_1->m_x.getZ()));
+
+		printf("x: %2.2f, y: %2.2f, z: %2.2f\n", node_0->m_x.getX(), node_0->m_x.getY(), node_0->m_x.getZ());
+//		printf("x: %2.2f, y: %2.2f, z: %2.2f\n", node_1->m_x.getX(), node_1->m_x.getY(), node_1->m_x.getZ());
 
 	}
 	spline.recalcTangents();
@@ -244,10 +247,13 @@ bool TutorialApplication::frameRenderingQueued(const Ogre::FrameEvent &evt){
 	mRopeObject->clear();
         mRopeObject->begin("manual1Material", Ogre::RenderOperation::OT_LINE_LIST); 
 	printf("rope segments:\n");
-	for(int s=0;s<spline.getNumPoints();++s)
-	{
-		Ogre::Vector3 point = spline.interpolate(s, s / spline.getNumPoints());
-		mRopeObject->position(point.x, point.y, point.z); 
+	for(int s=0;s<spline.getNumPoints();++s) {
+		for(float i=0.0; i<=1.0; i += 0.1)
+		{
+			Ogre::Vector3 point = spline.interpolate(s, i);
+			mRopeObject->position(point.x, point.y, point.z); 
+		//	printf("x: %2.2f, y: %2.2f, z: %2.2f\n", point.x, point.y, point.z);
+		}
 	}
 
 	mRopeObject->end();
