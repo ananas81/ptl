@@ -28,6 +28,10 @@ This source file is part of the
 #include "BulletSoftBody/btSoftBodyRigidBodyCollisionConfiguration.h"
 #include "BulletSoftBody/btSoftBodyHelpers.h"
 #include <stdio.h>
+#include <CEGUISystem.h>
+#include <CEGUISchemeManager.h>
+#include <RendererModules/Ogre/CEGUIOgreRenderer.h>
+
 
 
 class MyMotionState : public btMotionState {
@@ -72,12 +76,23 @@ public:
     TutorialApplication(void);
     virtual ~TutorialApplication(void);
 
+    enum QueryFlags
+    {       
+            NINJA_MASK = 1<<0, 
+            ROBOT_MASK = 1<<1
+    };
+
 protected:
     virtual void createScene(void);
     virtual void createFrameListener(void);
     virtual bool frameRenderingQueued(const Ogre::FrameEvent &evt);
     virtual bool nextLocation(void);
     virtual void preparePhysics(Ogre::Entity* entity, Ogre::SceneNode* node, Ogre::Entity* entity2, Ogre::SceneNode* node2);
+
+    virtual bool mouseMoved(const OIS::MouseEvent& arg);
+    virtual bool mousePressed(const OIS::MouseEvent& arg, OIS::MouseButtonID id);
+    virtual bool mouseReleased(const OIS::MouseEvent& arg, OIS::MouseButtonID id);
+    virtual bool keyPressed(const OIS::KeyEvent& arg);
 
     virtual btSoftRigidDynamicsWorld*       getSoftDynamicsWorld()
     {
@@ -103,6 +118,11 @@ protected:
     btSoftBody *mRope;
     Ogre::SceneNode *mRopeObjectNode;
     Ogre::ManualObject *mRopeObject;
+
+    Ogre::SceneNode *mCurrentObject;        //pointer to our currently selected object
+    Ogre::RaySceneQuery* mRayScnQuery;      //pointer to our ray scene query
+    CEGUI::Renderer* mGUIRenderer;          //our CEGUI renderer
+    bool bLMouseDown, bRMouseDown;
 };
 
 #endif // #ifndef __TutorialApplication_h_

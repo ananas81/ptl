@@ -19,7 +19,12 @@ Filename:    TutorialApplication.cpp
 #define BULLET_TRIANGLE_COLLISION 1
 
 //-------------------------------------------------------------------------------------
-TutorialApplication::TutorialApplication(void)
+TutorialApplication::TutorialApplication(void) :
+bLMouseDown(false),
+bRMouseDown(false),
+mCurrentObject(NULL),
+mRayScnQuery(NULL),
+mGUIRenderer(NULL)
 {
 }
 //-------------------------------------------------------------------------------------
@@ -107,6 +112,13 @@ void TutorialApplication::createScene(void)
 
     mRopeObjectNode->attachObject(mRopeObject);
 //------------rope-------------
+
+    //CEGUI setup
+    mGUIRenderer = &CEGUI::OgreRenderer::bootstrapSystem();
+ 
+    //show the CEGUI cursor
+    CEGUI::SchemeManager::getSingleton().create((CEGUI::utf8*)"TaharezLook.scheme");
+    CEGUI::MouseCursor::getSingleton().setImage("TaharezLook", "MouseArrow");
 
     preparePhysics(mEntity, mNode, mEntity2, mNode2);
 }
@@ -206,7 +218,12 @@ void TutorialApplication::preparePhysics(Ogre::Entity* entity,
 }
 
 void TutorialApplication::createFrameListener(void){
+    //we still want to create the frame listener from the base app
     BaseApplication::createFrameListener();
+
+    //but we also want to set up our raySceneQuery after everything has been initialized
+    mRayScnQuery = mSceneMgr->createRayQuery(Ogre::Ray());
+
     // Set default values for variables
     mWalkSpeed = 150.0f;
     mDirection = Ogre::Vector3::ZERO;
@@ -259,9 +276,163 @@ bool TutorialApplication::frameRenderingQueued(const Ogre::FrameEvent &evt){
 
 	mWorld->stepSimulation(evt.timeSinceLastFrame,50);
 	
-        return BaseApplication::frameRenderingQueued(evt);
+        if (!BaseApplication::frameRenderingQueued(evt))
+		return false;
+
+        /* 
+        This next big chunk basically sends a raycast straight down from the camera's position 
+        It then checks to see if it is under world geometry and if it is we move the camera back up 
+        */ 
+        Ogre::Vector3 camPos = mCamera->getPosition(); 
+        Ogre::Ray cameraRay(Ogre::Vector3(camPos.x, 5000.0f, camPos.z), Ogre::Vector3::NEGATIVE_UNIT_Y); 
+  
+        mRayScnQuery->setRay(cameraRay);
+
+        /*
+        here we tell it not to sort the raycast results world geometry would be 
+        at the end of the list so sorting would be bad in this case since we are iterating through everything
+        */
+        mRayScnQuery->setSortByDistance(false);
+        Ogre::RaySceneQueryResult& result = mRayScnQuery->execute();
+        Ogre::RaySceneQueryResult::iterator iter = result.begin();
+
+        for(iter; iter != result.end(); iter++)
+        {
+                if(iter->worldFragment)
+                {
+                        //gets the results, fixes camera height and breaks the loop
+                        Ogre::Real terrainHeight = iter->worldFragment->singleIntersection.y;
+
+                        if((terrainHeight + 10.0f) > camPos.y)
+                        {
+                                mCamera->setPosition(camPos.x, terrainHeight + 10.0f, camPos.z);
+                        }
+                        break;
+                }
+        }
+
+        return true;
 }
  
+bool TutorialApplication::mouseMoved(const OIS::MouseEvent& arg)
+{
+        //updates CEGUI with mouse movement
+        CEGUI::System::getSingleton().injectMouseMove(arg.state.X.rel, arg.state.Y.rel);
+
+        //if the left mouse button is held down
+        if(bLMouseDown)
+        {
+                //find the current mouse position
+                CEGUI::Point mousePos = CEGUI::MouseCursor::getSingleton().getPosition();
+
+                //create a raycast straight out from the camera at the mouse's location
+                Ogre::Ray mouseRay = mCamera->getCameraToViewportRay(mousePos.d_x/float(arg.state.width), mousePos.d_y/float(arg.state.height));
+                mRayScnQuery->setRay(mouseRay);
+                mRayScnQuery->setSortByDistance(false); //world geometry is at the end of the list if we sort it, so lets not do that
+
+                Ogre::RaySceneQueryResult& result = mRayScnQuery->execute();
+                Ogre::RaySceneQueryResult::iterator iter = result.begin();
+
+                //check to see if the mouse is pointing at the world and put our current object at that location
+                for(iter; iter != result.end(); iter++)
+                {
+                        if(iter->worldFragment)
+                        {
+                                mCurrentObject->setPosition(iter->worldFragment->singleIntersection);
+                                break;
+                        }
+                }
+        }
+        else if(bRMouseDown)    //if the right mouse button is held down, be rotate the camera with the mouse
+        {
+                mCamera->yaw(Ogre::Degree(-arg.state.X.rel * 0.1));
+                mCamera->pitch(Ogre::Degree(-arg.state.Y.rel * 0.1));
+        }
+
+        return true;
+}
+
+bool TutorialApplication::mousePressed(const OIS::MouseEvent& arg, OIS::MouseButtonID id)
+{
+        if(id == OIS::MB_Left)
+        {
+                //show that the current object has been deselected by removing the bounding box visual
+                if(mCurrentObject)
+                {
+                        mCurrentObject->showBoundingBox(false);
+                }
+
+                //find the current mouse position
+                CEGUI::Point mousePos = CEGUI::MouseCursor::getSingleton().getPosition();
+
+                //then send a raycast straight out from the camera at the mouse's position
+                Ogre::Ray mouseRay = mCamera->getCameraToViewportRay(mousePos.d_x/float(arg.state.width), mousePos.d_y/float(arg.state.height));
+                mRayScnQuery->setRay(mouseRay);
+                mRayScnQuery->setSortByDistance(true);
+                mRayScnQuery->setQueryMask(ROBOT_MASK);       //will return objects with the query mask in the results
+
+                /*
+                This next chunk finds the results of the raycast
+                If the mouse is pointing at world geometry we spawn a robot at that position
+                */
+                Ogre::RaySceneQueryResult& result = mRayScnQuery->execute();
+                Ogre::RaySceneQueryResult::iterator iter = result.begin();
+
+                for(iter; iter != result.end(); iter++)
+                {
+                        //if you clicked on a robot or ninja it becomes selected
+                        if(iter->movable && iter->movable->getName().substr(0, 5) != "tile[")
+                        {
+                                mCurrentObject = iter->movable->getParentSceneNode();
+                                break;
+                        }
+                        //otherwise we spawn a new one at the mouse location
+                        else if(iter->worldFragment)
+			{
+				printf(">>>> missed !!!\n");
+                        }
+                }
+
+                //now we show the bounding box so the user can see that this object is selected
+                if(mCurrentObject)
+                {
+                        mCurrentObject->showBoundingBox(true);
+                }
+
+                bLMouseDown = true;
+        }
+        else if(id == OIS::MB_Right)    // if the right mouse button is held we hide the mouse cursor for view mode
+        {
+                CEGUI::MouseCursor::getSingleton().hide();
+                bRMouseDown = true;
+        }
+
+        return true;
+}
+
+bool TutorialApplication::mouseReleased(const OIS::MouseEvent& arg, OIS::MouseButtonID id)
+{
+        if(id  == OIS::MB_Left)
+        {
+                bLMouseDown = false;
+        }
+        else if(id == OIS::MB_Right)    //when the right mouse is released we then unhide the cursor
+        {
+                CEGUI::MouseCursor::getSingleton().show();
+                bRMouseDown = false;
+        }
+        return true;
+}
+
+bool TutorialApplication::keyPressed(const OIS::KeyEvent& arg)
+{
+	printf(">>> key pressed\n");
+
+        //then we return the base app keyPressed function so that we get all of the functionality
+        //and the return value in one line
+        return BaseApplication::keyPressed(arg);
+}
+
 
 
 
