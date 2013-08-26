@@ -158,11 +158,11 @@ void TutorialApplication::preparePhysics(Ogre::Entity* entity,
         btCollisionShape* groundShape = new btStaticPlaneShape(btVector3(0,1,0),1);
 
 	//Create shape.
-/*	btBulletWorldImporter importer;
+	btBulletWorldImporter importer;
 	importer.loadFile("mug_tiny.bcs");
-	btCollisionShape * fallShape = importer.getCollisionShapeByIndex(0);*/
-	BtOgre::StaticMeshToShapeConverter converter(entity);
-	btCollisionShape* fallShape = converter.createConvex(); //You can also just use btSphereShape(1.2) or something.
+	btCollisionShape * fallShape = importer.getCollisionShapeByIndex(0);
+//	BtOgre::StaticMeshToShapeConverter converter(entity);
+//	btCollisionShape* fallShape = converter.createConvex(); //You can also just use btSphereShape(1.2) or something.
 
 //	fallShape->setMargin(1.1f);
 	
@@ -179,7 +179,7 @@ void TutorialApplication::preparePhysics(Ogre::Entity* entity,
 
         mFallMotionState =
                 new MyMotionState(btTransform(btQuaternion(70,100,150,1),btVector3(25,150,0)), node);
-        btScalar mass = 2.0;
+        btScalar mass = 4.0;
         btVector3 fallInertia(0,0,0);
         fallShape->calculateLocalInertia(mass,fallInertia);
         btRigidBody::btRigidBodyConstructionInfo fallRigidBodyCI(mass,mFallMotionState,fallShape,fallInertia);
