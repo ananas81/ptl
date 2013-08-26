@@ -164,7 +164,7 @@ void TutorialApplication::preparePhysics(Ogre::Entity* entity,
 	BtOgre::StaticMeshToShapeConverter converter(entity);
 	btCollisionShape* fallShape = converter.createConvex(); //You can also just use btSphereShape(1.2) or something.
 
-	fallShape->setMargin(1.1f);
+//	fallShape->setMargin(1.1f);
 	
 	//Create BtOgre MotionState (connects Ogre and Bullet).
         btDefaultMotionState* groundMotionState = new btDefaultMotionState(btTransform(btQuaternion(0,0,0,1),btVector3(0,-1,0)));
@@ -191,12 +191,12 @@ void TutorialApplication::preparePhysics(Ogre::Entity* entity,
         mWorld->addRigidBody(fallRigidBody);
 
 	//Create shape.
-/*	btBulletWorldImporter importer2;
-	importer2.loadFile("mugCollisionShape.bcs");
-	btCollisionShape * staticShape = importer2.getCollisionShapeByIndex(0);*/
-	BtOgre::StaticMeshToShapeConverter converter2(entity2);
-	btCollisionShape* staticShape = converter2.createConvex(); //You can also just use btSphereShape(1.2) or something.
-	staticShape->setMargin(1.1f);
+	btBulletWorldImporter importer2;
+	importer2.loadFile("Cylinder.bcs");
+	btCollisionShape * staticShape = importer2.getCollisionShapeByIndex(0);
+//	BtOgre::StaticMeshToShapeConverter converter2(entity2);
+//	btCollisionShape* staticShape = converter2.createConvex(); //You can also just use btSphereShape(1.2) or something.
+//	staticShape->setMargin(1.1f);
 
         mStaticMotionState =
                 new MyMotionState(btTransform(btQuaternion(0,0,0,1),btVector3(25,0,0)), node2);
