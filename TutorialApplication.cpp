@@ -42,7 +42,7 @@ void TutorialApplication::createScene(void)
     mWalkList.push_back(Ogre::Vector3(-100.0f,  150.0f, -200.0f));
  
     // Create an Entity
-    mEntity = mSceneMgr->createEntity("Head", "Cylinder.mesh");
+    mEntity = mSceneMgr->createEntity("Head", "mug_tiny.mesh");
     mEntity->setCastShadows(true);
 //    Ogre::Entity* ogreHead = mSceneMgr->createEntity("Head", "ogrehead.mesh");
  
@@ -51,7 +51,7 @@ void TutorialApplication::createScene(void)
     mNode->attachObject(mEntity);
     mNode->translate( Ogre::Vector3( 25, 150, 0 ) );
     mNode->roll(Ogre::Degree(80));
-//    mNode->scale( .8, .8, .8 );
+//    mNode->scale( .3, .3, .3 );
 
     mEntity2 = mSceneMgr->createEntity( "Head2", "Cylinder.mesh" );
     mEntity2->setCastShadows(true);
@@ -159,7 +159,7 @@ void TutorialApplication::preparePhysics(Ogre::Entity* entity,
 
 	//Create shape.
 /*	btBulletWorldImporter importer;
-	importer.loadFile("mugCollisionShape.bcs");
+	importer.loadFile("mug_tiny.bcs");
 	btCollisionShape * fallShape = importer.getCollisionShapeByIndex(0);*/
 	BtOgre::StaticMeshToShapeConverter converter(entity);
 	btCollisionShape* fallShape = converter.createConvex(); //You can also just use btSphereShape(1.2) or something.
@@ -179,7 +179,7 @@ void TutorialApplication::preparePhysics(Ogre::Entity* entity,
 
         mFallMotionState =
                 new MyMotionState(btTransform(btQuaternion(70,100,150,1),btVector3(25,150,0)), node);
-        btScalar mass = 2;
+        btScalar mass = 2.0;
         btVector3 fallInertia(0,0,0);
         fallShape->calculateLocalInertia(mass,fallInertia);
         btRigidBody::btRigidBodyConstructionInfo fallRigidBodyCI(mass,mFallMotionState,fallShape,fallInertia);
@@ -191,16 +191,16 @@ void TutorialApplication::preparePhysics(Ogre::Entity* entity,
         mWorld->addRigidBody(fallRigidBody);
 
 	//Create shape.
-	btBulletWorldImporter importer2;
+/*	btBulletWorldImporter importer2;
 	importer2.loadFile("mugCollisionShape.bcs");
-	btCollisionShape * staticShape = importer2.getCollisionShapeByIndex(0);
-//	BtOgre::StaticMeshToShapeConverter converter2(entity2);
-//	btCollisionShape* staticShape = converter2.createConvex(); //You can also just use btSphereShape(1.2) or something.
+	btCollisionShape * staticShape = importer2.getCollisionShapeByIndex(0);*/
+	BtOgre::StaticMeshToShapeConverter converter2(entity2);
+	btCollisionShape* staticShape = converter2.createConvex(); //You can also just use btSphereShape(1.2) or something.
 	staticShape->setMargin(1.1f);
 
         mStaticMotionState =
                 new MyMotionState(btTransform(btQuaternion(0,0,0,1),btVector3(25,0,0)), node2);
-        btScalar mass2 = 0.5;
+        btScalar mass2 = 1.0;
         btVector3 staticInertia(0,0,0);
         staticShape->calculateLocalInertia(mass2,staticInertia);
         btRigidBody::btRigidBodyConstructionInfo staticRigidBodyCI(mass2,mStaticMotionState,staticShape,staticInertia);
@@ -209,12 +209,12 @@ void TutorialApplication::preparePhysics(Ogre::Entity* entity,
         btRigidBody* staticRigidBody = new btRigidBody(staticRigidBodyCI);
 //	staticRigidBody->setContactProcessingThreshold(BT_LARGE_FLOAT);
         mWorld->addRigidBody(staticRigidBody);
-
+/*
         mRope = btSoftBodyHelpers::CreateRope(m_softBodyWorldInfo, btVector3(25, 150, 1), btVector3(25,0,1), 15, 0);
         mRope->setTotalMass(50);
         getSoftDynamicsWorld()->addSoftBody(mRope);
         mRope->appendAnchor(0, fallRigidBody);
-        mRope->appendAnchor(mRope->m_nodes.size()-1, staticRigidBody);
+        mRope->appendAnchor(mRope->m_nodes.size()-1, staticRigidBody);*/
 }
 
 void TutorialApplication::createFrameListener(void){
