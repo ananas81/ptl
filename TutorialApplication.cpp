@@ -209,12 +209,12 @@ void TutorialApplication::preparePhysics(Ogre::Entity* entity,
         btRigidBody* staticRigidBody = new btRigidBody(staticRigidBodyCI);
 //	staticRigidBody->setContactProcessingThreshold(BT_LARGE_FLOAT);
         mWorld->addRigidBody(staticRigidBody);
-/*
-        mRope = btSoftBodyHelpers::CreateRope(m_softBodyWorldInfo, btVector3(25, 150, 1), btVector3(25,0,1), 15, 0);
+
+        mRope = btSoftBodyHelpers::CreateRope(m_softBodyWorldInfo, btVector3(25, 150, 0), btVector3(25,0,0), 15, 0);
         mRope->setTotalMass(50);
         getSoftDynamicsWorld()->addSoftBody(mRope);
         mRope->appendAnchor(0, fallRigidBody);
-        mRope->appendAnchor(mRope->m_nodes.size()-1, staticRigidBody);*/
+        mRope->appendAnchor(mRope->m_nodes.size()-1, staticRigidBody);
 }
 
 void TutorialApplication::createFrameListener(void){
