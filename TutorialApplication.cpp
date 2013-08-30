@@ -334,11 +334,17 @@ bool TutorialApplication::mouseMoved(const OIS::MouseEvent& arg)
                 Ogre::RaySceneQueryResult::iterator iter = result.begin();
 
                 //check to see if the mouse is pointing at the world and put our current object at that location
+		printf("moving with pressed bl\n");
                 for(iter; iter != result.end(); iter++)
                 {
-                        if(iter->worldFragment)
+			printf("iterating\n");
+                        //if(iter->worldFragment)
+                        if(iter->movable && iter->movable->getName().substr(0, 5) != "tile[")
                         {
-                                mCurrentObject->setPosition(iter->worldFragment->singleIntersection);
+				printf("setting cur obj pos\n");
+                                //mCurrentObject->setPosition(iter->worldFragment->singleIntersection);
+				Ogre::Vector3 hitPoint = mouseRay.getOrigin() + mouseRay.getDirection() * iter->distance;
+                                mCurrentObject->setPosition(hitPoint);
                                 break;
                         }
                 }
@@ -384,13 +390,18 @@ bool TutorialApplication::mousePressed(const OIS::MouseEvent& arg, OIS::MouseBut
                         if(iter->movable && iter->movable->getName().substr(0, 5) != "tile[")
                         {
                                 mCurrentObject = iter->movable->getParentSceneNode();
+				printf(">>>> hit movable object !!!\n");
                                 break;
                         }
                         //otherwise we spawn a new one at the mouse location
                         else if(iter->worldFragment)
 			{
-				printf(">>>> missed !!!\n");
+				printf(">>>> hit world fragment !!!\n");
                         }
+			else
+			{
+				printf(">>>> missed !!!\n");
+			}
                 }
 
                 //now we show the bounding box so the user can see that this object is selected
