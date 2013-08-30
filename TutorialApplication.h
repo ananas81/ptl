@@ -50,16 +50,16 @@ public:
 
     virtual void getWorldTransform(btTransform &worldTrans) const {
         worldTrans = mPos1;
-	printf(">>>>>getWorldTransform\n");
+//	printf(">>>>>getWorldTransform\n");
     }
 
     virtual void setWorldTransform(const btTransform &worldTrans) {
-	printf(">>>>>setWorldTransform1\n");
+//	printf(">>>>>setWorldTransform1\n");
         if(NULL == mVisibleobj)
             return; // silently return before we set a node
-	printf(">>>>>setWorldTransform2\n");
+//	printf(">>>>>setWorldTransform2\n");
         btQuaternion rot = worldTrans.getRotation();
-	printf("mVisibleobj: %p\n",  mVisibleobj);
+//	printf("mVisibleobj: %p\n",  mVisibleobj);
         mVisibleobj->setOrientation(rot.w(), rot.x(), rot.y(), rot.z());
         btVector3 pos = worldTrans.getOrigin();
         mVisibleobj->setPosition(pos.x(), pos.y(), pos.z());

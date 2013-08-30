@@ -262,7 +262,7 @@ bool TutorialApplication::frameRenderingQueued(const Ogre::FrameEvent &evt){
 	mRopeObject->clear();
         //mRopeObject->begin("manual1Material", Ogre::RenderOperation::OT_LINE_LIST); 
         mRopeObject->begin("manual1Material", Ogre::RenderOperation::OT_LINE_STRIP); 
-	printf("rope segments:\n");
+//	printf("rope segments:\n");
 	for(int s=0;s<spline.getNumPoints();++s)
 	{
 		for(float i = 0.0; i <= 1.0; i += 0.1) {
