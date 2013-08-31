@@ -31,6 +31,7 @@ This source file is part of the
 #include <CEGUISystem.h>
 #include <CEGUISchemeManager.h>
 #include <RendererModules/Ogre/CEGUIOgreRenderer.h>
+#include <vector>
 
 
 
@@ -73,6 +74,8 @@ protected:
 class TutorialApplication : public BaseApplication
 {
 public:
+    typedef std::pair<Ogre::SceneNode*, btRigidBody*> WorldObject;
+
     TutorialApplication(void);
     virtual ~TutorialApplication(void);
 
@@ -93,6 +96,8 @@ protected:
     virtual bool mousePressed(const OIS::MouseEvent& arg, OIS::MouseButtonID id);
     virtual bool mouseReleased(const OIS::MouseEvent& arg, OIS::MouseButtonID id);
     virtual bool keyPressed(const OIS::KeyEvent& arg);
+
+    btRigidBody* getRigidBodyByNode(Ogre::SceneNode *node);
 
     virtual btSoftRigidDynamicsWorld*       getSoftDynamicsWorld()
     {
@@ -123,6 +128,11 @@ protected:
     Ogre::RaySceneQuery* mRayScnQuery;      //pointer to our ray scene query
     CEGUI::Renderer* mGUIRenderer;          //our CEGUI renderer
     bool bLMouseDown, bRMouseDown;
+
+    btRigidBody *mFallRigidBody;
+    btRigidBody *mStaticRigidBody;
+
+    std::vector<WorldObject*> mWorldObjects;
 };
 
 #endif // #ifndef __TutorialApplication_h_

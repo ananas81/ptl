@@ -24,7 +24,9 @@ bLMouseDown(false),
 bRMouseDown(false),
 mCurrentObject(NULL),
 mRayScnQuery(NULL),
-mGUIRenderer(NULL)
+mGUIRenderer(NULL),
+mFallRigidBody(NULL),
+mStaticRigidBody(NULL)
 {
 }
 //-------------------------------------------------------------------------------------
@@ -182,13 +184,14 @@ void TutorialApplication::preparePhysics(Ogre::Entity* entity,
         btScalar mass = 4.0;
         btVector3 fallInertia(0,0,0);
         fallShape->calculateLocalInertia(mass,fallInertia);
-        btRigidBody::btRigidBodyConstructionInfo fallRigidBodyCI(mass,mFallMotionState,fallShape,fallInertia);
-	fallRigidBodyCI.m_friction = 10;
-	fallRigidBodyCI.m_rollingFriction = 1;
-        btRigidBody* fallRigidBody = new btRigidBody(fallRigidBodyCI);
-//	fallRigidBody->setLinearFactor(btVector3(0,0,0));
-//	fallRigidBody->setAngularFactor(btVector3(1,0,0));
-        mWorld->addRigidBody(fallRigidBody);
+        btRigidBody::btRigidBodyConstructionInfo mFallRigidBodyCI(mass,mFallMotionState,fallShape,fallInertia);
+	mFallRigidBodyCI.m_friction = 10;
+	mFallRigidBodyCI.m_rollingFriction = 1;
+        mFallRigidBody = new btRigidBody(mFallRigidBodyCI);
+//	mFallRigidBody->setLinearFactor(btVector3(0,0,0));
+//	mFallRigidBody->setAngularFactor(btVector3(1,0,0));
+        mWorld->addRigidBody(mFallRigidBody);
+	mWorldObjects.push_back(new WorldObject(mNode, mFallRigidBody));
 
 	//Create shape.
 	btBulletWorldImporter importer2;
@@ -203,18 +206,19 @@ void TutorialApplication::preparePhysics(Ogre::Entity* entity,
         btScalar mass2 = 1.0;
         btVector3 staticInertia(0,0,0);
         staticShape->calculateLocalInertia(mass2,staticInertia);
-        btRigidBody::btRigidBodyConstructionInfo staticRigidBodyCI(mass2,mStaticMotionState,staticShape,staticInertia);
-	staticRigidBodyCI.m_friction = 10;
-	staticRigidBodyCI.m_rollingFriction = 1;
-        btRigidBody* staticRigidBody = new btRigidBody(staticRigidBodyCI);
-//	staticRigidBody->setContactProcessingThreshold(BT_LARGE_FLOAT);
-        mWorld->addRigidBody(staticRigidBody);
+        btRigidBody::btRigidBodyConstructionInfo mStaticRigidBodyCI(mass2,mStaticMotionState,staticShape,staticInertia);
+	mStaticRigidBodyCI.m_friction = 10;
+	mStaticRigidBodyCI.m_rollingFriction = 1;
+        mStaticRigidBody = new btRigidBody(mStaticRigidBodyCI);
+//	mStaticRigidBody->setContactProcessingThreshold(BT_LARGE_FLOAT);
+        mWorld->addRigidBody(mStaticRigidBody);
+	mWorldObjects.push_back(new WorldObject(mNode2, mStaticRigidBody));
 
         mRope = btSoftBodyHelpers::CreateRope(m_softBodyWorldInfo, btVector3(25, 150, 0), btVector3(25,0,0), 15, 0);
         mRope->setTotalMass(50);
         getSoftDynamicsWorld()->addSoftBody(mRope);
-        mRope->appendAnchor(0, fallRigidBody);
-        mRope->appendAnchor(mRope->m_nodes.size()-1, staticRigidBody);
+        mRope->appendAnchor(0, mFallRigidBody);
+        mRope->appendAnchor(mRope->m_nodes.size()-1, mStaticRigidBody);
 }
 
 void TutorialApplication::createFrameListener(void){
@@ -313,6 +317,19 @@ bool TutorialApplication::frameRenderingQueued(const Ogre::FrameEvent &evt){
 
         return true;
 }
+
+btRigidBody* TutorialApplication::getRigidBodyByNode(Ogre::SceneNode *node)
+{
+    if (!node)
+        return NULL;
+
+    for (int i = 0; i < mWorldObjects.size(); ++i) {
+        if (mWorldObjects[i]->first == node)
+            return mWorldObjects[i]->second;
+    }
+
+    return NULL;
+}
  
 bool TutorialApplication::mouseMoved(const OIS::MouseEvent& arg)
 {
@@ -344,7 +361,18 @@ bool TutorialApplication::mouseMoved(const OIS::MouseEvent& arg)
 				printf("setting cur obj pos\n");
                                 //mCurrentObject->setPosition(iter->worldFragment->singleIntersection);
 				Ogre::Vector3 hitPoint = mouseRay.getOrigin() + mouseRay.getDirection() * iter->distance;
-                                mCurrentObject->setPosition(hitPoint);
+				
+				btRigidBody* rigidBody = getRigidBodyByNode(mCurrentObject);
+
+				if (!rigidBody) {
+				    printf("Corresponding rigid body not found\n");
+				    return true;
+				}
+
+				btTransform transform = rigidBody->getCenterOfMassTransform();
+				transform.setOrigin(btVector3(hitPoint.x, hitPoint.y, hitPoint.z));
+				rigidBody->setCenterOfMassTransform(transform);
+                                //mCurrentObject->setPosition(hitPoint);
                                 break;
                         }
                 }
