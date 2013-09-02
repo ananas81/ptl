@@ -216,6 +216,10 @@ void TutorialApplication::preparePhysics(Ogre::Entity* entity,
 
         mRope = btSoftBodyHelpers::CreateRope(m_softBodyWorldInfo, btVector3(25, 150, 0), btVector3(25,0,0), 15, 0);
         mRope->setTotalMass(50);
+        mRope->m_cfg.kCHR = 1;
+//        mRope->m_cfg.kSRHR_CL = 1;
+        mRope->m_cfg.piterations = 100;
+//	mRope->m_cfg.collisions	= btSoftBody::fCollision::CL_SS | btSoftBody::fCollision::CL_RS | btSoftBody::fCollision::SDF_RS;
         getSoftDynamicsWorld()->addSoftBody(mRope);
         mRope->appendAnchor(0, mFallRigidBody);
         mRope->appendAnchor(mRope->m_nodes.size()-1, mStaticRigidBody);
