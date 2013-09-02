@@ -125,6 +125,22 @@ void TutorialApplication::createScene(void)
     preparePhysics(mEntity, mNode, mEntity2, mNode2);
 }
 
+void TutorialApplication::pickingPreTickCallback (btDynamicsWorld *world, btScalar timeStep)
+{
+	TutorialApplication* ta = (TutorialApplication*)world->getWorldUserInfo();
+
+	btRigidBody* rigidBody = ta->getRigidBodyByNode(ta->mCurrentObject);
+	
+	if (!rigidBody) {
+		printf("Corresponding rigid body not found\n");
+		return;
+	}
+	
+	btTransform transform = rigidBody->getCenterOfMassTransform();
+	transform.setOrigin(btVector3(ta->mCurHitPoint.x, ta->mCurHitPoint.y, ta->mCurHitPoint.z));
+	rigidBody->setCenterOfMassTransform(transform);
+}
+
 void TutorialApplication::preparePhysics(Ogre::Entity* entity,
 					 Ogre::SceneNode* node,
 					 Ogre::Entity* entity2,
@@ -151,6 +167,7 @@ void TutorialApplication::preparePhysics(Ogre::Entity* entity,
 //        mWorld->setGravity(btVector3(0,-10,0));
         mWorld->getDispatchInfo().m_enableSPU = true;
         mWorld->setGravity(btVector3(0,-10,0));
+	mWorld->setInternalTickCallback(pickingPreTickCallback,this,true);
         m_softBodyWorldInfo.m_gravity.setValue(0,-10,0);
 
         //      clientResetScene();
@@ -364,18 +381,8 @@ bool TutorialApplication::mouseMoved(const OIS::MouseEvent& arg)
                         {
 				printf("setting cur obj pos\n");
                                 //mCurrentObject->setPosition(iter->worldFragment->singleIntersection);
-				Ogre::Vector3 hitPoint = mouseRay.getOrigin() + mouseRay.getDirection() * iter->distance;
+				mCurHitPoint = mouseRay.getOrigin() + mouseRay.getDirection() * iter->distance;
 				
-				btRigidBody* rigidBody = getRigidBodyByNode(mCurrentObject);
-
-				if (!rigidBody) {
-				    printf("Corresponding rigid body not found\n");
-				    return true;
-				}
-
-				btTransform transform = rigidBody->getCenterOfMassTransform();
-				transform.setOrigin(btVector3(hitPoint.x, hitPoint.y, hitPoint.z));
-				rigidBody->setCenterOfMassTransform(transform);
                                 //mCurrentObject->setPosition(hitPoint);
                                 break;
                         }

@@ -106,6 +106,9 @@ protected:
             return (btSoftRigidDynamicsWorld*) mWorld;
     }
 
+    static void
+    pickingPreTickCallback (btDynamicsWorld *world, btScalar timeStep);
+
 
     Ogre::Real mDistance;                  // The distance the object has left to travel
     Ogre::Vector3 mDirection;              // The direction the object is moving
@@ -131,6 +134,7 @@ protected:
 
     btRigidBody *mFallRigidBody;
     btRigidBody *mStaticRigidBody;
+    Ogre::Vector3 mCurHitPoint;
 
     std::vector<WorldObject*> mWorldObjects;
 };
