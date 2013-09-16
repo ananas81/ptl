@@ -44,7 +44,7 @@ void TutorialApplication::createScene(void)
     mWalkList.push_back(Ogre::Vector3(-100.0f,  150.0f, -200.0f));
  
     // Create an Entity
-    mEntity = mSceneMgr->createEntity("Head", "mug_tiny.mesh");
+    mEntity = mSceneMgr->createEntity("Head", "Flywheel.mesh");
     mEntity->setCastShadows(true);
 //    Ogre::Entity* ogreHead = mSceneMgr->createEntity("Head", "ogrehead.mesh");
  
@@ -178,7 +178,7 @@ void TutorialApplication::preparePhysics(Ogre::Entity* entity,
 
 	//Create shape.
 	btBulletWorldImporter importer;
-	importer.loadFile("mug_tiny.bcs");
+	importer.loadFile("flywheel.bcs");
 	btCollisionShape * fallShape = importer.getCollisionShapeByIndex(0);
 //	BtOgre::StaticMeshToShapeConverter converter(entity);
 //	btCollisionShape* fallShape = converter.createConvex(); //You can also just use btSphereShape(1.2) or something.
