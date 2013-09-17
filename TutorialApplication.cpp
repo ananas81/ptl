@@ -52,7 +52,7 @@ void TutorialApplication::createScene(void)
     mNode = mSceneMgr->getRootSceneNode()->createChildSceneNode("HeadNode");
     mNode->attachObject(mEntity);
     mNode->translate( Ogre::Vector3( 25, 150, 0 ) );
-    mNode->roll(Ogre::Degree(80));
+//    mNode->roll(Ogre::Degree(80));
 //    mNode->scale( .3, .3, .3 );
 
     mEntity2 = mSceneMgr->createEntity( "Head2", "Cylinder.mesh" );
@@ -197,7 +197,7 @@ void TutorialApplication::preparePhysics(Ogre::Entity* entity,
         mWorld->addRigidBody(groundRigidBody);
 
         mFallMotionState =
-                new MyMotionState(btTransform(btQuaternion(70,100,150,1),btVector3(25,150,0)), node);
+                new MyMotionState(btTransform(btQuaternion(0,0,0,1),btVector3(25,0,0)), node);
         btScalar mass = 4.0;
         btVector3 fallInertia(0,0,0);
         fallShape->calculateLocalInertia(mass,fallInertia);
@@ -231,7 +231,7 @@ void TutorialApplication::preparePhysics(Ogre::Entity* entity,
         mWorld->addRigidBody(mStaticRigidBody);
 	mWorldObjects.push_back(new WorldObject(mNode2, mStaticRigidBody));
 
-        mRope = btSoftBodyHelpers::CreateRope(m_softBodyWorldInfo, btVector3(25, 150, 0), btVector3(25,0,0), 15, 0);
+        mRope = btSoftBodyHelpers::CreateRope(m_softBodyWorldInfo, btVector3(25, 111, 0), btVector3(25,0,0), 15, 0);
         mRope->setTotalMass(50);
         mRope->m_cfg.kCHR = 1;
 //        mRope->m_cfg.kSRHR_CL = 1;
