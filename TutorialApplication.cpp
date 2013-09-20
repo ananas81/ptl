@@ -197,7 +197,7 @@ void TutorialApplication::preparePhysics(Ogre::Entity* entity,
         mWorld->addRigidBody(groundRigidBody);
 
         mFallMotionState =
-                new MyMotionState(btTransform(btQuaternion(0,0,0,1),btVector3(25,0,0)), node);
+                new MyMotionState(btTransform(btQuaternion(0,0,0,1),btVector3(25,150,0)), node);
         btScalar mass = 4.0;
         btVector3 fallInertia(0,0,0);
         fallShape->calculateLocalInertia(mass,fallInertia);
@@ -205,7 +205,7 @@ void TutorialApplication::preparePhysics(Ogre::Entity* entity,
 	mFallRigidBodyCI.m_friction = 10;
 	mFallRigidBodyCI.m_rollingFriction = 1;
         mFallRigidBody = new btRigidBody(mFallRigidBodyCI);
-//	mFallRigidBody->setLinearFactor(btVector3(0,0,0));
+	mFallRigidBody->setLinearFactor(btVector3(0,0,0));
 //	mFallRigidBody->setAngularFactor(btVector3(1,0,0));
         mWorld->addRigidBody(mFallRigidBody);
 	mWorldObjects.push_back(new WorldObject(mNode, mFallRigidBody));
@@ -240,6 +240,11 @@ void TutorialApplication::preparePhysics(Ogre::Entity* entity,
         getSoftDynamicsWorld()->addSoftBody(mRope);
         mRope->appendAnchor(0, mFallRigidBody);
         mRope->appendAnchor(mRope->m_nodes.size()-1, mStaticRigidBody);
+
+	btHingeConstraint* hinge = new btHingeConstraint(*mFallRigidBody,btVector3(0,0,0),btVector3(0,0,1),true);
+	mFallRigidBody->setAngularVelocity(btVector3(0,0,1));
+	mWorld->addConstraint(hinge);
+
 }
 
 void TutorialApplication::createFrameListener(void){
