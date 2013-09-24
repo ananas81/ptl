@@ -26,7 +26,8 @@ mCurrentObject(NULL),
 mRayScnQuery(NULL),
 mGUIRenderer(NULL),
 mFallRigidBody(NULL),
-mStaticRigidBody(NULL)
+mStaticRigidBody(NULL),
+mWheelHinge(NULL)
 {
 }
 //-------------------------------------------------------------------------------------
@@ -241,9 +242,21 @@ void TutorialApplication::preparePhysics(Ogre::Entity* entity,
         mRope->appendAnchor(0, mFallRigidBody);
         mRope->appendAnchor(mRope->m_nodes.size()-1, mStaticRigidBody);
 
-	btHingeConstraint* hinge = new btHingeConstraint(*mFallRigidBody,btVector3(0,0,0),btVector3(0,0,1),true);
-	mFallRigidBody->setAngularVelocity(btVector3(0,0,1));
-	mWorld->addConstraint(hinge);
+	mWheelHinge = new btHingeConstraint(*mFallRigidBody,btVector3(0,0,0),btVector3(0,0,1),true);
+//	mWheelHinge->enableAngularMotor(true, 2, 3);
+	mFallRigidBody->setAngularVelocity(btVector3(0,0,3));
+	mFallRigidBody->setFriction(1);
+	mFallRigidBody->setDamping(0.01f,0.01f);
+	mFallRigidBody->setFlags(0);
+	//mFallRigidBody->setLinearFactor(btVector3(0.5, 0.5, 0.5));
+	//mFallRigidBody->setAngularFactor(btVector3(0.5, 0.5, 0.5));
+	//mFallRigidBody->applyTorqueImpulse(btVector3(1,1,3));
+	//mFallRigidBody->applyCentralImpulse(btVector3(1,1,3));
+	//mFallRigidBody->applyForce(btVector3(25,111,100), btVector3(20, 111, 0));
+	//mFallRigidBody->setFlags(BT_ENABLE_GYROPSCOPIC_FORCE);
+	//mFallRigidBody->applyTorque(btVector3(20, 111, 10));
+
+	mWorld->addConstraint(mWheelHinge);
 
 }
 
@@ -271,6 +284,9 @@ bool TutorialApplication::nextLocation(void){
 
 bool TutorialApplication::frameRenderingQueued(const Ogre::FrameEvent &evt){
 //	mWorld->stepSimulation(1/60.f,10);
+//	static int cntFrames = 0;
+//	if (++cntFrames == 100)
+//		mWheelHinge->enableMotor(false);
 
 	btSoftBody::tLinkArray& links(mRope->m_links);
 	Ogre::SimpleSpline spline;

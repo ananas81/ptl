@@ -135,6 +135,7 @@ protected:
     btRigidBody *mFallRigidBody;
     btRigidBody *mStaticRigidBody;
     Ogre::Vector3 mCurHitPoint;
+    btHingeConstraint *mWheelHinge;
 
     std::vector<WorldObject*> mWorldObjects;
 };
