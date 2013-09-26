@@ -133,7 +133,7 @@ void TutorialApplication::pickingPreTickCallback (btDynamicsWorld *world, btScal
 	btRigidBody* rigidBody = ta->getRigidBodyByNode(ta->mCurrentObject);
 	
 	if (!rigidBody) {
-		printf("Corresponding rigid body not found\n");
+//		printf("Corresponding rigid body not found\n");
 		return;
 	}
 	
@@ -236,15 +236,14 @@ void TutorialApplication::preparePhysics(Ogre::Entity* entity,
         mRope->setTotalMass(50);
         mRope->m_cfg.kCHR = 1;
 //        mRope->m_cfg.kSRHR_CL = 1;
-        mRope->m_cfg.piterations = 100;
+//        mRope->m_cfg.piterations = 100;
 //	mRope->m_cfg.collisions	= btSoftBody::fCollision::CL_SS | btSoftBody::fCollision::CL_RS | btSoftBody::fCollision::SDF_RS;
         getSoftDynamicsWorld()->addSoftBody(mRope);
         mRope->appendAnchor(0, mFallRigidBody);
         mRope->appendAnchor(mRope->m_nodes.size()-1, mStaticRigidBody);
 
 	mWheelHinge = new btHingeConstraint(*mFallRigidBody,btVector3(0,0,0),btVector3(0,0,1),true);
-//	mWheelHinge->enableAngularMotor(true, 2, 3);
-	mFallRigidBody->setAngularVelocity(btVector3(0,0,3));
+//	mFallRigidBody->setAngularVelocity(btVector3(0,0,5));
 	mFallRigidBody->setFriction(1);
 	mFallRigidBody->setDamping(0.01f,0.01f);
 	mFallRigidBody->setFlags(0);
@@ -284,9 +283,6 @@ bool TutorialApplication::nextLocation(void){
 
 bool TutorialApplication::frameRenderingQueued(const Ogre::FrameEvent &evt){
 //	mWorld->stepSimulation(1/60.f,10);
-//	static int cntFrames = 0;
-//	if (++cntFrames == 100)
-//		mWheelHinge->enableMotor(false);
 
 	btSoftBody::tLinkArray& links(mRope->m_links);
 	Ogre::SimpleSpline spline;
@@ -495,13 +491,27 @@ bool TutorialApplication::mouseReleased(const OIS::MouseEvent& arg, OIS::MouseBu
         return true;
 }
 
-bool TutorialApplication::keyPressed(const OIS::KeyEvent& arg)
+bool TutorialApplication::keyPressed(const OIS::KeyEvent& evt)
 {
 	printf(">>> key pressed\n");
+	static bool motorOn = false;
+
+	switch (evt.key) {
+	case OIS::KC_1: 
+	        motorOn = !motorOn;
+		if (motorOn)
+			mWheelHinge->enableAngularMotor(true, 20, 5);
+		else
+			mWheelHinge->enableMotor(false);
+
+        	break;
+	default:
+		break;
+	}
 
         //then we return the base app keyPressed function so that we get all of the functionality
         //and the return value in one line
-        return BaseApplication::keyPressed(arg);
+        return BaseApplication::keyPressed(evt);
 }
 
 
