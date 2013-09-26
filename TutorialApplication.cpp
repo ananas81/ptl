@@ -221,7 +221,7 @@ void TutorialApplication::preparePhysics(Ogre::Entity* entity,
 
         mStaticMotionState =
                 new MyMotionState(btTransform(btQuaternion(0,0,0,1),btVector3(25,0,0)), node2);
-        btScalar mass2 = 1.0;
+        btScalar mass2 = 10.0;
         btVector3 staticInertia(0,0,0);
         staticShape->calculateLocalInertia(mass2,staticInertia);
         btRigidBody::btRigidBodyConstructionInfo mStaticRigidBodyCI(mass2,mStaticMotionState,staticShape,staticInertia);
@@ -233,10 +233,16 @@ void TutorialApplication::preparePhysics(Ogre::Entity* entity,
 	mWorldObjects.push_back(new WorldObject(mNode2, mStaticRigidBody));
 
         mRope = btSoftBodyHelpers::CreateRope(m_softBodyWorldInfo, btVector3(25, 111, 0), btVector3(25,0,0), 15, 0);
-        mRope->setTotalMass(50);
+        mRope->setTotalMass(2);
         mRope->m_cfg.kCHR = 1;
+//        mRope->m_cfg.kKHR = 0;
+//        mRope->m_cfg.kLF = 0;
+//        mRope->m_cfg.kDG = 0;
+//        mRope->m_cfg.kDP = 0;
+//        mRope->m_cfg.kAHR = 0;
 //        mRope->m_cfg.kSRHR_CL = 1;
-//        mRope->m_cfg.piterations = 100;
+        mRope->m_cfg.piterations = 10;
+//        mRope->m_cfg.citerations = 10;
 //	mRope->m_cfg.collisions	= btSoftBody::fCollision::CL_SS | btSoftBody::fCollision::CL_RS | btSoftBody::fCollision::SDF_RS;
         getSoftDynamicsWorld()->addSoftBody(mRope);
         mRope->appendAnchor(0, mFallRigidBody);
