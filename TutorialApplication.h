@@ -99,13 +99,6 @@ protected:
 
     btRigidBody* getRigidBodyByNode(Ogre::SceneNode *node);
 
-    virtual btSoftRigidDynamicsWorld*       getSoftDynamicsWorld()
-    {
-            ///just make it a btSoftRigidDynamicsWorld please
-            ///or we will add type checking
-            return (btSoftRigidDynamicsWorld*) mWorld;
-    }
-
     static void
     pickingPreTickCallback (btDynamicsWorld *world, btScalar timeStep);
 

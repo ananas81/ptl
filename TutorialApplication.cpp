@@ -133,25 +133,13 @@ void TutorialApplication::preparePhysics(Ogre::Entity* entity,
 					 Ogre::Entity* entity2,
 					 Ogre::SceneNode* node2)
 {
-	const int maxProxies = 32766;
-	btVector3 worldAabbMin(-1000,-1000,-1000);
-        btVector3 worldAabbMax(1000,1000,1000);
-        
-        btBroadphaseInterface* broadphase = new btAxisSweep3(worldAabbMin,worldAabbMax,maxProxies);
-	m_softBodyWorldInfo.m_broadphase = broadphase;
+        btBroadphaseInterface* broadphase = new btDbvtBroadphase();
+        btSequentialImpulseConstraintSolver* solver = new btSequentialImpulseConstraintSolver;
+	btDefaultCollisionConfiguration* collisionConfiguration = new btDefaultCollisionConfiguration();
+	btCollisionDispatcher* dispatcher = new btCollisionDispatcher(collisionConfiguration);
 
-        btDefaultCollisionConfiguration* collisionConfiguration = new btSoftBodyRigidBodyCollisionConfiguration();
+	mWorld = new btDiscreteDynamicsWorld(dispatcher,broadphase,solver,collisionConfiguration);
 
-        btCollisionDispatcher* dispatcher = new btCollisionDispatcher(collisionConfiguration);
-        m_softBodyWorldInfo.m_dispatcher = dispatcher;
-
-        btConstraintSolver* solver = new btSequentialImpulseConstraintSolver;
-
-        //m_dynamicsWorld->setInternalTickCallback(pickingPreTickCallback,this,true);
-
-        mWorld = new btSoftRigidDynamicsWorld(dispatcher,broadphase,solver,collisionConfiguration,NULL);
-
-//        mWorld->setGravity(btVector3(0,-10,0));
         mWorld->getDispatchInfo().m_enableSPU = true;
         mWorld->setGravity(btVector3(0,-10,0));
 	mWorld->setInternalTickCallback(pickingPreTickCallback,this,true);
