@@ -59,7 +59,7 @@ void TutorialApplication::createScene(void)
     mEntity2 = mSceneMgr->createEntity( "Head2", "Cylinder.mesh" );
     mEntity2->setCastShadows(true);
     //Ogre::SceneNode* headNode2 = headNode->createChildSceneNode( "HeadNode2", Ogre::Vector3( 100, 0, 0 ) );
-    mNode2 = mSceneMgr->getRootSceneNode()->createChildSceneNode( "HeadNode2", Ogre::Vector3( 25, 0, 0 ) );
+    mNode2 = mSceneMgr->getRootSceneNode()->createChildSceneNode( "HeadNode2", Ogre::Vector3( 25, 50, 0 ) );
     mNode2->attachObject(mEntity2);
 //    headNode2->translate( Ogre::Vector3( 10, 0, 10 ) );
 
@@ -101,20 +101,6 @@ void TutorialApplication::createScene(void)
  
     entGround->setMaterialName("Examples/Rockwall");
     entGround->setCastShadows(false);
-
-//------------rope-------------
-    mRopeObject =  mSceneMgr->createManualObject("manual1"); 
-    mRopeObjectNode = mSceneMgr->getRootSceneNode()->createChildSceneNode("manual1_node");
-
-    Ogre::MaterialPtr myManualObjectMaterial = Ogre::MaterialManager::getSingleton().create("manual1Material","General"); 
-    myManualObjectMaterial->setReceiveShadows(false); 
-    myManualObjectMaterial->getTechnique(0)->setLightingEnabled(true); 
-    myManualObjectMaterial->getTechnique(0)->getPass(0)->setDiffuse(0,0,1,0); 
-    myManualObjectMaterial->getTechnique(0)->getPass(0)->setAmbient(0,0,1); 
-    myManualObjectMaterial->getTechnique(0)->getPass(0)->setSelfIllumination(0,0,1); 
-
-    mRopeObjectNode->attachObject(mRopeObject);
-//------------rope-------------
 
     //CEGUI setup
     mGUIRenderer = &CEGUI::OgreRenderer::bootstrapSystem();
@@ -206,7 +192,7 @@ void TutorialApplication::preparePhysics(Ogre::Entity* entity,
 	mFallRigidBodyCI.m_friction = 10;
 	mFallRigidBodyCI.m_rollingFriction = 1;
         mFallRigidBody = new btRigidBody(mFallRigidBodyCI);
-	mFallRigidBody->setLinearFactor(btVector3(0,0,0));
+//	mFallRigidBody->setLinearFactor(btVector3(0,0,0));
 //	mFallRigidBody->setAngularFactor(btVector3(1,0,0));
         mWorld->addRigidBody(mFallRigidBody);
 	mWorldObjects.push_back(new WorldObject(mNode, mFallRigidBody));
@@ -220,7 +206,7 @@ void TutorialApplication::preparePhysics(Ogre::Entity* entity,
 //	staticShape->setMargin(1.1f);
 
         mStaticMotionState =
-                new MyMotionState(btTransform(btQuaternion(0,0,0,1),btVector3(25,0,0)), node2);
+                new MyMotionState(btTransform(btQuaternion(45,45,45,1),btVector3(25,50,0)), node2);
         btScalar mass2 = 10.0;
         btVector3 staticInertia(0,0,0);
         staticShape->calculateLocalInertia(mass2,staticInertia);
@@ -232,29 +218,13 @@ void TutorialApplication::preparePhysics(Ogre::Entity* entity,
         mWorld->addRigidBody(mStaticRigidBody);
 	mWorldObjects.push_back(new WorldObject(mNode2, mStaticRigidBody));
 
-        mRope = btSoftBodyHelpers::CreateRope(m_softBodyWorldInfo, btVector3(25, 111, 0), btVector3(25,0,0), 15, 0);
-        mRope->setTotalMass(2);
-        mRope->m_cfg.kCHR = 1;
-//        mRope->m_cfg.kKHR = 0;
-//        mRope->m_cfg.kLF = 0;
-//        mRope->m_cfg.kDG = 0;
-//        mRope->m_cfg.kDP = 0;
-//        mRope->m_cfg.kAHR = 0;
-//        mRope->m_cfg.kSRHR_CL = 1;
-        mRope->m_cfg.piterations = 10;
-//        mRope->m_cfg.citerations = 10;
-//	mRope->m_cfg.collisions	= btSoftBody::fCollision::CL_SS | btSoftBody::fCollision::CL_RS | btSoftBody::fCollision::SDF_RS;
-        getSoftDynamicsWorld()->addSoftBody(mRope);
-        mRope->appendAnchor(0, mFallRigidBody);
-        mRope->appendAnchor(mRope->m_nodes.size()-1, mStaticRigidBody);
-
 	mWheelHinge = new btHingeConstraint(*mFallRigidBody,btVector3(0,0,0),btVector3(0,0,1),true);
 //	mFallRigidBody->setAngularVelocity(btVector3(0,0,5));
 	mFallRigidBody->setFriction(1);
-	mFallRigidBody->setDamping(0.01f,0.01f);
+//	mFallRigidBody->setDamping(0.01f,0.01f);
 	mFallRigidBody->setFlags(0);
-	//mFallRigidBody->setLinearFactor(btVector3(0.5, 0.5, 0.5));
-	//mFallRigidBody->setAngularFactor(btVector3(0.5, 0.5, 0.5));
+	mFallRigidBody->setLinearFactor(btVector3(0, 0, 0.5));
+	mFallRigidBody->setAngularFactor(btVector3(0, 0, 0.5));
 	//mFallRigidBody->applyTorqueImpulse(btVector3(1,1,3));
 	//mFallRigidBody->applyCentralImpulse(btVector3(1,1,3));
 	//mFallRigidBody->applyForce(btVector3(25,111,100), btVector3(20, 111, 0));
@@ -289,38 +259,6 @@ bool TutorialApplication::nextLocation(void){
 
 bool TutorialApplication::frameRenderingQueued(const Ogre::FrameEvent &evt){
 //	mWorld->stepSimulation(1/60.f,10);
-
-	btSoftBody::tLinkArray& links(mRope->m_links);
-	Ogre::SimpleSpline spline;
-
-	spline.setAutoCalculate(false);
-
-	for(int j=0;j<links.size();++j)
-	{
-		btSoftBody::Node*   node_0=links[j].m_n[0];
-		btSoftBody::Node*   node_1=links[j].m_n[1];
-
-		spline.addPoint(Ogre::Vector3(node_0->m_x.getX(), node_0->m_x.getY(), node_0->m_x.getZ()));
-		if (j == links.size() - 1)
-			spline.addPoint(Ogre::Vector3(node_1->m_x.getX(), node_1->m_x.getY(), node_1->m_x.getZ()));
-
-	}
-	spline.recalcTangents();
-
-	mRopeObject->clear();
-        //mRopeObject->begin("manual1Material", Ogre::RenderOperation::OT_LINE_LIST); 
-        mRopeObject->begin("manual1Material", Ogre::RenderOperation::OT_LINE_STRIP); 
-//	printf("rope segments:\n");
-	for(int s=0;s<spline.getNumPoints();++s)
-	{
-		for(float i = 0.0; i <= 1.0; i += 0.1) {
-			Ogre::Vector3 point = spline.interpolate(s, i);
-			mRopeObject->position(point.x, point.y, point.z); 
-		//	printf("curIntPoint: x: %2.2f, y: %2.2f, z: %2.2f\n", point.x, point.y, point.z);
-		}
-	}
-
-	mRopeObject->end();
 
 	mWorld->stepSimulation(evt.timeSinceLastFrame,50);
 	
@@ -506,9 +444,11 @@ bool TutorialApplication::keyPressed(const OIS::KeyEvent& evt)
 	case OIS::KC_1: 
 	        motorOn = !motorOn;
 		if (motorOn)
-			mWheelHinge->enableAngularMotor(true, 20, 5);
+			mFallRigidBody->setAngularVelocity(btVector3(0, 0, 1));
+			//mWheelHinge->enableAngularMotor(true, 20, 5);
 		else
-			mWheelHinge->enableMotor(false);
+			mFallRigidBody->setAngularVelocity(btVector3(0, 0, 0));
+			//mWheelHinge->enableMotor(false);
 
         	break;
 	default:

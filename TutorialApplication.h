@@ -123,9 +123,7 @@ protected:
     MyMotionState *mStaticMotionState;
     btDiscreteDynamicsWorld* mWorld;
     btSoftBodyWorldInfo m_softBodyWorldInfo;
-    btSoftBody *mRope;
     Ogre::SceneNode *mRopeObjectNode;
-    Ogre::ManualObject *mRopeObject;
 
     Ogre::SceneNode *mCurrentObject;        //pointer to our currently selected object
     Ogre::RaySceneQuery* mRayScnQuery;      //pointer to our ray scene query
