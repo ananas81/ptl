@@ -13,7 +13,6 @@ Filename:    TutorialApplication.cpp
 -----------------------------------------------------------------------------
 */
 #include "TutorialApplication.h"
-#include <OgreSimpleSpline.h>
 
 
 #define BULLET_TRIANGLE_COLLISION 1
@@ -27,7 +26,8 @@ mRayScnQuery(NULL),
 mGUIRenderer(NULL),
 mFallRigidBody(NULL),
 mStaticRigidBody(NULL),
-mWheelHinge(NULL)
+mWheelHinge(NULL),
+mDebugDrawer(NULL)
 {
 }
 //-------------------------------------------------------------------------------------
@@ -59,7 +59,7 @@ void TutorialApplication::createScene(void)
     mEntity2 = mSceneMgr->createEntity( "Head2", "Cylinder.mesh" );
     mEntity2->setCastShadows(true);
     //Ogre::SceneNode* headNode2 = headNode->createChildSceneNode( "HeadNode2", Ogre::Vector3( 100, 0, 0 ) );
-    mNode2 = mSceneMgr->getRootSceneNode()->createChildSceneNode( "HeadNode2", Ogre::Vector3( 25, 50, 0 ) );
+    mNode2 = mSceneMgr->getRootSceneNode()->createChildSceneNode( "HeadNode2", Ogre::Vector3( 25, 104, 0 ) );
     mNode2->attachObject(mEntity2);
 //    headNode2->translate( Ogre::Vector3( 10, 0, 10 ) );
 
@@ -143,11 +143,8 @@ void TutorialApplication::preparePhysics(Ogre::Entity* entity,
         mWorld->getDispatchInfo().m_enableSPU = true;
         mWorld->setGravity(btVector3(0,-10,0));
 	mWorld->setInternalTickCallback(pickingPreTickCallback,this,true);
-        m_softBodyWorldInfo.m_gravity.setValue(0,-10,0);
 
         //      clientResetScene();
-
-        m_softBodyWorldInfo.m_sparsesdf.Initialize();
 
         btCollisionShape* groundShape = new btStaticPlaneShape(btVector3(0,1,0),1);
 
@@ -194,7 +191,7 @@ void TutorialApplication::preparePhysics(Ogre::Entity* entity,
 //	staticShape->setMargin(1.1f);
 
         mStaticMotionState =
-                new MyMotionState(btTransform(btQuaternion(45,45,45,1),btVector3(25,50,0)), node2);
+                new MyMotionState(btTransform(btQuaternion(0,0,0,1),btVector3(25,104,0)), node2);
         btScalar mass2 = 10.0;
         btVector3 staticInertia(0,0,0);
         staticShape->calculateLocalInertia(mass2,staticInertia);
@@ -209,7 +206,7 @@ void TutorialApplication::preparePhysics(Ogre::Entity* entity,
 	mWheelHinge = new btHingeConstraint(*mFallRigidBody,btVector3(0,0,0),btVector3(0,0,1),true);
 //	mFallRigidBody->setAngularVelocity(btVector3(0,0,5));
 	mFallRigidBody->setFriction(1);
-//	mFallRigidBody->setDamping(0.01f,0.01f);
+	mFallRigidBody->setDamping(0.0001f,0.0001f);
 	mFallRigidBody->setFlags(0);
 	mFallRigidBody->setLinearFactor(btVector3(0, 0, 0.5));
 	mFallRigidBody->setAngularFactor(btVector3(0, 0, 0.5));
@@ -219,8 +216,16 @@ void TutorialApplication::preparePhysics(Ogre::Entity* entity,
 	//mFallRigidBody->setFlags(BT_ENABLE_GYROPSCOPIC_FORCE);
 	//mFallRigidBody->applyTorque(btVector3(20, 111, 10));
 
-	mWorld->addConstraint(mWheelHinge);
+	btTypedConstraint* p2p = new btPoint2PointConstraint(*mFallRigidBody, *mStaticRigidBody, btVector3(0,0,-38.5), btVector3(0,0,7));
+//	p2p ->setBreakingImpulseThreshold(0.2);
+//	btTypedConstraint* p2p = btPoint2PointConstraint(*mFallRigidBody, btVector3(25,111,0));
 
+	mWorld->addConstraint(mWheelHinge);
+	mWorld->addConstraint(p2p);
+
+	mDebugDrawer = new DebugDrawer(mSceneMgr, mWorld);
+	mDebugDrawer->setDebugMode(1);
+	mWorld->setDebugDrawer(mDebugDrawer);
 }
 
 void TutorialApplication::createFrameListener(void){
@@ -284,6 +289,8 @@ bool TutorialApplication::frameRenderingQueued(const Ogre::FrameEvent &evt){
                         break;
                 }
         }
+
+	mDebugDrawer->Update();
 
         return true;
 }
@@ -432,7 +439,7 @@ bool TutorialApplication::keyPressed(const OIS::KeyEvent& evt)
 	case OIS::KC_1: 
 	        motorOn = !motorOn;
 		if (motorOn)
-			mFallRigidBody->setAngularVelocity(btVector3(0, 0, 1));
+			mFallRigidBody->setAngularVelocity(btVector3(0, 0, 5));
 			//mWheelHinge->enableAngularMotor(true, 20, 5);
 		else
 			mFallRigidBody->setAngularVelocity(btVector3(0, 0, 0));

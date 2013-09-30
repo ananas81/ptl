@@ -6,9 +6,15 @@ SET(BULLET_PHYSICS_SOURCE_DIR "/home/anjack/opengl/ogre/bullet-2.81-rev2613")
 
 message("PKG_CONFIG_PATH: "$ENV{PKG_CONFIG_PATH})
 
+SET(OPENGL_gl_LIBRARY "/usr/lib/libGL.so")
+SET(OPENGL_glu_LIBRARY "/usr/lib/libGLU.so")
+SET(GLUT_glut_LIBRARY "/usr/lib/libglut.so")
+
 SET(SRC
     "TutorialApplication.cpp"
     "BaseApplication.cpp"
+    "DebugDraw.cpp"
+    "DynamicLineDrawer.cpp"
 )
 
 INCLUDE(FindPkgConfig)
@@ -32,4 +38,8 @@ add_executable(ogrePhysics ${SRC})
 target_link_libraries(ogrePhysics ${ogre_deps_LDFLAGS}
 		      ${PROJECT_SOURCE_DIR}/libBtOgre.a
 		      ${PROJECT_SOURCE_DIR}/libBulletWorldImporter_gmake.a
-		      ${PROJECT_SOURCE_DIR}/libBulletFileLoader.a)
+		      ${PROJECT_SOURCE_DIR}/libOpenGLSupport_gmake.a
+		      ${PROJECT_SOURCE_DIR}/libBulletFileLoader.a
+		      ${GLUT_glut_LIBRARY}
+		      ${OPENGL_gl_LIBRARY}
+		      ${OPENGL_glu_LIBRARY})

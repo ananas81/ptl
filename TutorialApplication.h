@@ -32,8 +32,17 @@ This source file is part of the
 #include <CEGUISchemeManager.h>
 #include <RendererModules/Ogre/CEGUIOgreRenderer.h>
 #include <vector>
+#include "DebugDraw.hpp"
 
+class DebugDrawer : public CDebugDraw
+{
+	public:
+		DebugDrawer(Ogre::SceneManager* Scene, btDynamicsWorld* World ) : CDebugDraw(Scene, World) {}
 
+		void virtual setDebugMode( int DebugMode ) { CDebugDraw::setDebugMode(DebugMode); }
+		virtual ~DebugDrawer() {}
+
+};
 
 class MyMotionState : public btMotionState {
 public:
@@ -127,6 +136,7 @@ protected:
     btRigidBody *mStaticRigidBody;
     Ogre::Vector3 mCurHitPoint;
     btHingeConstraint *mWheelHinge;
+    DebugDrawer *mDebugDrawer;
 
     std::vector<WorldObject*> mWorldObjects;
 };
