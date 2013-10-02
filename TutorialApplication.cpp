@@ -56,7 +56,7 @@ void TutorialApplication::createScene(void)
 //    mNode->roll(Ogre::Degree(80));
 //    mNode->scale( .3, .3, .3 );
 
-    mEntity2 = mSceneMgr->createEntity( "Head2", "Cylinder.mesh" );
+    mEntity2 = mSceneMgr->createEntity( "Head2", "Sphere.mesh" );
     mEntity2->setCastShadows(true);
     //Ogre::SceneNode* headNode2 = headNode->createChildSceneNode( "HeadNode2", Ogre::Vector3( 100, 0, 0 ) );
     mNode2 = mSceneMgr->getRootSceneNode()->createChildSceneNode( "HeadNode2", Ogre::Vector3( 25, 104, 0 ) );
@@ -183,12 +183,11 @@ void TutorialApplication::preparePhysics(Ogre::Entity* entity,
 	mWorldObjects.push_back(new WorldObject(mNode, mFallRigidBody));
 
 	//Create shape.
-	btBulletWorldImporter importer2;
+/*	btBulletWorldImporter importer2;
 	importer2.loadFile("Cylinder.bcs");
-	btCollisionShape * staticShape = importer2.getCollisionShapeByIndex(0);
-//	BtOgre::StaticMeshToShapeConverter converter2(entity2);
-//	btCollisionShape* staticShape = converter2.createConvex(); //You can also just use btSphereShape(1.2) or something.
-//	staticShape->setMargin(1.1f);
+	btCollisionShape * staticShape = importer2.getCollisionShapeByIndex(0);*/
+	BtOgre::StaticMeshToShapeConverter converter2(entity2);
+	btCollisionShape* staticShape = converter2.createSphere(); //You can also just use btSphereShape(1.2) or something.
 
         mStaticMotionState =
                 new MyMotionState(btTransform(btQuaternion(0,0,0,1),btVector3(25,104,0)), node2);
@@ -215,8 +214,10 @@ void TutorialApplication::preparePhysics(Ogre::Entity* entity,
 	//mFallRigidBody->applyForce(btVector3(25,111,100), btVector3(20, 111, 0));
 	//mFallRigidBody->setFlags(BT_ENABLE_GYROPSCOPIC_FORCE);
 	//mFallRigidBody->applyTorque(btVector3(20, 111, 10));
+	mFallRigidBody->setActivationState(DISABLE_DEACTIVATION);
+	mStaticRigidBody->setActivationState(DISABLE_DEACTIVATION);
 
-	btTypedConstraint* p2p = new btPoint2PointConstraint(*mFallRigidBody, *mStaticRigidBody, btVector3(0,0,-38.5), btVector3(0,0,7));
+	btTypedConstraint* p2p = new btPoint2PointConstraint(*mFallRigidBody, *mStaticRigidBody, btVector3(0,-38.5,0), btVector3(0,6.12,0));
 //	p2p ->setBreakingImpulseThreshold(0.2);
 //	btTypedConstraint* p2p = btPoint2PointConstraint(*mFallRigidBody, btVector3(25,111,0));
 
