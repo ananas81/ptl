@@ -46,20 +46,20 @@ void TutorialApplication::createScene(void)
  
     // Create an Entity
     mEntity = mSceneMgr->createEntity("Head", "Flywheel.mesh");
-    mEntity->setCastShadows(true);
+//    mEntity->setCastShadows(true);
 //    Ogre::Entity* ogreHead = mSceneMgr->createEntity("Head", "ogrehead.mesh");
  
     // Create a SceneNode and attach the Entity to it
     mNode = mSceneMgr->getRootSceneNode()->createChildSceneNode("HeadNode");
     mNode->attachObject(mEntity);
-    mNode->translate( Ogre::Vector3( 25, 150, 0 ) );
+    //mNode->translate( Ogre::Vector3( 25, 150, 0 ) );
 //    mNode->roll(Ogre::Degree(80));
 //    mNode->scale( .3, .3, .3 );
 
     mEntity2 = mSceneMgr->createEntity( "Head2", "Sphere.mesh" );
     mEntity2->setCastShadows(true);
     //Ogre::SceneNode* headNode2 = headNode->createChildSceneNode( "HeadNode2", Ogre::Vector3( 100, 0, 0 ) );
-    mNode2 = mSceneMgr->getRootSceneNode()->createChildSceneNode( "HeadNode2", Ogre::Vector3( 25, 104, 0 ) );
+    mNode2 = mSceneMgr->getRootSceneNode()->createChildSceneNode( "HeadNode2");
     mNode2->attachObject(mEntity2);
 //    headNode2->translate( Ogre::Vector3( 10, 0, 10 ) );
 
@@ -225,7 +225,7 @@ void TutorialApplication::preparePhysics(Ogre::Entity* entity,
 	mWorld->addConstraint(p2p);
 
 	mDebugDrawer = new DebugDrawer(mSceneMgr, mWorld);
-	mDebugDrawer->setDebugMode(1);
+	mDebugDrawer->setDebugMode(0);
 	mWorld->setDebugDrawer(mDebugDrawer);
 }
 

@@ -1,0 +1,34 @@
+
+class CollisionShapeDispatcher (derived: BulletImporterSha[eDispatcher(filename, id), BtOgreShapeDispatcher(Ogre::Entity, Shape)
+
+getCollisionShape()
+
+
+class PhysicalBody
+
+mesh (name, btCollisionShape)
+coordinates (x, y, z)
+orientation (quaternion)
+mass
+inertia
+friction
+rollingFriction
+
+
+
+=========
+execution
+=========
+
+BtOgreDispatcher lineSphereDisp("Sphere.mesh", SHAPE_SPHERE);
+btCollisionShape *lineSphereShape = lineSphereDisp.getCollisionshape();
+
+BtOgreDispatcher lineSphereDisp("WeightSphere.mesh", SHAPE_SPHERE);
+btCollisionShape *lineSphereShape = lineSphereDisp.getCollisionshape();
+
+BulletImporterShapeDispatcher flywheelDisp("flywheel.bcs", 0);
+btCollisionShape *flywheelShape = flywheelDisp.getCollisionshape();
+
+phyBodies.push_back(new PhysicalBody("Flywheel.mesh", new Coords, new Orientation, flywheelShape, new Constraint)
+phyBodies.push_back(new PhysicalBody("Sphere.mesh", new Coords, new Orientation, lineSphereShape)
+phyBodies.push_back(new PhysicalBody("WeightSphere.mesh", new Coords, new Orientation, flywheelShape)
