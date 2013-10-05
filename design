@@ -3,16 +3,19 @@ class CollisionShapeDispatcher (derived: BulletImporterSha[eDispatcher(filename,
 
 getCollisionShape()
 
-
 class PhysicalBody
+class PhysicalRigidBody
 
 mesh (name, btCollisionShape)
 coordinates (x, y, z)
 orientation (quaternion)
 mass
 inertia
-friction
-rollingFriction
+
+btRigidBody::btRigidBodyConstructionInfo
+
+getPhysicalBody
+getVisualBody
 
 
 
@@ -23,12 +26,25 @@ execution
 BtOgreDispatcher lineSphereDisp("Sphere.mesh", SHAPE_SPHERE);
 btCollisionShape *lineSphereShape = lineSphereDisp.getCollisionshape();
 
-BtOgreDispatcher lineSphereDisp("WeightSphere.mesh", SHAPE_SPHERE);
-btCollisionShape *lineSphereShape = lineSphereDisp.getCollisionshape();
+BtOgreDispatcher weightSphereDisp("WeightSphere.mesh", SHAPE_SPHERE);
+btCollisionShape *weightSphereShape = lineSphereDisp.getCollisionshape();
 
 BulletImporterShapeDispatcher flywheelDisp("flywheel.bcs", 0);
 btCollisionShape *flywheelShape = flywheelDisp.getCollisionshape();
 
-phyBodies.push_back(new PhysicalBody("Flywheel.mesh", new Coords, new Orientation, flywheelShape, new Constraint)
-phyBodies.push_back(new PhysicalBody("Sphere.mesh", new Coords, new Orientation, lineSphereShape)
-phyBodies.push_back(new PhysicalBody("WeightSphere.mesh", new Coords, new Orientation, flywheelShape)
+PhysicalBody *flywheel = new PhysicalRigidBody("Flywheel.mesh", new Coords, new Orientation, flywheelShape, mass, inertia, btRigidBody::btRigidBodyConstructionInfo)
+PhysicalBody *lineSphere new PhysicalRigidBody("Sphere.mesh", new Coords, new Orientation, lineSphereShape, mass, inertia, btRigidBody::btRigidBodyConstructionInfo)
+PhysicalBody *weightSphere = new PhysicalRigidBody("WeightSphere.mesh", new Coords, new Orientation, weightSphereShape, mass, inertia, btRigidBody::btRigidBodyConstructionInfo)
+
+phyBodies.push_back(flywheel)
+phyBodies.push_back(lineSphere)
+phyBodies.push_back(weightSphere)
+
+for body in phyBodies
+	mWorld->addRigidBody(phyBodies[i]->getPhysicalBody());
+
+btTypedConstraint wheelHinge = new btHingeConstraint(*flywheel,btVector3(0,0,0),btVector3(0,0,1),true);              
+btTypedConstraint* p2p = new btPoint2PointConstraint(*flywheel, *lineSphere, btVector3(0,-38.5,|ld *world, btScalar timeStep);
+
+mWorld->addConstraint(mWheelHinge);
+mWorld->addConstraint(p2p);
