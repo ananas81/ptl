@@ -6,10 +6,10 @@
 namespace Perpetual
 {
 
-class CollisionShapeDispatcher
+class PtlCollisionShapeDispatcher
 {
 	public:
-		virtual ~CollisionShapeDispatcher() = 0;
+		virtual ~PtlCollisionShapeDispatcher() = 0;
 		virtual btCollisionShape* getCollisionShape() const = 0;
 };
 

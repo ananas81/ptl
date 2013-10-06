@@ -4,12 +4,12 @@
 #include <btBulletDynamicsCommon.h>
 #include <OgreEntity.h>
 #include <string>
-#include "CollisionShapeDispatcher.h"
+#include "PtlCollisionShapeDispatcher.h"
 
 namespace Perpetual
 {
 
-class BtOgreShapeDispatcher : public CollisionShapeDispatcher
+class PtlBtOgreShapeDispatcher : public PtlCollisionShapeDispatcher
 {
 	public:
 		enum BulletShape
@@ -22,8 +22,8 @@ class BtOgreShapeDispatcher : public CollisionShapeDispatcher
 			CAPSULE
 		};
 		
-		BtOgreShapeDispatcher(Ogre::Entity* ogreEntity, BulletShape btShape);
-		virtual ~BtOgreShapeDispatcher();
+		PtlBtOgreShapeDispatcher(Ogre::Entity* ogreEntity, BulletShape btShape);
+		virtual ~PtlBtOgreShapeDispatcher();
 		virtual btCollisionShape* getCollisionShape() const;
 
 	private:

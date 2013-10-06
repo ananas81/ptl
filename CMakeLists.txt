@@ -15,9 +15,9 @@ SET(SRC
     "BaseApplication.cpp"
     "DebugDraw.cpp"
     "DynamicLineDrawer.cpp"
-    "BtOgreShapeDispatcher.cpp"
-    "BulletImporterShapeDispatcher.cpp"
-    "CollisionShapeDispatcher.cpp"
+    "PtlBtOgreShapeDispatcher.cpp"
+    "PtlBulletImporterShapeDispatcher.cpp"
+    "PtlCollisionShapeDispatcher.cpp"
     "PtlPhysicalBody.cpp"
 )
 

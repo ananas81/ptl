@@ -3,16 +3,16 @@
 
 #include <btBulletDynamicsCommon.h>
 #include <string>
-#include "CollisionShapeDispatcher.h"
+#include "PtlCollisionShapeDispatcher.h"
 
 namespace Perpetual
 {
 
-class BulletImporterShapeDispatcher : public CollisionShapeDispatcher
+class PtlBulletImporterShapeDispatcher : public PtlCollisionShapeDispatcher
 {
 	public:
-		BulletImporterShapeDispatcher(const std::string& bcsFileName, int shapeId);
-		virtual ~BulletImporterShapeDispatcher();
+		PtlBulletImporterShapeDispatcher(const std::string& bcsFileName, int shapeId);
+		virtual ~PtlBulletImporterShapeDispatcher();
 		virtual btCollisionShape* getCollisionShape() const;
 
 	private:

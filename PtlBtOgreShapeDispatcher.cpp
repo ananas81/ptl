@@ -1,21 +1,21 @@
 #include <btBulletWorldImporter.h>
-#include "BtOgreShapeDispatcher.h"
+#include "PtlBtOgreShapeDispatcher.h"
 #include "BtOgreGP.h"
 #include "PerpetualCommon.h"
 
 namespace Perpetual {
 
-BtOgreShapeDispatcher::BtOgreShapeDispatcher(Ogre::Entity* ogreEntity, BulletShape btShape) :
+PtlBtOgreShapeDispatcher::PtlBtOgreShapeDispatcher(Ogre::Entity* ogreEntity, BulletShape btShape) :
 				mOgreEntity(ogreEntity),
 				mBtShape(btShape)
 {
 }
 
-BtOgreShapeDispatcher::~BtOgreShapeDispatcher()
+PtlBtOgreShapeDispatcher::~PtlBtOgreShapeDispatcher()
 {
 }
 
-btCollisionShape* BtOgreShapeDispatcher::getCollisionShape() const
+btCollisionShape* PtlBtOgreShapeDispatcher::getCollisionShape() const
 {
         BtOgre::StaticMeshToShapeConverter converter(mOgreEntity);
         btCollisionShape *shape;
