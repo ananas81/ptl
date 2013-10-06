@@ -1,7 +1,7 @@
 #include <btBulletWorldImporter.h>
 #include "PtlBtOgreShapeDispatcher.h"
 #include "BtOgreGP.h"
-#include "PerpetualCommon.h"
+#include "PtlPerpetualCommon.h"
 
 namespace Perpetual {
 
