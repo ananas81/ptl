@@ -29,6 +29,7 @@ class PtlPhysicalBody
 
 		PtlPhysicalBody(Ogre::Entity* visualObject,
 				btCollisionShape* shape,
+				btRigidBody::btRigidBodyConstructionInfo constrInfo,
 				const Vector& pos,
 				const Quaternion& quat,
 				double mass,
@@ -40,6 +41,7 @@ class PtlPhysicalBody
 	private:
 		Ogre::Entity* mVisualObject;
 		btCollisionShape *mShape;
+		btRigidBody::btRigidBodyConstructionInfo mConstrInfo;
 		Vector mPos;
 		Quaternion mQuat;
 		double mMass;
