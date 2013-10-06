@@ -2,6 +2,7 @@
 	#define __BTOGRE_SHAPE_DISPATCHER_H
 
 #include <btBulletDynamicsCommon.h>
+#include <OgreEntity.h>
 #include <string>
 #include "CollisionShapeDispatcher.h"
 
