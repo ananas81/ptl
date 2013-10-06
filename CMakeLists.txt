@@ -15,6 +15,9 @@ SET(SRC
     "BaseApplication.cpp"
     "DebugDraw.cpp"
     "DynamicLineDrawer.cpp"
+    "BtOgreShapeDispatcher.cpp"
+    "BulletImporterShapeDispatcher.cpp"
+    "CollisionShapeDispatcher.cpp"
 )
 
 INCLUDE(FindPkgConfig)
