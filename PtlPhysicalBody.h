@@ -5,6 +5,8 @@
 //#include <btCollisionObject.h>
 //#include <BulletCollision/CollisionShapes/btCollisionShape.h>
 #include <OgreEntity.h>
+#include <OgreSceneNode.h>
+#include "PtlPerpetualCommon.h"
 
 namespace Perpetual
 {
@@ -12,28 +14,34 @@ namespace Perpetual
 class PtlPhysicalBody
 {
 	public:
-		struct Vector
-		{
-			double x;
-			double y;
-			double z;
+		class MotionState : public btMotionState {
+			public:
+			    MotionState(const btTransform &initialpos, Ogre::SceneNode *node);
+			    virtual ~MotionState();
+			    void setNode(Ogre::SceneNode *node);
+			    virtual void getWorldTransform(btTransform &worldTrans) const;
+			    virtual void setWorldTransform(const btTransform &worldTrans);
+			protected:
+			    Ogre::SceneNode *mVisibleObj;
+			    btTransform mPos;
 		};
 
-		struct Quaternion
-		{
-			double w;
-			double x;
-			double y;
-			double z;
-		};
+//		class BodyCommand
+//		{
+//			virtual ~BodyCommand() = 0;
+//		};
+//
+//		BodyCommand::~BodyCommand() {}
+
+		virtual void init();
 
 		PtlPhysicalBody(Ogre::Entity* visualObject,
 				btCollisionShape* shape,
 				btRigidBody::btRigidBodyConstructionInfo constrInfo,
-				const Vector& pos,
-				const Quaternion& quat,
+				const btVector3& pos,
+				const btQuaternion& quat,
 				double mass,
-				const Vector& intertia);
+				const btVector3& inertia);
 		virtual ~PtlPhysicalBody();
 		virtual btCollisionObject* getCollisionObject() const;
 		virtual Ogre::Entity* getVisualObject() const;
@@ -42,11 +50,12 @@ class PtlPhysicalBody
 		Ogre::Entity* mVisualObject;
 		btCollisionShape *mShape;
 		btRigidBody::btRigidBodyConstructionInfo mConstrInfo;
-		Vector mPos;
-		Quaternion mQuat;
+		btVector3 mPos;
+		btQuaternion mQuat;
 		double mMass;
-		Vector mIntertia;
+		btVector3 mInertia;
 		btCollisionObject *mCollisionObject;
+		MotionState *mMotionState;
 };
 
 };

@@ -41,7 +41,7 @@ btCollisionShape* PtlBtOgreShapeDispatcher::getCollisionShape() const
         		shape = converter.createCapsule();
 			break;
 		default:
-			PERPET_LOG("Unsupported bullet shape");
+			PTL_LOG("Unsupported bullet shape");
 	}
 
 	return shape;
