@@ -1,62 +1,97 @@
-#include "PtlPhysicalBody.h"
+#include "PhysicalBody.h"
 
-namespace Perpetual
+namespace Ptl
 {
 
-PtlPhysicalBody::PtlPhysicalBody(Ogre::Entity* visualObject,
-				 btCollisionShape* shape,
-				 btRigidBody::btRigidBodyConstructionInfo constrInfo,
-				 const btVector3& pos,
-				 const btQuaternion& quat,
-				 double mass,
-				 const btVector3& inertia) : 
-				 mVisualObject(visualObject),
-				 mShape(shape),
-				 mConstrInfo(constrInfo),
-				 mPos(pos),
-				 mMass(mass),
-				 mInertia(inertia),
-				 mCollisionObject(NULL),
-				 mMotionState(NULL) { 
+PhysicalBody::PhysicalBody(Ogre::SceneManager* sceneManager,
+			   const std::string& bodyName,
+			   const std::string& meshName,
+			   const Ogre::Vector3& pos,
+			   const Ogre::Quaternion& orient,
+			   btCollisionShape* shape,
+			   double mass,
+			   const btVector3& inertia, 
+			   double friction,
+			   double rollingFriction) :
+			   mSceneManager(sceneManager),
+			   mBodyNode(NULL),
+			   mBodyName(bodyName),
+			   mMeshName(meshName),
+			   mPos(pos),
+			   mOrient(orient),
+			   mEntity(NULL),
+			   mShape(shape),
+			   mConstrInfo(constrInfo),
+			   mPos(pos),
+			   mMass(mass),
+			   mInertia(inertia),
+			   mCollisionObject(NULL),
+			   mMotionState(NULL),
+			   mFriction(friction),
+			   mRollingFriction(rollingFriction)
+{
+	init();
 }
 
-PtlPhysicalBody::~PtlPhysicalBody() {
+PhysicalBody::~PhysicalBody()
+{
 	delete mMotionState;
-	delete mCollisionObject;
+	delete mEntity;
 }
 
-btCollisionObject* PtlPhysicalBody::getCollisionObject() const {
+btCollisionObject* PhysicalBody::getCollisionObject() const
+{
 	return mCollisionObject;
 }
 
-Ogre::Entity* PtlPhysicalBody::getVisualObject() const {
-	return mVisualObject;
+Ogre::Entity* PhysicalBody::getVisualObject() const
+{
+	return mEntity;
 }
 
-void PtlPhysicalBody::init()
+void PhysicalBody::init()
 {
-	mMotionState = new MotionState(btTransform(mQuat, mPos), mVisualObject->getParentSceneNode());
+        mEntity = mSceneMgr->createEntity(mBodyName.c_str(), mMeshName.c_str());
+	mBodyNode = mSceneMgr->getRootSceneNode()->createChildSceneNode(mBodyName.c_str(),
+									mPos,
+									mOrient);
+	mBodyNode->attachObject(mEntity);
+	mMotionState = new MotionState(btTransform(btQuaternion(mOrient.x, mOrient.y, mOrient.z, mOrient.w),
+						   btVector3(mPos.x, mPos.y, mPos.z)),
+				       mBodyNode);
 	mShape->calculateLocalInertia(mMass, mInertia);
+	btRigidBody::btRigidBodyConstructionInfo
+					constrInfo(mMass,
+						   mMotionState,
+						   mShape,
+						   mInertia);
+	constrInfo.m_friction = mFriction;
+	constrInfo.m_rollingFriction = mRollingFriction;
 	mCollisionObject = new btRigidBody(mConstrInfo); 
 }
 
-PtlPhysicalBody::MotionState::MotionState(const btTransform &initialpos, Ogre::SceneNode *node) :
+PhysicalBody::MotionState::MotionState(const btTransform &initialpos, Ogre::SceneNode *node) :
 	mVisibleObj(node),
-	mPos(initialpos) {
+	mPos(initialpos)
+{
 }
 
-PtlPhysicalBody::MotionState::~MotionState() {
+PhysicalBody::MotionState::~MotionState()
+{
 }
 
-void PtlPhysicalBody::MotionState::setNode(Ogre::SceneNode *node) {
+void PhysicalBody::MotionState::setNode(Ogre::SceneNode *node)
+{
 	mVisibleObj = node;
 }
 
-void PtlPhysicalBody::MotionState::getWorldTransform(btTransform &worldTrans) const {
+void PhysicalBody::MotionState::getWorldTransform(btTransform &worldTrans) const
+{
 	worldTrans = mPos;
 }
 
-void PtlPhysicalBody::MotionState::setWorldTransform(const btTransform &worldTrans) {
+void PhysicalBody::MotionState::setWorldTransform(const btTransform &worldTrans)
+{
 	if(NULL == mVisibleObj) {
 		PTL_LOG("mVisibleObj null pointer");
 		return; // silently return before we set a node

@@ -6,10 +6,10 @@
 #include <string>
 #include "PtlCollisionShapeDispatcher.h"
 
-namespace Perpetual
+namespace Ptl
 {
 
-class PtlBtOgreShapeDispatcher : public PtlCollisionShapeDispatcher
+class BtOgreShapeDispatcher : public CollisionShapeDispatcher
 {
 	public:
 		enum BulletShape
@@ -22,8 +22,8 @@ class PtlBtOgreShapeDispatcher : public PtlCollisionShapeDispatcher
 			CAPSULE
 		};
 		
-		PtlBtOgreShapeDispatcher(Ogre::Entity* ogreEntity, BulletShape btShape);
-		virtual ~PtlBtOgreShapeDispatcher();
+		BtOgreShapeDispatcher(Ogre::Entity* ogreEntity, BulletShape btShape);
+		virtual ~BtOgreShapeDispatcher();
 		virtual btCollisionShape* getCollisionShape() const;
 
 	private:

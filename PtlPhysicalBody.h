@@ -8,10 +8,10 @@
 #include <OgreSceneNode.h>
 #include "PtlPerpetualCommon.h"
 
-namespace Perpetual
+namespace Ptl
 {
 
-class PtlPhysicalBody
+class PhysicalBody
 {
 	public:
 		class MotionState : public btMotionState {
@@ -35,27 +35,35 @@ class PtlPhysicalBody
 
 		virtual void init();
 
-		PtlPhysicalBody(Ogre::Entity* visualObject,
-				btCollisionShape* shape,
-				btRigidBody::btRigidBodyConstructionInfo constrInfo,
-				const btVector3& pos,
-				const btQuaternion& quat,
-				double mass,
-				const btVector3& inertia);
-		virtual ~PtlPhysicalBody();
+		PhysicalBody(Ogre::SceneManager* sceneMgr,
+			     const std::string& bodyName,
+			     const std::string& meshName,
+			     const Ogre::Vector3& pos,
+			     const Ogre::Quaternion& orient,
+			     btCollisionShape* shape,
+			     double mass,
+			     const btVector3& inertia,
+			     double friction,
+			     double rollingFriction);
+		virtual ~PhysicalBody();
 		virtual btCollisionObject* getCollisionObject() const;
 		virtual Ogre::Entity* getVisualObject() const;
 
 	private:
-		Ogre::Entity* mVisualObject;
+		Ogre::SceneManager *mSceneManager;
+		Ogre::SceneNode *mBodyNode;
+		const std::string mBodyName;
+		const std::string mMeshName;
+		Ogre::Vector3 mPos;
+		Ogre::Quaternion& mOrient;
+		Ogre::Entity *mEntity;
 		btCollisionShape *mShape;
-		btRigidBody::btRigidBodyConstructionInfo mConstrInfo;
-		btVector3 mPos;
-		btQuaternion mQuat;
 		double mMass;
 		btVector3 mInertia;
 		btCollisionObject *mCollisionObject;
 		MotionState *mMotionState;
+		double mFriction;
+		double mRollingFriction;
 };
 
 };

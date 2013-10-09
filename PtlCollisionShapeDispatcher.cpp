@@ -1,9 +1,9 @@
 #include "PtlCollisionShapeDispatcher.h"
 
-namespace Perpetual
+namespace Ptl
 {
 
-PtlCollisionShapeDispatcher::~PtlCollisionShapeDispatcher()
+CollisionShapeDispatcher::~CollisionShapeDispatcher()
 {
 }
 

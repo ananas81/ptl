@@ -3,19 +3,19 @@
 #include "BtOgreGP.h"
 #include "PtlPerpetualCommon.h"
 
-namespace Perpetual {
+namespace Ptl {
 
-PtlBtOgreShapeDispatcher::PtlBtOgreShapeDispatcher(Ogre::Entity* ogreEntity, BulletShape btShape) :
+BtOgreShapeDispatcher::BtOgreShapeDispatcher(Ogre::Entity* ogreEntity, BulletShape btShape) :
 				mOgreEntity(ogreEntity),
 				mBtShape(btShape)
 {
 }
 
-PtlBtOgreShapeDispatcher::~PtlBtOgreShapeDispatcher()
+BtOgreShapeDispatcher::~BtOgreShapeDispatcher()
 {
 }
 
-btCollisionShape* PtlBtOgreShapeDispatcher::getCollisionShape() const
+btCollisionShape* BtOgreShapeDispatcher::getCollisionShape() const
 {
         BtOgre::StaticMeshToShapeConverter converter(mOgreEntity);
         btCollisionShape *shape;

@@ -5,10 +5,10 @@
 #include <string>
 #include "PtlCollisionShapeDispatcher.h"
 
-namespace Perpetual
+namespace Ptl
 {
 
-class PtlBulletImporterShapeDispatcher : public PtlCollisionShapeDispatcher
+class PtlBulletImporterShapeDispatcher : public CollisionShapeDispatcher
 {
 	public:
 		PtlBulletImporterShapeDispatcher(const std::string& bcsFileName, int shapeId);

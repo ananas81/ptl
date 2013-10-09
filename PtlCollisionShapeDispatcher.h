@@ -3,10 +3,10 @@
 
 #include <btBulletDynamicsCommon.h>
 
-namespace Perpetual
+namespace Ptl
 {
 
-class PtlCollisionShapeDispatcher
+class CollisionShapeDispatcher
 {
 	public:
 		virtual ~PtlCollisionShapeDispatcher() = 0;

@@ -33,6 +33,7 @@ This source file is part of the
 #include <RendererModules/Ogre/CEGUIOgreRenderer.h>
 #include <vector>
 #include "DebugDraw.hpp"
+#include "PtlPhysicalBody.h"
 
 class DebugDrawer : public CDebugDraw
 {
@@ -99,7 +100,7 @@ protected:
     virtual void createFrameListener(void);
     virtual bool frameRenderingQueued(const Ogre::FrameEvent &evt);
     virtual bool nextLocation(void);
-    virtual void preparePhysics(Ogre::Entity* entity, Ogre::SceneNode* node, Ogre::Entity* entity2, Ogre::SceneNode* node2);
+    virtual void initPhysics();
 
     virtual bool mouseMoved(const OIS::MouseEvent& arg);
     virtual bool mousePressed(const OIS::MouseEvent& arg, OIS::MouseButtonID id);
@@ -112,33 +113,22 @@ protected:
     pickingPreTickCallback (btDynamicsWorld *world, btScalar timeStep);
 
 
-    Ogre::Real mDistance;                  // The distance the object has left to travel
-    Ogre::Vector3 mDirection;              // The direction the object is moving
-    Ogre::Vector3 mDestination;            // The destination the object is moving towards
-    Ogre::SceneNode *mNode;
-    Ogre::Entity *mEntity;
-    Ogre::SceneNode *mNode2;
-    Ogre::Entity *mEntity2;
-    Ogre::Real mWalkSpeed;                 // The speed at which the object is moving
-    std::deque<Ogre::Vector3> mWalkList;   // The list of points we are walking to
-    MyMotionState *mFallMotionState;
-    MyMotionState *mStaticMotionState;
     btDiscreteDynamicsWorld* mWorld;
-    btSoftBodyWorldInfo m_softBodyWorldInfo;
-    Ogre::SceneNode *mRopeObjectNode;
 
     Ogre::SceneNode *mCurrentObject;        //pointer to our currently selected object
     Ogre::RaySceneQuery* mRayScnQuery;      //pointer to our ray scene query
     CEGUI::Renderer* mGUIRenderer;          //our CEGUI renderer
     bool bLMouseDown, bRMouseDown;
 
-    btRigidBody *mFallRigidBody;
-    btRigidBody *mStaticRigidBody;
+    Ptl::PhysicalBody *mFlywheel1;
+    Ptl::PhysicalBody *mFlywheel2;
+    Ptl::PhysicalBody *mRopeSphere;
     Ogre::Vector3 mCurHitPoint;
     btHingeConstraint *mWheelHinge;
     DebugDrawer *mDebugDrawer;
 
     std::vector<WorldObject*> mWorldObjects;
+    std::vector<Ptl::PhysicalBody*> mPhysBodies;
 };
 
 #endif // #ifndef __TutorialApplication_h_
