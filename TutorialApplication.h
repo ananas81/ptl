@@ -115,10 +115,11 @@ protected:
 
     btDiscreteDynamicsWorld* mWorld;
 
+    bool bLMouseDown;
+    bool bRMouseDown;
     Ogre::SceneNode *mCurrentObject;        //pointer to our currently selected object
     Ogre::RaySceneQuery* mRayScnQuery;      //pointer to our ray scene query
     CEGUI::Renderer* mGUIRenderer;          //our CEGUI renderer
-    bool bLMouseDown, bRMouseDown;
 
     Ptl::PhysicalBody *mFlywheel1;
     Ptl::PhysicalBody *mFlywheel2;

@@ -9,7 +9,7 @@ namespace Ptl
 class CollisionShapeDispatcher
 {
 	public:
-		virtual ~PtlCollisionShapeDispatcher() = 0;
+		virtual ~CollisionShapeDispatcher() = 0;
 		virtual btCollisionShape* getCollisionShape() const = 0;
 };
 

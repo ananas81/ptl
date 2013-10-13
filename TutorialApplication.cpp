@@ -14,6 +14,8 @@ Filename:    TutorialApplication.cpp
 */
 #include "TutorialApplication.h"
 #include "PtlCollisionShapeDispatcher.h"
+#include "PtlBulletImporterShapeDispatcher.h"
+#include "PtlBtOgreShapeDispatcherData.h"
 
 
 #define BULLET_TRIANGLE_COLLISION 1
@@ -40,36 +42,30 @@ TutorialApplication::~TutorialApplication(void)
 //-------------------------------------------------------------------------------------
 void TutorialApplication::createScene(void)
 {
-	Ptl::CollisionShapeDispatcher *shapeDispatcher;
+	btCollisionShape *shape;
 
 	mSceneMgr->setAmbientLight(Ogre::ColourValue(0.0f, 0.0f, 0.5f));
 	mSceneMgr->setShadowTechnique(Ogre::SHADOWTYPE_STENCIL_ADDITIVE);
 
 //======================
-	shapeDispatcher = new Ptl::BulletImporterShapeDispatcher("flywheel.bcs", 0);
-	btCollisionShape *flywheelShape = shapeDispatcher->getCollisionShape();
-
-	mFlywheel1 = new Ptl::PtlPhysicalBody(mSceneManager,
+	mFlywheel1 = new Ptl::OgrePhysicalBody(mSceneMgr,
 					      "Flywheel",
 					      "Flywheel.mesh",
 					      Ogre::Vector3(25, 150, 0),
 					      Ogre::Quaternion(0, 0, 0, 1),
-					      flywheelShape,
+					      new Ptl::BulletImporterShapeDispatcherData("flywheel.bcs", 0),
 					      4.0,
 					      btVector3(0, 0, 0),
 					      10.0,
 					      1.0);
 	mPhysBodies.push_back(mFlywheel1);
 
-	shapeDispatcher = new Ptl::BtOgreShapeDispatcher(node, Ptl::BtOgreShapeDispatcher::SPHERE);
-	btCollisionShape *sphereShape = shapeDispatcher->getCollisionShape();
-
-	mRopeSphere = new Ptl::PtlPhysicalBody(mSceneManager,
+	mRopeSphere = new Ptl:OgrePhysicalBody(mSceneMgr,
 					      "RopeSphere",
 					      "Sphere.mesh",
 					      Ogre::Vector3(25, 104, 0),
 					      Ogre::Quaternion(0, 0, 0, 1),
-					      sphereShape,
+					      new Ptl::BtOgreShapeDispatcherData(Ptl::BtOgreShapeDispatcher::SPHERE),
 					      10.0,
 					      btVector3(0, 0, 0),
 					      10.0,

@@ -8,11 +8,11 @@
 namespace Ptl
 {
 
-class PtlBulletImporterShapeDispatcher : public CollisionShapeDispatcher
+class BulletImporterShapeDispatcher : public CollisionShapeDispatcher
 {
 	public:
-		PtlBulletImporterShapeDispatcher(const std::string& bcsFileName, int shapeId);
-		virtual ~PtlBulletImporterShapeDispatcher();
+		BulletImporterShapeDispatcher(const std::string& bcsFileName, int shapeId);
+		virtual ~BulletImporterShapeDispatcher();
 		virtual btCollisionShape* getCollisionShape() const;
 
 	private:

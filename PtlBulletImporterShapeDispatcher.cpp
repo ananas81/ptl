@@ -1,19 +1,19 @@
 #include <btBulletWorldImporter.h>
-#include "PtlBulletImporterShapeDispatcher.h"
+#include "BulletImporterShapeDispatcher.h"
 
 namespace Perpetual {
 
-PtlBulletImporterShapeDispatcher::PtlBulletImporterShapeDispatcher(const std::string& bcsFileName, int shapeId) :
+BulletImporterShapeDispatcher::BulletImporterShapeDispatcher(const std::string& bcsFileName, int shapeId) :
 				mBcsFileName(bcsFileName),
 				mShapeId(shapeId)
 {
 }
 
-PtlBulletImporterShapeDispatcher::~PtlBulletImporterShapeDispatcher()
+BulletImporterShapeDispatcher::~BulletImporterShapeDispatcher()
 {
 }
 
-btCollisionShape* PtlBulletImporterShapeDispatcher::getCollisionShape() const
+btCollisionShape* BulletImporterShapeDispatcher::getCollisionShape() const
 {
 	btBulletWorldImporter importer;
 	importer.loadFile(mBcsFileName.c_str());

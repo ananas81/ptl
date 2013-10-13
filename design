@@ -48,3 +48,18 @@ btTypedConstraint* p2p = new btPoint2PointConstraint(*flywheel, *lineSphere, btV
 
 mWorld->addConstraint(mWheelHinge);
 mWorld->addConstraint(p2p);
+
+
+class CollisionShapeDispatcherFactory
+	CollisionShapeDispatcher* createDispatcher(BtOgreCollisionShapeDispatcherData* data);
+	CollisionShapeDispatcher* createDispatcher(BulletImporterCollisionShapeDispatcherData* data);
+
+
+class CollisionShapeDispatcherData
+	virtual CollisionShapeDispatcher* getData();
+
+class BtOgreCollisionShapeDispatcherData
+	CollisionShapeDispatcher* getData();
+
+class BulletImporterCollisionShapeDispatcherData
+	CollisionShapeDispatcher* getData();
