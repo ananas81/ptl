@@ -33,7 +33,7 @@ This source file is part of the
 #include <RendererModules/Ogre/CEGUIOgreRenderer.h>
 #include <vector>
 #include "DebugDraw.hpp"
-#include "PtlPhysicalBody.h"
+#include "PtlOgrePhysicalBody.h"
 
 class DebugDrawer : public CDebugDraw
 {
@@ -129,7 +129,7 @@ protected:
     DebugDrawer *mDebugDrawer;
 
     std::vector<WorldObject*> mWorldObjects;
-    std::vector<Ptl::PhysicalBody*> mPhysBodies;
+    std::vector<Ptl::OgrePhysicalBody*> mPhysBodies;
 };
 
 #endif // #ifndef __TutorialApplication_h_

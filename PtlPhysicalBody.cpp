@@ -14,6 +14,7 @@ PhysicalBody::PhysicalBody(const btVector3& pos,
 			   mPos(pos),
 			   mOrient(orient),
 			   mMotionState(motionState),
+			   mCollisionShape(colShape),
 			   mMass(mass),
 			   mInertia(inertia),
 			   mFriction(friction),
@@ -21,7 +22,6 @@ PhysicalBody::PhysicalBody(const btVector3& pos,
 			   mCollisionShape(NULL),
 			   mCollisionObject(NULL)
 {
-	init();
 }
 
 PhysicalBody::~PhysicalBody()
@@ -43,7 +43,7 @@ void PhysicalBody::setMotionState(btMotionState* motionState)
 	mMotionState = motionState;
 }
 
-void PhysicalBody::init()
+void PhysicalBody::initPhysics()
 {
 	mShape->calculateLocalInertia(mMass, mInertia);
 	btRigidBody::btRigidBodyConstructionInfo

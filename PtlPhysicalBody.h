@@ -21,7 +21,7 @@ class PhysicalBody
 //
 //		BodyCommand::~BodyCommand() {}
 
-		virtual void init();
+		virtual void initPhysics();
 
 		PhysicalBody(const btVector3& pos,
 			     const btQuaternion& orient,
@@ -36,15 +36,17 @@ class PhysicalBody
 		virtual void setCollisionShape(btCollisionShape* shape);
 		virtual void setMotionState(btMotionState *motionState);
 
+	protected:
+		btCollisionShape *mCollisionShape;
+		btMotionState *mMotionState;
+
 	private:
 		btVector3 mPos;
 		btQuaternion mOrient;
-		btMotionState *mMotionState;
 		double mMass;
 		btVector3 mInertia;
 		double mFriction;
 		double mRollingFriction;
-		btCollisionShape *mCollisionShape;
 		btCollisionObject *mCollisionObject;
 };
 
