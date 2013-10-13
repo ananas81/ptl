@@ -15,7 +15,7 @@ Filename:    TutorialApplication.cpp
 #include "TutorialApplication.h"
 #include "PtlCollisionShapeDispatcher.h"
 #include "PtlBulletImporterShapeDispatcher.h"
-#include "PtlBtOgreShapeDispatcherData.h"
+#include "PtlCollisionShapeDispatcherData.h"
 
 
 #define BULLET_TRIANGLE_COLLISION 1
