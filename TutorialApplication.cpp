@@ -15,6 +15,7 @@ Filename:    TutorialApplication.cpp
 #include "TutorialApplication.h"
 #include "PtlCollisionShapeDispatcher.h"
 #include "PtlBulletImporterShapeDispatcher.h"
+#include "PtlBtOgreShapeDispatcher.h"
 #include "PtlCollisionShapeDispatcherData.h"
 
 
@@ -53,21 +54,21 @@ void TutorialApplication::createScene(void)
 					      "Flywheel.mesh",
 					      Ogre::Vector3(25, 150, 0),
 					      Ogre::Quaternion(0, 0, 0, 1),
-					      new Ptl::BulletImporterShapeDispatcherData("flywheel.bcs", 0),
+					      new Ptl::BulletImporterDispatcherData("flywheel.bcs", 0),
 					      4.0,
-					      btVector3(0, 0, 0),
+					      Ogre::Vector3(0, 0, 0),
 					      10.0,
 					      1.0);
 	mPhysBodies.push_back(mFlywheel1);
 
-	mRopeSphere = new Ptl:OgrePhysicalBody(mSceneMgr,
+	mRopeSphere = new Ptl::OgrePhysicalBody(mSceneMgr,
 					      "RopeSphere",
 					      "Sphere.mesh",
 					      Ogre::Vector3(25, 104, 0),
 					      Ogre::Quaternion(0, 0, 0, 1),
-					      new Ptl::BtOgreShapeDispatcherData(Ptl::BtOgreShapeDispatcher::SPHERE),
+					      new Ptl::BtOgreDispatcherData(Ptl::BtOgreShapeDispatcher::SPHERE),
 					      10.0,
-					      btVector3(0, 0, 0),
+					      Ogre::Vector3(0, 0, 0),
 					      10.0,
 					      1.0);	
 	mPhysBodies.push_back(mRopeSphere);
@@ -148,10 +149,10 @@ void TutorialApplication::initPhysics()
 	btCollisionShape* groundShape = new btStaticPlaneShape(btVector3(0,1,0),1);
 
 	for (int i = 0; i < mPhysBodies.size(); ++i)
-		mWorld->addRigidBody(mPhysBodies[i]);
+		mWorld->addRigidBody(static_cast<btRigidBody*>(mPhysBodies[i]->getCollisionObject()));
 
-	btRigidBody* flywheel1Body = mflywheel1->getCollisionObject();
-	btRigidBody* ropeSphereBody = mRopeSphere->getCollisionObject();
+	btRigidBody* flywheelBody1 = static_cast<btRigidBody*>(mFlywheel1->getCollisionObject());
+	btRigidBody* ropeSphereBody = static_cast<btRigidBody*>(mRopeSphere->getCollisionObject());
 
 	mWheelHinge = new btHingeConstraint(*flywheelBody1, btVector3(0,0,0), btVector3(0,0,1), true);
 	flywheelBody1->setFriction(1);
@@ -184,21 +185,7 @@ void TutorialApplication::createFrameListener(void){
 
 	//but we also want to set up our raySceneQuery after everything has been initialized
 	mRayScnQuery = mSceneMgr->createRayQuery(Ogre::Ray());
-
-	// Set default values for variables
-	mWalkSpeed = 150.0f;
-	mDirection = Ogre::Vector3::ZERO;
 }
-
-bool TutorialApplication::nextLocation(void){
-	static int i = 0;
-	i = !i;
-	mDestination = mWalkList[i];  // this gets the front of the deque
-	mDirection = mDestination - mNode->getPosition();
-	mDistance = mDirection.normalise();
-	return true;
-}
-
 
 bool TutorialApplication::frameRenderingQueued(const Ogre::FrameEvent &evt){
 //	mWorld->stepSimulation(1/60.f,10);
@@ -385,19 +372,23 @@ bool TutorialApplication::keyPressed(const OIS::KeyEvent& evt)
 	printf(">>> key pressed\n");
 	static bool motorOn = false;
 
-	switch (evt.key) {
-	case OIS::KC_1: 
-	    motorOn = !motorOn;
-		if (motorOn)
-			mFlywheel1->getCollisionObject()->setAngularVelocity(btVector3(0, 0, 5));
-			//mWheelHinge->enableAngularMotor(true, 20, 5);
-		else
-			mFlywheel1->getCollisionObject()->setAngularVelocity(btVector3(0, 0, 0));
-			//mWheelHinge->enableMotor(false);
-
-		break;
-	default:
-		break;
+	switch (evt.key)
+	{
+		case OIS::KC_1:
+		{
+			motorOn = !motorOn;
+			btRigidBody* flywheel1 = static_cast<btRigidBody*>(mFlywheel1->getCollisionObject());
+			if (motorOn)
+				flywheel1->setAngularVelocity(btVector3(0, 0, 5));
+				//mWheelHinge->enableAngularMotor(true, 20, 5);
+			else
+				flywheel1->setAngularVelocity(btVector3(0, 0, 0));
+				//mWheelHinge->enableMotor(false);
+	
+			break;
+		}
+		default:
+			break;
 	}
 
 	//then we return the base app keyPressed function so that we get all of the functionality

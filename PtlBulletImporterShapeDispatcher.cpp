@@ -1,7 +1,7 @@
 #include <btBulletWorldImporter.h>
-#include "BulletImporterShapeDispatcher.h"
+#include "PtlBulletImporterShapeDispatcher.h"
 
-namespace Perpetual {
+namespace Ptl {
 
 BulletImporterShapeDispatcher::BulletImporterShapeDispatcher(const std::string& bcsFileName, int shapeId) :
 				mBcsFileName(bcsFileName),

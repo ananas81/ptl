@@ -1,5 +1,5 @@
-#ifndef __PHYSICAL_BODY_DISPATCHER_H
-	#define __PHYSICAL_BODY_DISPATCHER_H
+#ifndef __PHYSICAL_BODY_H
+	#define __PHYSICAL_BODY_H
 
 #include <btBulletDynamicsCommon.h>
 //#include <btCollisionObject.h>
@@ -23,24 +23,21 @@ class PhysicalBody
 
 		virtual void initPhysics();
 
-		PhysicalBody(const btVector3& pos,
-			     const btQuaternion& orient,
-			     btMotionState *motionState,
+		PhysicalBody(btMotionState *motionState,
 			     btCollisionShape *colShape,
+			     const btVector3& pos,
+			     const btQuaternion& orient,
 			     double mass,
 			     const btVector3& inertia,
 			     double friction,
 			     double rollingFriction);
 		virtual ~PhysicalBody();
 		virtual btCollisionObject* getCollisionObject() const;
-		virtual void setCollisionShape(btCollisionShape* shape);
 		virtual void setMotionState(btMotionState *motionState);
 
 	protected:
-		btCollisionShape *mCollisionShape;
 		btMotionState *mMotionState;
-
-	private:
+		btCollisionShape *mCollisionShape;
 		btVector3 mPos;
 		btQuaternion mOrient;
 		double mMass;
@@ -52,4 +49,4 @@ class PhysicalBody
 
 };
 	
-#endif //__PHYSICAL_BODY_DISPATCHER_H
+#endif //__PHYSICAL_BODY_H

@@ -99,7 +99,6 @@ protected:
     virtual void createScene(void);
     virtual void createFrameListener(void);
     virtual bool frameRenderingQueued(const Ogre::FrameEvent &evt);
-    virtual bool nextLocation(void);
     virtual void initPhysics();
 
     virtual bool mouseMoved(const OIS::MouseEvent& arg);
@@ -121,9 +120,9 @@ protected:
     Ogre::RaySceneQuery* mRayScnQuery;      //pointer to our ray scene query
     CEGUI::Renderer* mGUIRenderer;          //our CEGUI renderer
 
-    Ptl::PhysicalBody *mFlywheel1;
-    Ptl::PhysicalBody *mFlywheel2;
-    Ptl::PhysicalBody *mRopeSphere;
+    Ptl::OgrePhysicalBody *mFlywheel1;
+    Ptl::OgrePhysicalBody *mFlywheel2;
+    Ptl::OgrePhysicalBody *mRopeSphere;
     Ogre::Vector3 mCurHitPoint;
     btHingeConstraint *mWheelHinge;
     DebugDrawer *mDebugDrawer;

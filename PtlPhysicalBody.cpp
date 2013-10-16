@@ -1,25 +1,24 @@
-#include "PhysicalBody.h"
+#include "PtlPhysicalBody.h"
 
 namespace Ptl
 {
 
-PhysicalBody::PhysicalBody(const btVector3& pos,
-			   const btQuaternion& orient,
-			   btMotionState *motionState,
+PhysicalBody::PhysicalBody(btMotionState *motionState,
 			   btCollisionShape *colShape,
+			   const btVector3& pos,
+			   const btQuaternion& orient,
 			   double mass,
 			   const btVector3& inertia,
 			   double friction,
 			   double rollingFriction) :
-			   mPos(pos),
-			   mOrient(orient),
 			   mMotionState(motionState),
 			   mCollisionShape(colShape),
+			   mPos(pos),
+			   mOrient(orient),
 			   mMass(mass),
 			   mInertia(inertia),
 			   mFriction(friction),
 			   mRollingFriction(rollingFriction),
-			   mCollisionShape(NULL),
 			   mCollisionObject(NULL)
 {
 }
@@ -33,11 +32,6 @@ btCollisionObject* PhysicalBody::getCollisionObject() const
 	return mCollisionObject;
 }
 
-void PhysicalBody::setCollisionShape(btCollisionShape* shape)
-{
-	mCollisionShape = shape;
-}
-
 void PhysicalBody::setMotionState(btMotionState* motionState)
 {
 	mMotionState = motionState;
@@ -45,7 +39,7 @@ void PhysicalBody::setMotionState(btMotionState* motionState)
 
 void PhysicalBody::initPhysics()
 {
-	mShape->calculateLocalInertia(mMass, mInertia);
+	mCollisionShape->calculateLocalInertia(mMass, mInertia);
 	btRigidBody::btRigidBodyConstructionInfo
 					constrInfo(mMass,
 						   mMotionState,
@@ -53,7 +47,7 @@ void PhysicalBody::initPhysics()
 						   mInertia);
 	constrInfo.m_friction = mFriction;
 	constrInfo.m_rollingFriction = mRollingFriction;
-	mCollisionObject = new btRigidBody(mConstrInfo); 
+	mCollisionObject = new btRigidBody(constrInfo); 
 }
 
 };
