@@ -25,6 +25,7 @@ class BtOgreShapeDispatcher : public CollisionShapeDispatcher
 		BtOgreShapeDispatcher(Ogre::Entity* ogreEntity, BulletShape btShape);
 		virtual ~BtOgreShapeDispatcher();
 		virtual btCollisionShape* getCollisionShape() const;
+		virtual void setOgreEntity(Ogre::Entity* entity);
 
 	private:
 		Ogre::Entity* mOgreEntity;

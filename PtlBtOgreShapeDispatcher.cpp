@@ -47,4 +47,9 @@ btCollisionShape* BtOgreShapeDispatcher::getCollisionShape() const
 	return shape;
 }
 
+virtual void setOgreEntity(Ogre::Entity* entity)
+{
+	mOgreEntity = entity;
+}
+
 };
