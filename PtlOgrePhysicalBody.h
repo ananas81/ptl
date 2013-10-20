@@ -54,7 +54,7 @@ class OgrePhysicalBody : public PhysicalBody
 
 		virtual ~OgrePhysicalBody();
 		virtual btCollisionObject* getCollisionObject() const;
-		virtual Ogre::Entity* getVisualObject() const;
+		virtual Ogre::Entity* getOgreEntity() const;
 		virtual Ogre::SceneNode* getBodyNode() const;
 
 	private:
