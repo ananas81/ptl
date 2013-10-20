@@ -2,7 +2,11 @@
 	#define __COLLISION_SHAPE_DISPATCHER_H
 
 #include <btBulletDynamicsCommon.h>
-#include "PtlOgrePhysicalBody.h"
+
+namespace Ogre
+{
+	class Entity;
+}
 
 namespace Ptl
 {
@@ -10,8 +14,13 @@ namespace Ptl
 class CollisionShapeDispatcher
 {
 	public:
+		CollisionShapeDispatcher(Ogre::Entity *entity = NULL);
 		virtual ~CollisionShapeDispatcher() = 0;
-		virtual btCollisionShape* getCollisionShape(OgrePhysicalBody *body) const = 0;
+		virtual btCollisionShape* getCollisionShape() const = 0;
+		virtual void setOgreEntity(Ogre::Entity *entity);
+
+	protected:
+		Ogre::Entity *mOgreEntity;
 };
 
 };

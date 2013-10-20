@@ -2,7 +2,6 @@
 	#define __BTOGRE_SHAPE_DISPATCHER_H
 
 #include <btBulletDynamicsCommon.h>
-#include <OgreEntity.h>
 #include <string>
 #include "PtlCollisionShapeDispatcher.h"
 
@@ -24,10 +23,9 @@ class BtOgreShapeDispatcher : public CollisionShapeDispatcher
 		
 		BtOgreShapeDispatcher(Ogre::Entity* ogreEntity, BulletShape btShape);
 		virtual ~BtOgreShapeDispatcher();
-		virtual btCollisionShape* getCollisionShape(OgrePhysicalBody *body) const;
+		virtual btCollisionShape* getCollisionShape() const;
 
 	private:
-		Ogre::Entity* mOgreEntity;
 		BulletShape mBtShape;
 };
 

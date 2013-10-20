@@ -13,7 +13,7 @@ BulletImporterShapeDispatcher::~BulletImporterShapeDispatcher()
 {
 }
 
-btCollisionShape* BulletImporterShapeDispatcher::getCollisionShape(OgrePhysicalBody *body) const
+btCollisionShape* BulletImporterShapeDispatcher::getCollisionShape() const
 {
 	btBulletWorldImporter importer;
 	importer.loadFile(mBcsFileName.c_str());

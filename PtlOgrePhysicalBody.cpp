@@ -33,7 +33,8 @@ OgrePhysicalBody::OgrePhysicalBody(Ogre::SceneManager* sceneMgr,
 									    orient);
 	mBodyNode->attachObject(mEntity);
 
-	mCollisionShape = shapeDispatcher->getCollisionShape(this);
+	shapeDispatcher->setOgreEntity(mEntity);
+	mCollisionShape = shapeDispatcher->getCollisionShape();
 
 	mMotionState = new MotionState(btTransform(btQuaternion(orient.x, orient.y, orient.z, orient.w),
 						   btVector3(pos.x, pos.y, pos.z)),

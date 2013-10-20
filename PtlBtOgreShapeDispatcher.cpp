@@ -6,7 +6,7 @@
 namespace Ptl {
 
 BtOgreShapeDispatcher::BtOgreShapeDispatcher(Ogre::Entity* ogreEntity, BulletShape btShape) :
-				mOgreEntity(ogreEntity),
+				CollisionShapeDispatcher(ogreEntity),
 				mBtShape(btShape)
 {
 }
@@ -15,9 +15,9 @@ BtOgreShapeDispatcher::~BtOgreShapeDispatcher()
 {
 }
 
-btCollisionShape* BtOgreShapeDispatcher::getCollisionShape(OgrePhysicalBody *body) const
+btCollisionShape* BtOgreShapeDispatcher::getCollisionShape() const
 {
-        BtOgre::StaticMeshToShapeConverter converter(body->getOgreEntity());
+        BtOgre::StaticMeshToShapeConverter converter(mOgreEntity);
         btCollisionShape *shape;
 
 	switch (mBtShape)
