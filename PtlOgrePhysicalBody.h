@@ -9,7 +9,6 @@
 #include <OgreSceneManager.h>
 #include "PtlPerpetualCommon.h"
 #include "PtlPhysicalBody.h"
-#include "PtlCollisionShapeDispatcherData.h"
 #include "PtlBulletImporterShapeDispatcher.h"
 #include "PtlBtOgreShapeDispatcher.h"
 
@@ -36,7 +35,7 @@ class OgrePhysicalBody : public PhysicalBody
 				 const std::string& meshName,
 				 const Ogre::Vector3& pos,
 				 const Ogre::Quaternion& orient,
-				 CollisionShapeDispatcherData* shapeDispData,
+				 CollisionShapeDispatcher* shapeDispatcher,
 				 double mass,
 				 const Ogre::Vector3& inertia,
 				 double friction,
@@ -57,9 +56,6 @@ class OgrePhysicalBody : public PhysicalBody
 		virtual btCollisionObject* getCollisionObject() const;
 		virtual Ogre::Entity* getVisualObject() const;
 		virtual Ogre::SceneNode* getBodyNode() const;
-		virtual btCollisionShape* dispatchCollisionShape(BulletImporterDispatcherData *dispatcherData);
-		virtual btCollisionShape* dispatchCollisionShape(BtOgreDispatcherData *dispatcherData);
-		virtual btCollisionShape* dispatchCollisionShape(CollisionShapeDispatcherData *dispatcherData);
 
 	private:
 		Ogre::SceneManager *mSceneManager;

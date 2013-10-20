@@ -13,7 +13,7 @@ class BulletImporterShapeDispatcher : public CollisionShapeDispatcher
 	public:
 		BulletImporterShapeDispatcher(const std::string& bcsFileName, int shapeId);
 		virtual ~BulletImporterShapeDispatcher();
-		virtual btCollisionShape* getCollisionShape() const;
+		virtual btCollisionShape* getCollisionShape(OgrePhysicalBody *body) const;
 
 	private:
 		std::string mBcsFileName;

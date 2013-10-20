@@ -15,9 +15,9 @@ BtOgreShapeDispatcher::~BtOgreShapeDispatcher()
 {
 }
 
-btCollisionShape* BtOgreShapeDispatcher::getCollisionShape() const
+btCollisionShape* BtOgreShapeDispatcher::getCollisionShape(OgrePhysicalBody *body) const
 {
-        BtOgre::StaticMeshToShapeConverter converter(mOgreEntity);
+        BtOgre::StaticMeshToShapeConverter converter(body->getOgreEntity());
         btCollisionShape *shape;
 
 	switch (mBtShape)
@@ -45,11 +45,6 @@ btCollisionShape* BtOgreShapeDispatcher::getCollisionShape() const
 	}
 
 	return shape;
-}
-
-virtual void setOgreEntity(Ogre::Entity* entity)
-{
-	mOgreEntity = entity;
 }
 
 };

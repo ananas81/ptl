@@ -8,7 +8,7 @@ OgrePhysicalBody::OgrePhysicalBody(Ogre::SceneManager* sceneMgr,
 				   const std::string& meshName,
 				   const Ogre::Vector3& pos,
 				   const Ogre::Quaternion& orient,
-				   CollisionShapeDispatcherData* shapeDispData,
+				   CollisionShapeDispatcher* shapeDispatcher,
 				   double mass,
 				   const Ogre::Vector3& inertia,
 				   double friction,
@@ -33,7 +33,7 @@ OgrePhysicalBody::OgrePhysicalBody(Ogre::SceneManager* sceneMgr,
 									    orient);
 	mBodyNode->attachObject(mEntity);
 
-	mCollisionShape = dispatchCollisionShape(shapeDispData);
+	mCollisionShape = shapeDispatcher->getCollisionShape(this);
 
 	mMotionState = new MotionState(btTransform(btQuaternion(orient.x, orient.y, orient.z, orient.w),
 						   btVector3(pos.x, pos.y, pos.z)),
@@ -78,27 +78,6 @@ OgrePhysicalBody::OgrePhysicalBody(Ogre::SceneManager* sceneMgr,
 	initPhysics();
 }
 
-btCollisionShape* OgrePhysicalBody::dispatchCollisionShape(CollisionShapeDispatcherData *dispatcherData)
-{
-	PTL_LOG("Empty OgrePhysicalBody::dispatchCollisionShape called.")
-
-	return NULL;
-}
-
-btCollisionShape* OgrePhysicalBody::dispatchCollisionShape(BtOgreDispatcherData *dispatcherData)
-{
-	BtOgreShapeDispatcher shapeDispatcher(mEntity, dispatcherData->getBtShape());
-
-	return shapeDispatcher.getCollisionShape();
-}
-
-btCollisionShape* OgrePhysicalBody::dispatchCollisionShape(BulletImporterDispatcherData *dispatcherData)
-{
-	BulletImporterShapeDispatcher shapeDispatcher(dispatcherData->getBcsFilename(), dispatcherData->getShapeId());
-
-	return shapeDispatcher.getCollisionShape();
-}
-
 OgrePhysicalBody::~OgrePhysicalBody()
 {
 	delete mMotionState;
@@ -110,7 +89,7 @@ btCollisionObject* OgrePhysicalBody::getCollisionObject() const
 	return mCollisionObject;
 }
 
-Ogre::Entity* OgrePhysicalBody::getVisualObject() const
+Ogre::Entity* OgrePhysicalBody::getOgreEntity() const
 {
 	return mEntity;
 }

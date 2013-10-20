@@ -2,6 +2,7 @@
 	#define __COLLISION_SHAPE_DISPATCHER_H
 
 #include <btBulletDynamicsCommon.h>
+#include "PtlOgrePhysicalBody.h"
 
 namespace Ptl
 {
@@ -10,7 +11,7 @@ class CollisionShapeDispatcher
 {
 	public:
 		virtual ~CollisionShapeDispatcher() = 0;
-		virtual btCollisionShape* getCollisionShape() const = 0;
+		virtual btCollisionShape* getCollisionShape(OgrePhysicalBody *body) const = 0;
 };
 
 };
