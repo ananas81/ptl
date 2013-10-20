@@ -148,6 +148,14 @@ void TutorialApplication::initPhysics()
 
 	btCollisionShape* groundShape = new btStaticPlaneShape(btVector3(0,1,0),1);
 
+	btDefaultMotionState* groundMotionState = new btDefaultMotionState(btTransform(btQuaternion(0,0,0,1),btVector3(0,-1,0)));
+	btRigidBody::btRigidBodyConstructionInfo
+		groundRigidBodyCI(0,groundMotionState,groundShape,btVector3(0,0,0));
+	groundRigidBodyCI.m_friction = 10;
+	groundRigidBodyCI.m_rollingFriction = 1;
+	btRigidBody* groundRigidBody = new btRigidBody(groundRigidBodyCI);
+	mWorld->addRigidBody(groundRigidBody);
+
 	for (int i = 0; i < mPhysBodies.size(); ++i)
 		mWorld->addRigidBody(static_cast<btRigidBody*>(mPhysBodies[i]->getCollisionObject()));
 
