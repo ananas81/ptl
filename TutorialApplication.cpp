@@ -48,7 +48,6 @@ void TutorialApplication::createScene(void)
 	mSceneMgr->setAmbientLight(Ogre::ColourValue(0.0f, 0.0f, 0.5f));
 	mSceneMgr->setShadowTechnique(Ogre::SHADOWTYPE_STENCIL_ADDITIVE);
 
-//======================
 	mFlywheel1 = new Ptl::OgrePhysicalBody(mSceneMgr,
 					      "Flywheel",
 					      "Flywheel.mesh",
@@ -62,7 +61,7 @@ void TutorialApplication::createScene(void)
 	mPhysBodies.push_back(mFlywheel1);
 
 	mRopeSphere = new Ptl::OgrePhysicalBody(mSceneMgr,
-					      "RopeSphere",
+					      "RopeSphere_0",
 					      "Sphere.mesh",
 					      Ogre::Vector3(25, 104, 0),
 					      Ogre::Quaternion(1, 0, 0, 0),
@@ -71,7 +70,27 @@ void TutorialApplication::createScene(void)
 					      Ogre::Vector3(0, 0, 0),
 					      10.0,
 					      1.0);	
-	mPhysBodies.push_back(mRopeSphere);
+	mRopeSpheres.push_back(mRopeSphere);
+
+	btCollisionShape* ropeSphereShape = mRopeSphere->getCollisionShape();
+	printf("collision shape: %p\n", ropeSphereShape);
+
+	for (int i = 1; i < 4; ++i)
+	{
+		char bodyName[15];
+		sprintf(bodyName, "RopeSphere_%d", i);
+		mRopeSpheres.push_back(new Ptl::OgrePhysicalBody(mSceneMgr,
+					bodyName,
+					"Sphere.mesh",
+					Ogre::Vector3(25, 104-i*12.24, 0),
+					Ogre::Quaternion(1, 0, 0, 0),
+					ropeSphereShape,
+					10.0,
+					Ogre::Vector3(0, 0, 0),
+					10.0,
+					1.0));
+	}
+	
 
 	Ogre::Light* pointLight = mSceneMgr->createLight("pointLight");
 	pointLight->setType(Ogre::Light::LT_POINT);
@@ -159,10 +178,19 @@ void TutorialApplication::initPhysics()
 	for (int i = 0; i < mPhysBodies.size(); ++i)
 		mWorld->addRigidBody(static_cast<btRigidBody*>(mPhysBodies[i]->getCollisionObject()));
 
+	for (int i = 0; i < mRopeSpheres.size(); ++i)
+	{			
+		btRigidBody* ropeSphereBody = static_cast<btRigidBody*>(mRopeSpheres[i]->getCollisionObject());
+		ropeSphereBody->setActivationState(DISABLE_DEACTIVATION);
+		mWorld->addRigidBody(static_cast<btRigidBody*>(mRopeSpheres[i]->getCollisionObject()));
+	}
+
 	btRigidBody* flywheelBody1 = static_cast<btRigidBody*>(mFlywheel1->getCollisionObject());
 	btRigidBody* ropeSphereBody = static_cast<btRigidBody*>(mRopeSphere->getCollisionObject());
 
 	mWheelHinge = new btHingeConstraint(*flywheelBody1, btVector3(0,0,0), btVector3(0,0,1), true);
+	mWorld->addConstraint(mWheelHinge);
+
 	flywheelBody1->setFriction(1);
 	flywheelBody1->setDamping(0.0001f,0.0001f);
 	flywheelBody1->setFlags(0);
@@ -175,12 +203,22 @@ void TutorialApplication::initPhysics()
 	//flywheelBody1->setFlags(BT_ENABLE_GYROPSCOPIC_FORCE);
 	//flywheelBody1->applyTorque(btVector3(20, 111, 10));
 	flywheelBody1->setActivationState(DISABLE_DEACTIVATION);
-	ropeSphereBody->setActivationState(DISABLE_DEACTIVATION);
 
-	btTypedConstraint* p2p = new btPoint2PointConstraint(*flywheelBody1, *ropeSphereBody, btVector3(0,-38.5,0), btVector3(0,6.12,0));
+	btTypedConstraint* p2p;
 
-	mWorld->addConstraint(mWheelHinge);
+	p2p = new btPoint2PointConstraint(*flywheelBody1, *ropeSphereBody, btVector3(0,-38.5,0), btVector3(0,6.12,0));
 	mWorld->addConstraint(p2p);
+
+	btRigidBody *s1, *s2;
+
+	for (int i = 1; i < mRopeSpheres.size(); ++i)
+	{
+		s1 = static_cast<btRigidBody*>(mRopeSpheres[i-1]->getCollisionObject());
+		s2 = static_cast<btRigidBody*>(mRopeSpheres[i]->getCollisionObject());
+		p2p = new btPoint2PointConstraint(*s1, *s2, btVector3(0,-6.12,0), btVector3(0,6.12,0));
+		mWorld->addConstraint(p2p);
+	}
+
 
 	mDebugDrawer = new DebugDrawer(mSceneMgr, mWorld);
 	mDebugDrawer->setDebugMode(0);

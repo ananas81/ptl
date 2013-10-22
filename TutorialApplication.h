@@ -129,6 +129,7 @@ protected:
 
     std::vector<WorldObject*> mWorldObjects;
     std::vector<Ptl::OgrePhysicalBody*> mPhysBodies;
+    std::vector<Ptl::OgrePhysicalBody*> mRopeSpheres;
 };
 
 #endif // #ifndef __TutorialApplication_h_
