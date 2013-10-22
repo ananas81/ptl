@@ -90,6 +90,33 @@ btCollisionObject* OgrePhysicalBody::getCollisionObject() const
 	return mCollisionObject;
 }
 
+btCollisionShape* OgrePhysicalBody::getCollisionShape() const
+{
+	return mCollisionShape;
+}
+
+Ogre::Vector3 OgrePhysicalBody::getPos() const
+{
+	btVector3 origin;
+	btTransform trans;
+
+	mMotionState->getWorldTransform(trans);
+	origin = trans.getOrigin();
+
+	return Ogre::Vector3(origin.getX(), origin.getY(), origin.getZ());
+}
+
+Ogre::Quaternion OgrePhysicalBody::getOrient() const
+{
+	btQuaternion orient;
+	btTransform trans;
+
+	mMotionState->getWorldTransform(trans);
+	orient = trans.getRotation();
+
+	return Ogre::Quaternion(orient.getW(), orient.getX(), orient.getY(), orient.getZ());
+}
+
 Ogre::Entity* OgrePhysicalBody::getOgreEntity() const
 {
 	return mEntity;

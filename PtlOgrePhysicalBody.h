@@ -20,11 +20,12 @@ class OgrePhysicalBody : public PhysicalBody
 	public:
 		class MotionState : public btMotionState {
 			public:
-			    MotionState(const btTransform &initialpos, Ogre::SceneNode *node);
-			    virtual ~MotionState();
-			    void setNode(Ogre::SceneNode *node);
-			    virtual void getWorldTransform(btTransform &worldTrans) const;
-			    virtual void setWorldTransform(const btTransform &worldTrans);
+				MotionState(const btTransform &initialpos, Ogre::SceneNode *node);
+				virtual ~MotionState();
+				void setNode(Ogre::SceneNode *node);
+				virtual void getWorldTransform(btTransform &worldTrans) const;
+				virtual void setWorldTransform(const btTransform &worldTrans);
+
 			protected:
 			    Ogre::SceneNode *mVisualObj;
 			    btTransform mPos;
@@ -56,6 +57,9 @@ class OgrePhysicalBody : public PhysicalBody
 		virtual btCollisionObject* getCollisionObject() const;
 		virtual Ogre::Entity* getOgreEntity() const;
 		virtual Ogre::SceneNode* getBodyNode() const;
+		virtual btCollisionShape* getCollisionShape() const;
+		virtual Ogre::Vector3 getPos() const;
+		virtual Ogre::Quaternion getOrient() const;
 
 	private:
 		Ogre::SceneManager *mSceneManager;
