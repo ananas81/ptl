@@ -62,30 +62,42 @@ void TutorialApplication::createScene(void)
 
 	mRopeSphere = new Ptl::OgrePhysicalBody(mSceneMgr,
 					      "RopeSphere_0",
-					      "Sphere.mesh",
+					      "SmallSphere.mesh",
 					      Ogre::Vector3(25, 104, 0),
 					      Ogre::Quaternion(1, 0, 0, 0),
 					      new Ptl::BtOgreShapeDispatcher(NULL, Ptl::BtOgreShapeDispatcher::SPHERE),
-					      10.0,
+					      0.1,
 					      Ogre::Vector3(0, 0, 0),
 					      10.0,
 					      1.0);	
 	mRopeSpheres.push_back(mRopeSphere);
-
+/*
+	mRopeSphere = new Ptl::OgrePhysicalBody(mSceneMgr,
+					      "WeightSphere_0",
+					      "Sphere.mesh",
+					      Ogre::Vector3(25, 104, 0),
+					      Ogre::Quaternion(1, 0, 0, 0),
+					      new Ptl::BtOgreShapeDispatcher(NULL, Ptl::BtOgreShapeDispatcher::SPHERE),
+					      0.1,
+					      Ogre::Vector3(0, 0, 0),
+					      10.0,
+					      1.0);	
+	mRopeSpheres.push_back(mRopeSphere);
+*/
 	btCollisionShape* ropeSphereShape = mRopeSphere->getCollisionShape();
 	printf("collision shape: %p\n", ropeSphereShape);
 
-	for (int i = 1; i < 4; ++i)
+	for (int i = 1; i < 20; ++i)
 	{
 		char bodyName[15];
 		sprintf(bodyName, "RopeSphere_%d", i);
 		mRopeSpheres.push_back(new Ptl::OgrePhysicalBody(mSceneMgr,
 					bodyName,
-					"Sphere.mesh",
-					Ogre::Vector3(25, 104-i*12.24, 0),
+					"SmallSphere.mesh",
+					Ogre::Vector3(25, 104-i*2.0, 0),
 					Ogre::Quaternion(1, 0, 0, 0),
 					ropeSphereShape,
-					10.0,
+					0.1,
 					Ogre::Vector3(0, 0, 0),
 					10.0,
 					1.0));
@@ -206,7 +218,9 @@ void TutorialApplication::initPhysics()
 
 	btTypedConstraint* p2p;
 
-	p2p = new btPoint2PointConstraint(*flywheelBody1, *ropeSphereBody, btVector3(0,-38.5,0), btVector3(0,6.12,0));
+	p2p = new btPoint2PointConstraint(*flywheelBody1, *ropeSphereBody, btVector3(0,-38.5,0), btVector3(0,1.0,0));
+//	p2p->setStiffness(0, 39.478f);
+//	p2p->setBreakingImpulseThreshold(100.2);
 	mWorld->addConstraint(p2p);
 
 	btRigidBody *s1, *s2;
@@ -215,7 +229,9 @@ void TutorialApplication::initPhysics()
 	{
 		s1 = static_cast<btRigidBody*>(mRopeSpheres[i-1]->getCollisionObject());
 		s2 = static_cast<btRigidBody*>(mRopeSpheres[i]->getCollisionObject());
-		p2p = new btPoint2PointConstraint(*s1, *s2, btVector3(0,-6.12,0), btVector3(0,6.12,0));
+		p2p = new btPoint2PointConstraint(*s1, *s2, btVector3(0,-1.0,0), btVector3(0,1.0,0));
+//		p2p->setStiffness(0, 39.478f);
+//		p2p->setBreakingImpulseThreshold(100.2);
 		mWorld->addConstraint(p2p);
 	}
 
@@ -425,11 +441,11 @@ bool TutorialApplication::keyPressed(const OIS::KeyEvent& evt)
 			motorOn = !motorOn;
 			btRigidBody* flywheel1 = static_cast<btRigidBody*>(mFlywheel1->getCollisionObject());
 			if (motorOn)
-				flywheel1->setAngularVelocity(btVector3(0, 0, 5));
-				//mWheelHinge->enableAngularMotor(true, 20, 5);
+				//flywheel1->setAngularVelocity(btVector3(0, 0, 5));
+				mWheelHinge->enableAngularMotor(true, 4000, 2000);
 			else
-				flywheel1->setAngularVelocity(btVector3(0, 0, 0));
-				//mWheelHinge->enableMotor(false);
+				//flywheel1->setAngularVelocity(btVector3(0, 0, 0));
+				mWheelHinge->enableMotor(false);
 	
 			break;
 		}
