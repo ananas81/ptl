@@ -216,12 +216,22 @@ void TutorialApplication::initPhysics()
 	//flywheelBody1->applyTorque(btVector3(20, 111, 10));
 	flywheelBody1->setActivationState(DISABLE_DEACTIVATION);
 
-	btTypedConstraint* p2p;
+	btGeneric6DofConstraint* dofConstraint;
 
-	p2p = new btPoint2PointConstraint(*flywheelBody1, *ropeSphereBody, btVector3(0,-38.5,0), btVector3(0,1.0,0));
+	btTransform frameInA, frameInB;
+	frameInA = btTransform::getIdentity();
+	frameInB = btTransform::getIdentity();
+	frameInA.setOrigin(btVector3(0., -38.5, 0.));
+	frameInB.setOrigin(btVector3(0., 1.0, 0.));
+
+	dofConstraint = new btGeneric6DofConstraint(*flywheelBody1, *ropeSphereBody,frameInA,frameInB,true);
+	dofConstraint->setOverrideNumSolverIterations(100);
+//	dofConstraint->setParam(BT_CONSTRAINT_CFM, 0.0);
+	for (int i=0;i<6;i++)
+		dofConstraint->setLimit(i,0,0);	
 //	p2p->setStiffness(0, 39.478f);
 //	p2p->setBreakingImpulseThreshold(100.2);
-	mWorld->addConstraint(p2p);
+	mWorld->addConstraint(dofConstraint);
 
 	btRigidBody *s1, *s2;
 
@@ -229,10 +239,18 @@ void TutorialApplication::initPhysics()
 	{
 		s1 = static_cast<btRigidBody*>(mRopeSpheres[i-1]->getCollisionObject());
 		s2 = static_cast<btRigidBody*>(mRopeSpheres[i]->getCollisionObject());
-		p2p = new btPoint2PointConstraint(*s1, *s2, btVector3(0,-1.0,0), btVector3(0,1.0,0));
+		frameInA = btTransform::getIdentity();
+		frameInB = btTransform::getIdentity();
+		frameInA.setOrigin(btVector3(0., -1.0, 0.));
+		frameInB.setOrigin(btVector3(0., 1.0, 0.));
+		dofConstraint = new btGeneric6DofConstraint(*s1, *s2,frameInA,frameInB,true);
+//		dofConstraint->setParam(BT_CONSTRAINT_CFM, 0.0);
+		for (int i=0;i<6;i++)
+			dofConstraint->setLimit(i,0,0);
+		dofConstraint->setOverrideNumSolverIterations(100);
 //		p2p->setStiffness(0, 39.478f);
 //		p2p->setBreakingImpulseThreshold(100.2);
-		mWorld->addConstraint(p2p);
+		mWorld->addConstraint(dofConstraint);
 	}
 
 
@@ -442,7 +460,7 @@ bool TutorialApplication::keyPressed(const OIS::KeyEvent& evt)
 			btRigidBody* flywheel1 = static_cast<btRigidBody*>(mFlywheel1->getCollisionObject());
 			if (motorOn)
 				//flywheel1->setAngularVelocity(btVector3(0, 0, 5));
-				mWheelHinge->enableAngularMotor(true, 4000, 2000);
+				mWheelHinge->enableAngularMotor(true, 400, 200);
 			else
 				//flywheel1->setAngularVelocity(btVector3(0, 0, 0));
 				mWheelHinge->enableMotor(false);
