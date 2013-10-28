@@ -54,7 +54,7 @@ void TutorialApplication::createScene(void)
 					      Ogre::Vector3(25, 150, 0),
 					      Ogre::Quaternion(1, 0, 0, 0),
 					      new Ptl::BulletImporterShapeDispatcher("flywheel.bcs", 0),
-					      4.0,
+					      40.0,
 					      Ogre::Vector3(0, 0, 0),
 					      10.0,
 					      1.0);
@@ -71,23 +71,12 @@ void TutorialApplication::createScene(void)
 					      10.0,
 					      1.0);	
 	mRopeSpheres.push_back(mRopeSphere);
-/*
-	mRopeSphere = new Ptl::OgrePhysicalBody(mSceneMgr,
-					      "WeightSphere_0",
-					      "Sphere.mesh",
-					      Ogre::Vector3(25, 104, 0),
-					      Ogre::Quaternion(1, 0, 0, 0),
-					      new Ptl::BtOgreShapeDispatcher(NULL, Ptl::BtOgreShapeDispatcher::SPHERE),
-					      0.1,
-					      Ogre::Vector3(0, 0, 0),
-					      10.0,
-					      1.0);	
-	mRopeSpheres.push_back(mRopeSphere);
-*/
+
 	btCollisionShape* ropeSphereShape = mRopeSphere->getCollisionShape();
 	printf("collision shape: %p\n", ropeSphereShape);
 
-	for (int i = 1; i < 20; ++i)
+	int i;
+	for (i = 1; i < 40; ++i)
 	{
 		char bodyName[15];
 		sprintf(bodyName, "RopeSphere_%d", i);
@@ -103,6 +92,16 @@ void TutorialApplication::createScene(void)
 					1.0));
 	}
 	
+	mRopeSpheres.push_back(new Ptl::OgrePhysicalBody(mSceneMgr,
+					      "WeightSphere_0",
+					      "Sphere.mesh",
+					      Ogre::Vector3(25, 104-i*2.0-6.12, 0),
+					      Ogre::Quaternion(1, 0, 0, 0),
+					      new Ptl::BtOgreShapeDispatcher(NULL, Ptl::BtOgreShapeDispatcher::SPHERE),
+					      10.0,
+					      Ogre::Vector3(0, 0, 0),
+					      10.0,
+					      1.0));
 
 	Ogre::Light* pointLight = mSceneMgr->createLight("pointLight");
 	pointLight->setType(Ogre::Light::LT_POINT);
@@ -204,7 +203,7 @@ void TutorialApplication::initPhysics()
 	mWorld->addConstraint(mWheelHinge);
 
 	flywheelBody1->setFriction(1);
-	flywheelBody1->setDamping(0.0001f,0.0001f);
+	flywheelBody1->setDamping(0.01f,0.01f);
 	flywheelBody1->setFlags(0);
 	flywheelBody1->setLinearFactor(btVector3(0, 0, 0.5));
 	flywheelBody1->setAngularFactor(btVector3(0, 0, 0.5));
@@ -227,15 +226,24 @@ void TutorialApplication::initPhysics()
 	dofConstraint = new btGeneric6DofConstraint(*flywheelBody1, *ropeSphereBody,frameInA,frameInB,true);
 	dofConstraint->setOverrideNumSolverIterations(100);
 //	dofConstraint->setParam(BT_CONSTRAINT_CFM, 0.0);
-	for (int i=0;i<6;i++)
-		dofConstraint->setLimit(i,0,0);	
+/*	for (int i=0;i<6;i++)
+	{
+		//dofConstraint->setLimit(i,0,0);	
+		btRotationalLimitMotor *lm = dofConstraint->getRotationalLimitMotor(i);
+		lm->m_enableMotor = false;
+	}*/
+	dofConstraint->setLinearUpperLimit(btVector3(0., 0., 0.));
+	dofConstraint->setLinearLowerLimit(btVector3(0., 0., 0.));
+	dofConstraint->setAngularUpperLimit(btVector3(0., 0., 0.));
+	dofConstraint->setAngularLowerLimit(btVector3(0., 0., 0.));
 //	p2p->setStiffness(0, 39.478f);
 //	p2p->setBreakingImpulseThreshold(100.2);
 	mWorld->addConstraint(dofConstraint);
 
 	btRigidBody *s1, *s2;
 
-	for (int i = 1; i < mRopeSpheres.size(); ++i)
+	int i;
+	for (i = 1; i < mRopeSpheres.size() - 1; ++i)
 	{
 		s1 = static_cast<btRigidBody*>(mRopeSpheres[i-1]->getCollisionObject());
 		s2 = static_cast<btRigidBody*>(mRopeSpheres[i]->getCollisionObject());
@@ -244,15 +252,36 @@ void TutorialApplication::initPhysics()
 		frameInA.setOrigin(btVector3(0., -1.0, 0.));
 		frameInB.setOrigin(btVector3(0., 1.0, 0.));
 		dofConstraint = new btGeneric6DofConstraint(*s1, *s2,frameInA,frameInB,true);
+		dofConstraint->setLinearUpperLimit(btVector3(0., 0., 0.));
+		dofConstraint->setLinearLowerLimit(btVector3(0., 0., 0.));
+		dofConstraint->setAngularUpperLimit(btVector3(0., 0., 0.));
+		dofConstraint->setAngularLowerLimit(btVector3(0., 0., 0.));
 //		dofConstraint->setParam(BT_CONSTRAINT_CFM, 0.0);
-		for (int i=0;i<6;i++)
-			dofConstraint->setLimit(i,0,0);
+/*		for (int i=0;i<6;i++)
+		{
+			//dofConstraint->setLimit(i,0,0);
+			btRotationalLimitMotor *lm = dofConstraint->getRotationalLimitMotor(i);
+			lm->m_enableMotor = false;
+		}*/
 		dofConstraint->setOverrideNumSolverIterations(100);
 //		p2p->setStiffness(0, 39.478f);
 //		p2p->setBreakingImpulseThreshold(100.2);
 		mWorld->addConstraint(dofConstraint);
 	}
 
+	s1 = static_cast<btRigidBody*>(mRopeSpheres[i-1]->getCollisionObject());
+	s2 = static_cast<btRigidBody*>(mRopeSpheres[i]->getCollisionObject());
+	frameInA = btTransform::getIdentity();
+	frameInB = btTransform::getIdentity();
+	frameInA.setOrigin(btVector3(0., -1.0, 0.));
+	frameInB.setOrigin(btVector3(0., 6.12, 0.));
+	dofConstraint = new btGeneric6DofConstraint(*s1, *s2,frameInA,frameInB,true);
+	dofConstraint->setLinearUpperLimit(btVector3(0., 0., 0.));
+	dofConstraint->setLinearLowerLimit(btVector3(0., 0., 0.));
+	dofConstraint->setAngularUpperLimit(btVector3(0., 0., 0.));
+	dofConstraint->setAngularLowerLimit(btVector3(0., 0., 0.));
+	dofConstraint->setOverrideNumSolverIterations(100);
+	mWorld->addConstraint(dofConstraint);
 
 	mDebugDrawer = new DebugDrawer(mSceneMgr, mWorld);
 	mDebugDrawer->setDebugMode(0);
