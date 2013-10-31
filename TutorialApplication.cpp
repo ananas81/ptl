@@ -17,7 +17,6 @@ Filename:    TutorialApplication.cpp
 #include "PtlBulletImporterShapeDispatcher.h"
 #include "PtlBtOgreShapeDispatcher.h"
 #include "PtlCollisionShapeDispatcherData.h"
-#include "PtlWheelComponent.h"
 
 
 #define BULLET_TRIANGLE_COLLISION 1
@@ -32,7 +31,6 @@ mGUIRenderer(NULL),
 mFlywheel1(NULL),
 mFlywheel2(NULL),
 mRopeSphere(NULL),
-mWheelHinge(NULL),
 mDebugDrawer(NULL)
 {
 }
@@ -131,11 +129,10 @@ void TutorialApplication::initPhysics()
 	btRigidBody* groundRigidBody = new btRigidBody(groundRigidBodyCI);
 	mWorld->addRigidBody(groundRigidBody);
 
-	Ptl::WheelBodyComponent *flywheel = new Ptl::WheelBodyComponent(
-							mSceneMgr,
-							mWorld,
-							Ogre::Vector3(25, 150, 0),
-							Ogre::Quaternion(1, 0, 0, 0));
+	mFlywheel1 = new Ptl::WheelBodyComponent(mSceneMgr,
+						 mWorld,
+						 Ogre::Vector3(25, 150, 0),
+						 Ogre::Quaternion(1, 0, 0, 0));
 
 	mDebugDrawer = new DebugDrawer(mSceneMgr, mWorld);
 	mDebugDrawer->setDebugMode(0);
@@ -340,13 +337,12 @@ bool TutorialApplication::keyPressed(const OIS::KeyEvent& evt)
 		case OIS::KC_1:
 		{
 			motorOn = !motorOn;
-			btRigidBody* flywheel1 = static_cast<btRigidBody*>(mFlywheel1->getCollisionObject());
 			if (motorOn)
 				//flywheel1->setAngularVelocity(btVector3(0, 0, 5));
-				mWheelHinge->enableAngularMotor(true, 400, 200);
+				mFlywheel1->getHinge()->enableAngularMotor(true, 400, 200);
 			else
 				//flywheel1->setAngularVelocity(btVector3(0, 0, 0));
-				mWheelHinge->enableMotor(false);
+				mFlywheel1->getHinge()->enableMotor(false);
 	
 			break;
 		}

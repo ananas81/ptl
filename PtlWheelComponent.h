@@ -20,6 +20,7 @@ class WheelBodyComponent : public BodyComponent
 		virtual ~WheelBodyComponent();
 		virtual btRigidBody* getRootBody();
 		virtual btVector3 getRootAnchor();
+		virtual btHingeConstraint* getHinge();
 
 	protected:
 		OgrePhysicalBody *mOgrePhysBody;

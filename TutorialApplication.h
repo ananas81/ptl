@@ -34,6 +34,7 @@ This source file is part of the
 #include <vector>
 #include "DebugDraw.hpp"
 #include "PtlOgrePhysicalBody.h"
+#include "PtlWheelComponent.h"
 
 class DebugDrawer : public CDebugDraw
 {
@@ -120,16 +121,13 @@ protected:
     Ogre::RaySceneQuery* mRayScnQuery;      //pointer to our ray scene query
     CEGUI::Renderer* mGUIRenderer;          //our CEGUI renderer
 
-    Ptl::OgrePhysicalBody *mFlywheel1;
-    Ptl::OgrePhysicalBody *mFlywheel2;
+    Ptl::WheelBodyComponent *mFlywheel1;
+    Ptl::WheelBodyComponent *mFlywheel2;
     Ptl::OgrePhysicalBody *mRopeSphere;
     Ogre::Vector3 mCurHitPoint;
-    btHingeConstraint *mWheelHinge;
     DebugDrawer *mDebugDrawer;
 
     std::vector<WorldObject*> mWorldObjects;
-    std::vector<Ptl::OgrePhysicalBody*> mPhysBodies;
-    std::vector<Ptl::OgrePhysicalBody*> mRopeSpheres;
 };
 
 #endif // #ifndef __TutorialApplication_h_

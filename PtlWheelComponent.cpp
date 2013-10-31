@@ -70,4 +70,9 @@ btVector3 WheelBodyComponent::getRootAnchor()
 	return btVector3(0, 0, 0);
 }
 
+btHingeConstraint* WheelBodyComponent::getHinge()
+{
+	return mWheelHinge;
+}
+
 };

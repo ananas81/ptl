@@ -20,7 +20,7 @@ ChainBodyComponent::ChainBodyComponent(Ogre::SceneManager *aSceneMgr,
 					mSceneMgr,
 					"RopeSphere_0",
 					"SmallSphere.mesh",
-					mPos,
+					Ogre::Vector3(mPos.x, mPos.y - 1.0, mPos.z),
 					mOrient,
 					new Ptl::BtOgreShapeDispatcher(NULL, Ptl::BtOgreShapeDispatcher::SPHERE),
 					chainElementMass,
@@ -39,7 +39,7 @@ ChainBodyComponent::ChainBodyComponent(Ogre::SceneManager *aSceneMgr,
 					mSceneMgr,
 					bodyName,
 					"SmallSphere.mesh",
-					Ogre::Vector3(mPos.x, mPos.y-i*2.0, mPos.z),
+					Ogre::Vector3(mPos.x, mPos.y - 1.0 - i*2.0, mPos.z),
 					mOrient,
 					chainElementShape,
 					chainElementMass,
@@ -52,7 +52,7 @@ ChainBodyComponent::ChainBodyComponent(Ogre::SceneManager *aSceneMgr,
 					mSceneMgr,
 					"WeightSphere_0",
 					"Sphere.mesh",
-					Ogre::Vector3(mPos.x, mPos.y-i*2.0-6.12, mPos.z),
+					Ogre::Vector3(mPos.x, mPos.y - 1.0 - i*2.0-6.12, mPos.z),
 					mOrient,
 					new Ptl::BtOgreShapeDispatcher(NULL, Ptl::BtOgreShapeDispatcher::SPHERE),
 					10.0,
@@ -114,7 +114,7 @@ btRigidBody* ChainBodyComponent::getRootBody()
 
 btVector3 ChainBodyComponent::getRootAnchor()
 {
-	return btVector3(mPos.x, mPos.y + 1.0, mPos.z);
+	return btVector3(.0, 1.0, .0);
 }
 
 };
