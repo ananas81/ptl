@@ -63,3 +63,26 @@ class BtOgreCollisionShapeDispatcherData
 
 class BulletImporterCollisionShapeDispatcherData
 	CollisionShapeDispatcher* getData();
+
+
+======
+
+BodyComponent
+	btRigidBody* getRootBody
+	Ogre:Vector3 getRootAnchor
+	attachComponent(BodyComponent* subComponent)
+		btConstraint (subComponent->getRootBody(), this->getRootBody, subComponent->getRootAnchor(), this->getRootAnchor())
+
+wheel = new Wheel
+
+chain1 = new Chain(rootPos, direction)
+wheel->attachChain(chain1->getRootBody(), getRootPosition)
+
+chain2 = new Chain
+wheel->attachChain
+
+chain3 = new Chain
+wheel->attachChain
+
+chain4 = new Chain
+wheel->attachChain

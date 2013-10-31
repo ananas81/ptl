@@ -20,6 +20,8 @@ SET(SRC
     "PtlCollisionShapeDispatcher.cpp"
     "PtlPhysicalBody.cpp"
     "PtlOgrePhysicalBody.cpp"
+    "PtlWheelComponent.cpp"
+    "PtlChainComponent.cpp"
 )
 
 INCLUDE(FindPkgConfig)
