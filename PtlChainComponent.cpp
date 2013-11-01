@@ -5,11 +5,67 @@
 namespace Ptl
 {
 
+const double ChainBodyComponent::CHAIN_ELEMENT_RADIUS;
+const double ChainBodyComponent::WEIGHT_RADIUS;
+
+Ogre::Vector3 ChainBodyComponent::calculateChainElementPos(int elementId)
+{
+	double offsetX = mPos.x, offsetY = mPos.y, offsetZ = mPos.z;
+
+	switch (mDirection)
+	{
+		case DIR_LEFT:
+			offsetX += -CHAIN_ELEMENT_RADIUS - elementId*CHAIN_ELEMENT_RADIUS*2.0;
+			break;
+		case DIR_UP:
+			offsetY += CHAIN_ELEMENT_RADIUS + elementId*CHAIN_ELEMENT_RADIUS*2.0;
+			break;
+		case DIR_RIGHT:
+			offsetX += CHAIN_ELEMENT_RADIUS + elementId*CHAIN_ELEMENT_RADIUS*2.0;
+			break;
+		case DIR_DOWN:
+			offsetY += -CHAIN_ELEMENT_RADIUS - elementId*CHAIN_ELEMENT_RADIUS*2.0;
+			break;
+		default:
+			break;
+	}
+
+	return Ogre::Vector3(offsetX, offsetY, offsetZ);
+}
+
+Ogre::Vector3 ChainBodyComponent::calculateWeightPos(int elementId)
+{
+	double offsetX = mPos.x, offsetY = mPos.y, offsetZ = mPos.z;
+
+	switch (mDirection)
+	{
+		case DIR_LEFT:
+			offsetX += -CHAIN_ELEMENT_RADIUS - elementId*CHAIN_ELEMENT_RADIUS*2.0 - WEIGHT_RADIUS;
+			break;
+		case DIR_UP:
+			offsetY += CHAIN_ELEMENT_RADIUS + elementId*CHAIN_ELEMENT_RADIUS*2.0 + WEIGHT_RADIUS;
+			break;
+		case DIR_RIGHT:
+			offsetX += CHAIN_ELEMENT_RADIUS + elementId*CHAIN_ELEMENT_RADIUS*2.0 + WEIGHT_RADIUS;
+			break;
+		case DIR_DOWN:
+			offsetY += -CHAIN_ELEMENT_RADIUS - elementId*CHAIN_ELEMENT_RADIUS*2.0 - WEIGHT_RADIUS;
+			break;
+		default:
+			break;
+	}
+
+	return Ogre::Vector3(offsetX, offsetY, offsetZ);
+}
+
 ChainBodyComponent::ChainBodyComponent(Ogre::SceneManager *aSceneMgr,
 				       btDiscreteDynamicsWorld *aWorld,
 				       const Ogre::Vector3& aPos,
-				       const Ogre::Quaternion& aOrient) :
+				       const Ogre::Quaternion& aOrient,
+				       ChainDirection aDirection
+				       ) :
 				       BodyComponent(aSceneMgr, aWorld, aPos, aOrient),
+				       mDirection(aDirection),
 				       mOgrePhysBody(NULL),
 				       mChainHinge(NULL)
 				      
@@ -20,7 +76,7 @@ ChainBodyComponent::ChainBodyComponent(Ogre::SceneManager *aSceneMgr,
 					mSceneMgr,
 					"RopeSphere_0",
 					"SmallSphere.mesh",
-					Ogre::Vector3(mPos.x, mPos.y - 1.0, mPos.z),
+					calculateChainElementPos(0),
 					mOrient,
 					new Ptl::BtOgreShapeDispatcher(NULL, Ptl::BtOgreShapeDispatcher::SPHERE),
 					chainElementMass,
@@ -39,7 +95,7 @@ ChainBodyComponent::ChainBodyComponent(Ogre::SceneManager *aSceneMgr,
 					mSceneMgr,
 					bodyName,
 					"SmallSphere.mesh",
-					Ogre::Vector3(mPos.x, mPos.y - 1.0 - i*2.0, mPos.z),
+					calculateChainElementPos(i),
 					mOrient,
 					chainElementShape,
 					chainElementMass,
@@ -52,7 +108,7 @@ ChainBodyComponent::ChainBodyComponent(Ogre::SceneManager *aSceneMgr,
 					mSceneMgr,
 					"WeightSphere_0",
 					"Sphere.mesh",
-					Ogre::Vector3(mPos.x, mPos.y - 1.0 - i*2.0-6.12, mPos.z),
+					calculateWeightPos(i),
 					mOrient,
 					new Ptl::BtOgreShapeDispatcher(NULL, Ptl::BtOgreShapeDispatcher::SPHERE),
 					10.0,
@@ -77,8 +133,8 @@ ChainBodyComponent::ChainBodyComponent(Ogre::SceneManager *aSceneMgr,
 		s2 = static_cast<btRigidBody*>(mChainElements[i]->getCollisionObject());
 		frameInA = btTransform::getIdentity();
 		frameInB = btTransform::getIdentity();
-		frameInA.setOrigin(btVector3(0., -1.0, 0.));
-		frameInB.setOrigin(btVector3(0., 1.0, 0.));
+		frameInA.setOrigin(btVector3(0., -CHAIN_ELEMENT_RADIUS, 0.));
+		frameInB.setOrigin(btVector3(0., CHAIN_ELEMENT_RADIUS, 0.));
 		dofConstraint = new btGeneric6DofConstraint(*s1, *s2,frameInA,frameInB,true);
 		dofConstraint->setLinearUpperLimit(btVector3(0., 0., 0.));
 		dofConstraint->setLinearLowerLimit(btVector3(0., 0., 0.));
@@ -92,8 +148,8 @@ ChainBodyComponent::ChainBodyComponent(Ogre::SceneManager *aSceneMgr,
 	s2 = static_cast<btRigidBody*>(mChainElements[i]->getCollisionObject());
 	frameInA = btTransform::getIdentity();
 	frameInB = btTransform::getIdentity();
-	frameInA.setOrigin(btVector3(0., -1.0, 0.));
-	frameInB.setOrigin(btVector3(0., 6.12, 0.));
+	frameInA.setOrigin(btVector3(0., -CHAIN_ELEMENT_RADIUS, 0.));
+	frameInB.setOrigin(btVector3(0., WEIGHT_RADIUS, 0.));
 	dofConstraint = new btGeneric6DofConstraint(*s1, *s2,frameInA,frameInB,true);
 	dofConstraint->setLinearUpperLimit(btVector3(0., 0., 0.));
 	dofConstraint->setLinearLowerLimit(btVector3(0., 0., 0.));

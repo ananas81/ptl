@@ -37,11 +37,15 @@ WheelBodyComponent::WheelBodyComponent(Ogre::SceneManager *aSceneMgr,
 	mWorld->addConstraint(mWheelHinge);              
 	mWorld->addRigidBody(wheelBody);
 
-	mChildComponents.push_back((new ChainBodyComponent(mSceneMgr, mWorld, Ogre::Vector3(mPos.x, mPos.y - 38.5, mPos.z), mOrient)));
-
 	btGeneric6DofConstraint* dofConstraint;
-
 	btTransform frameInA, frameInB;
+
+	mChildComponents.push_back(new ChainBodyComponent(mSceneMgr,
+							  mWorld,
+							  Ogre::Vector3(mPos.x, mPos.y - 38.5, mPos.z),
+							  mOrient,
+							  ChainBodyComponent::DIR_DOWN));
+
 	frameInA = btTransform::getIdentity();
 	frameInB = btTransform::getIdentity();
 	frameInA.setOrigin(btVector3(0., -38.5, 0.));
