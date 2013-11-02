@@ -58,6 +58,25 @@ WheelBodyComponent::WheelBodyComponent(Ogre::SceneManager *aSceneMgr,
 	dofConstraint->setAngularUpperLimit(btVector3(0., 0., 0.));
 	dofConstraint->setAngularLowerLimit(btVector3(0., 0., 0.));
 	mWorld->addConstraint(dofConstraint);
+
+	mChildComponents.push_back(new ChainBodyComponent(mSceneMgr,
+							  mWorld,
+							  Ogre::Vector3(mPos.x, mPos.y + 38.5, mPos.z),
+							  mOrient,
+							  ChainBodyComponent::DIR_UP));
+
+	frameInA = btTransform::getIdentity();
+	frameInB = btTransform::getIdentity();
+	frameInA.setOrigin(btVector3(0., 38.5, 0.));
+	frameInB.setOrigin(btVector3(mChildComponents[1]->getRootAnchor()));
+
+	dofConstraint = new btGeneric6DofConstraint(*wheelBody, *mChildComponents[1]->getRootBody(), frameInA, frameInB, true);
+	dofConstraint->setOverrideNumSolverIterations(100);
+	dofConstraint->setLinearUpperLimit(btVector3(0., 0., 0.));
+	dofConstraint->setLinearLowerLimit(btVector3(0., 0., 0.));
+	dofConstraint->setAngularUpperLimit(btVector3(0., 0., 0.));
+	dofConstraint->setAngularLowerLimit(btVector3(0., 0., 0.));
+	mWorld->addConstraint(dofConstraint);
 }
 
 WheelBodyComponent::~WheelBodyComponent()

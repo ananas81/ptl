@@ -40,6 +40,7 @@ class ChainBodyComponent : public BodyComponent
 		OgrePhysicalBody *mOgrePhysBody;
 		btHingeConstraint *mChainHinge;
     		std::vector<Ptl::OgrePhysicalBody*> mChainElements;
+		static int mChainElementsCnt;
 };
 
 };

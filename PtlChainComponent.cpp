@@ -7,6 +7,7 @@ namespace Ptl
 
 const double ChainBodyComponent::CHAIN_ELEMENT_RADIUS;
 const double ChainBodyComponent::WEIGHT_RADIUS;
+int ChainBodyComponent::mChainElementsCnt = 0;
 
 Ogre::Vector3 ChainBodyComponent::calculateChainElementPos(int elementId)
 {
@@ -71,10 +72,12 @@ ChainBodyComponent::ChainBodyComponent(Ogre::SceneManager *aSceneMgr,
 				      
 {
 	double chainElementMass = 0.1;
+	char bodyName[15];
 
+	sprintf(bodyName, "ChainElement_%d", ++mChainElementsCnt);
 	mChainElements.push_back(new Ptl::OgrePhysicalBody(
 					mSceneMgr,
-					"RopeSphere_0",
+					bodyName,
 					"SmallSphere.mesh",
 					calculateChainElementPos(0),
 					mOrient,
@@ -83,14 +86,14 @@ ChainBodyComponent::ChainBodyComponent(Ogre::SceneManager *aSceneMgr,
 					Ogre::Vector3(0, 0, 0),
 					10.0,
 					1.0));
+	++mChainElementsCnt;
 
 	btCollisionShape* chainElementShape = mChainElements[0]->getCollisionShape();
 
 	int i;
 	for (i = 1; i < 40; ++i)
 	{
-		char bodyName[15];
-		sprintf(bodyName, "RopeSphere_%d", i);
+		sprintf(bodyName, "ChainElement_%d", ++mChainElementsCnt);
 		mChainElements.push_back(new Ptl::OgrePhysicalBody(
 					mSceneMgr,
 					bodyName,
@@ -104,9 +107,10 @@ ChainBodyComponent::ChainBodyComponent(Ogre::SceneManager *aSceneMgr,
 					1.0));
 	}
 
+	sprintf(bodyName, "ChainElement_%d", ++mChainElementsCnt);
 	mChainElements.push_back(new Ptl::OgrePhysicalBody(
 					mSceneMgr,
-					"WeightSphere_0",
+					bodyName,
 					"Sphere.mesh",
 					calculateWeightPos(i),
 					mOrient,
