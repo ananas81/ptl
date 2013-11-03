@@ -23,6 +23,7 @@ class BodyComponent
 		virtual ~BodyComponent() {}
 		virtual btRigidBody* getRootBody() = 0;
 		virtual btTransform getRootAnchor() = 0;
+		virtual void attachTo(btRigidBody* parentComponent, const btTransform& parentAnchor) = 0;
 
 	protected:
 		Ogre::SceneManager* mSceneMgr;

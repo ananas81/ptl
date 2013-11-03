@@ -159,11 +159,11 @@ ChainBodyComponent::ChainBodyComponent(Ogre::SceneManager *aSceneMgr,
 		frameInA.setOrigin(btVector3(0., -CHAIN_ELEMENT_RADIUS, 0.));
 		frameInB.setOrigin(btVector3(0., CHAIN_ELEMENT_RADIUS, 0.));
 		dofConstraint = new btGeneric6DofConstraint(*s1, *s2,frameInA,frameInB,true);
-		dofConstraint->setLinearUpperLimit(btVector3(0., 0., 0.));
-		dofConstraint->setLinearLowerLimit(btVector3(0., 0., 0.));
-		dofConstraint->setAngularUpperLimit(btVector3(0., 0., 0.));
-		dofConstraint->setAngularLowerLimit(btVector3(0., 0., 0.));
-		dofConstraint->setOverrideNumSolverIterations(100);
+	/*	dofConstraint->setLinearUpperLimit(btVector3(0.3, 0.3, 0.3));
+		dofConstraint->setLinearLowerLimit(btVector3(0.3, 0.3, 0.3));
+		dofConstraint->setAngularUpperLimit(btVector3(0.3, 0.3, 0.3));
+		dofConstraint->setAngularLowerLimit(btVector3(0.3, 0.3, 0.3));
+		dofConstraint->setOverrideNumSolverIterations(100);*/
 		mWorld->addConstraint(dofConstraint);
 	}
 
@@ -174,11 +174,11 @@ ChainBodyComponent::ChainBodyComponent(Ogre::SceneManager *aSceneMgr,
 	frameInA.setOrigin(btVector3(0., -CHAIN_ELEMENT_RADIUS, 0.));
 	frameInB.setOrigin(btVector3(0., WEIGHT_RADIUS, 0.));
 	dofConstraint = new btGeneric6DofConstraint(*s1, *s2,frameInA,frameInB,true);
-	dofConstraint->setLinearUpperLimit(btVector3(0., 0., 0.));
-	dofConstraint->setLinearLowerLimit(btVector3(0., 0., 0.));
-	dofConstraint->setAngularUpperLimit(btVector3(0., 0., 0.));
-	dofConstraint->setAngularLowerLimit(btVector3(0., 0., 0.));
-	dofConstraint->setOverrideNumSolverIterations(100);
+/*	dofConstraint->setLinearUpperLimit(btVector3(0.3, 0.3, 0.3));
+	dofConstraint->setLinearLowerLimit(btVector3(0.3, 0.3, 0.3));
+	dofConstraint->setAngularUpperLimit(btVector3(0.3, 0.3, 0.3));
+	dofConstraint->setAngularLowerLimit(btVector3(0.3, 0.3, 0.3));
+	dofConstraint->setOverrideNumSolverIterations(100);*/
 	mWorld->addConstraint(dofConstraint);
 }
 
@@ -189,6 +189,20 @@ ChainBodyComponent::~ChainBodyComponent()
 btRigidBody* ChainBodyComponent::getRootBody()
 {
 	return static_cast<btRigidBody*>(mChainElements[0]->getCollisionObject());
+}
+
+void ChainBodyComponent::attachTo(btRigidBody* parentComponent, const btTransform& parentAnchor)
+{
+	btGeneric6DofConstraint* dofConstraint;
+
+	dofConstraint = new btGeneric6DofConstraint(*parentComponent, *getRootBody(), parentAnchor, getRootAnchor(), true);
+/*	dofConstraint->setLinearUpperLimit(btVector3(0.3, 0.3, 0.3));
+	dofConstraint->setLinearLowerLimit(btVector3(0.3, 0.3, 0.3));
+	dofConstraint->setAngularUpperLimit(btVector3(0.3, 0.3, 0.3));
+	dofConstraint->setAngularLowerLimit(btVector3(0.3, 0.3, 0.3));
+	dofConstraint->setOverrideNumSolverIterations(100);*/
+        mWorld->addConstraint(dofConstraint);
+
 }
 
 btTransform ChainBodyComponent::getRootAnchor()

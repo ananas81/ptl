@@ -20,6 +20,7 @@ class WheelBodyComponent : public BodyComponent
 		virtual ~WheelBodyComponent();
 		virtual btRigidBody* getRootBody();
 		virtual btTransform getRootAnchor();
+		virtual void attachTo(btRigidBody* parentComponent, const btTransform& parentAnchor);
 		virtual btHingeConstraint* getHinge();
 
 	protected:

@@ -29,6 +29,7 @@ class ChainBodyComponent : public BodyComponent
 		virtual ~ChainBodyComponent();
 		virtual btRigidBody* getRootBody();
 		virtual btTransform getRootAnchor();
+		virtual void attachTo(btRigidBody* parentComponent, const btTransform& parentAnchor);
 		Ogre::Vector3 calculateChainElementPos(int elementId);
 		Ogre::Vector3 calculateWeightPos(int elementId);
 
