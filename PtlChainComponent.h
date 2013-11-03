@@ -30,8 +30,9 @@ class ChainBodyComponent : public BodyComponent
 		virtual btRigidBody* getRootBody();
 		virtual btTransform getRootAnchor();
 		virtual void attachTo(btRigidBody* parentComponent, const btTransform& parentAnchor);
-		Ogre::Vector3 calculateChainElementPos(int elementId);
-		Ogre::Vector3 calculateWeightPos(int elementId);
+		virtual Ogre::Vector3 calculateChainElementPos(int elementId);
+		virtual Ogre::Vector3 calculateWeightPos(int elementId);
+		virtual void setRotationalMotor(btGeneric6DofConstraint* dofConstraint);
 
 		static const double CHAIN_ELEMENT_RADIUS = 6.6;
 		static const double WEIGHT_RADIUS = 6.12;

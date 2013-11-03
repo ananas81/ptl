@@ -162,8 +162,9 @@ ChainBodyComponent::ChainBodyComponent(Ogre::SceneManager *aSceneMgr,
 	/*	dofConstraint->setLinearUpperLimit(btVector3(0.3, 0.3, 0.3));
 		dofConstraint->setLinearLowerLimit(btVector3(0.3, 0.3, 0.3));
 		dofConstraint->setAngularUpperLimit(btVector3(0.3, 0.3, 0.3));
-		dofConstraint->setAngularLowerLimit(btVector3(0.3, 0.3, 0.3));
-		dofConstraint->setOverrideNumSolverIterations(100);*/
+		dofConstraint->setAngularLowerLimit(btVector3(0.3, 0.3, 0.3));*/
+		setRotationalMotor(dofConstraint);
+		dofConstraint->setOverrideNumSolverIterations(100);
 		mWorld->addConstraint(dofConstraint);
 	}
 
@@ -177,8 +178,9 @@ ChainBodyComponent::ChainBodyComponent(Ogre::SceneManager *aSceneMgr,
 /*	dofConstraint->setLinearUpperLimit(btVector3(0.3, 0.3, 0.3));
 	dofConstraint->setLinearLowerLimit(btVector3(0.3, 0.3, 0.3));
 	dofConstraint->setAngularUpperLimit(btVector3(0.3, 0.3, 0.3));
-	dofConstraint->setAngularLowerLimit(btVector3(0.3, 0.3, 0.3));
-	dofConstraint->setOverrideNumSolverIterations(100);*/
+	dofConstraint->setAngularLowerLimit(btVector3(0.3, 0.3, 0.3));*/
+	setRotationalMotor(dofConstraint);
+	dofConstraint->setOverrideNumSolverIterations(100);
 	mWorld->addConstraint(dofConstraint);
 }
 
@@ -199,10 +201,28 @@ void ChainBodyComponent::attachTo(btRigidBody* parentComponent, const btTransfor
 /*	dofConstraint->setLinearUpperLimit(btVector3(0.3, 0.3, 0.3));
 	dofConstraint->setLinearLowerLimit(btVector3(0.3, 0.3, 0.3));
 	dofConstraint->setAngularUpperLimit(btVector3(0.3, 0.3, 0.3));
-	dofConstraint->setAngularLowerLimit(btVector3(0.3, 0.3, 0.3));
-	dofConstraint->setOverrideNumSolverIterations(100);*/
+	dofConstraint->setAngularLowerLimit(btVector3(0.3, 0.3, 0.3));*/
+	setRotationalMotor(dofConstraint);
+	dofConstraint->setOverrideNumSolverIterations(100);
         mWorld->addConstraint(dofConstraint);
 
+}
+
+void ChainBodyComponent::setRotationalMotor(btGeneric6DofConstraint* dofConstraint)
+{
+	btRotationalLimitMotor *dofRotMotor;
+
+	for (int i = 0; i < 3; ++i)
+	{
+		dofRotMotor = dofConstraint->getRotationalLimitMotor(i);
+		dofRotMotor->m_enableMotor = true;
+		dofRotMotor->m_normalCFM = 0.0;
+		dofRotMotor->m_stopCFM = 0.0;
+		dofRotMotor->m_stopERP = 0.0;
+//		dofRotMotor->m_hiLimit = 0.2;
+//		dofRotMotor->m_loLimit = 0.2;
+		dofRotMotor->m_limitSoftness = 0.0;
+	}
 }
 
 btTransform ChainBodyComponent::getRootAnchor()
