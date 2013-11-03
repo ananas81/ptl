@@ -22,7 +22,7 @@ class BodyComponent
 
 		virtual ~BodyComponent() {}
 		virtual btRigidBody* getRootBody() = 0;
-		virtual btVector3 getRootAnchor() = 0;
+		virtual btTransform getRootAnchor() = 0;
 
 	protected:
 		Ogre::SceneManager* mSceneMgr;

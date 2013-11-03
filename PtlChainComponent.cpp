@@ -1,6 +1,7 @@
 #include "PtlChainComponent.h"
 #include "PtlOgrePhysicalBody.h"
 #include <stdio.h>
+#include <math.h>
 
 namespace Ptl
 {
@@ -74,6 +75,25 @@ ChainBodyComponent::ChainBodyComponent(Ogre::SceneManager *aSceneMgr,
 	double chainElementMass = 0.1;
 	char bodyName[15];
 
+	switch (mDirection)
+	{
+		case DIR_LEFT:
+			mOrient = Ogre::Quaternion(sqrt(0.5), 0, 0, -sqrt(0.5));
+			break;
+		case DIR_UP:
+			mOrient = Ogre::Quaternion(0, 0, 0, 1);
+			break;
+		case DIR_RIGHT:
+			mOrient = Ogre::Quaternion(sqrt(0.5), 0, 0, sqrt(0.5));
+			break;
+		case DIR_DOWN:
+			mOrient = Ogre::Quaternion(1, 0, 0, 0);
+			break;
+		default:
+			mOrient = Ogre::Quaternion(1, 0, 0, 0);
+			break;
+	}
+
 	sprintf(bodyName, "ChainElement_%d", ++mChainElementsCnt);
 	mChainElements.push_back(new Ptl::OgrePhysicalBody(
 					mSceneMgr,
@@ -86,7 +106,6 @@ ChainBodyComponent::ChainBodyComponent(Ogre::SceneManager *aSceneMgr,
 					Ogre::Vector3(0, 0, 0),
 					10.0,
 					1.0));
-	++mChainElementsCnt;
 
 	btCollisionShape* chainElementShape = mChainElements[0]->getCollisionShape();
 
@@ -172,9 +191,32 @@ btRigidBody* ChainBodyComponent::getRootBody()
 	return static_cast<btRigidBody*>(mChainElements[0]->getCollisionObject());
 }
 
-btVector3 ChainBodyComponent::getRootAnchor()
+btTransform ChainBodyComponent::getRootAnchor()
 {
-	return btVector3(.0, 1.0, .0);
+	btTransform frame = btTransform::getIdentity();
+	btVector3 anchorPoint(.0, CHAIN_ELEMENT_RADIUS, .0);
+
+	frame.setOrigin(anchorPoint);
+
+	switch (mDirection)
+	{
+		case DIR_LEFT:
+			frame.setRotation(btQuaternion(0, 0, sqrt(0.5), sqrt(0.5)));
+			break;
+		case DIR_UP:
+			frame.setRotation(btQuaternion(0, 0, 1, 0));
+			break;
+		case DIR_RIGHT:
+			frame.setRotation(btQuaternion(0, 0, sqrt(0.5), -sqrt(0.5)));
+			break;
+		case DIR_DOWN:
+			break;
+		default:
+			frame.setRotation(btQuaternion(0, 0, sqrt(0.5), -sqrt(0.5)));
+			break;
+	}
+
+	return frame;
 }
 
 };

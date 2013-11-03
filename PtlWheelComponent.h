@@ -19,7 +19,7 @@ class WheelBodyComponent : public BodyComponent
 
 		virtual ~WheelBodyComponent();
 		virtual btRigidBody* getRootBody();
-		virtual btVector3 getRootAnchor();
+		virtual btTransform getRootAnchor();
 		virtual btHingeConstraint* getHinge();
 
 	protected:

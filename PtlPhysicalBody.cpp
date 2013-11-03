@@ -47,6 +47,8 @@ void PhysicalBody::initPhysics()
 						   mInertia);
 	constrInfo.m_friction = mFriction;
 	constrInfo.m_rollingFriction = mRollingFriction;
+	constrInfo.m_startWorldTransform = btTransform(mOrient, mPos);
+
 	mCollisionObject = new btRigidBody(constrInfo); 
 }
 

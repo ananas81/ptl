@@ -47,11 +47,46 @@ WheelBodyComponent::WheelBodyComponent(Ogre::SceneManager *aSceneMgr,
 							  ChainBodyComponent::DIR_DOWN));
 
 	frameInA = btTransform::getIdentity();
-	frameInB = btTransform::getIdentity();
 	frameInA.setOrigin(btVector3(0., -38.5, 0.));
-	frameInB.setOrigin(btVector3(mChildComponents[0]->getRootAnchor()));
+	frameInB = mChildComponents[0]->getRootAnchor();
 
 	dofConstraint = new btGeneric6DofConstraint(*wheelBody, *mChildComponents[0]->getRootBody(), frameInA, frameInB, true);
+	dofConstraint->setOverrideNumSolverIterations(100);
+	dofConstraint->setLinearUpperLimit(btVector3(0., 0., 0.));
+	dofConstraint->setLinearLowerLimit(btVector3(0., 0., 0.));
+	dofConstraint->setAngularUpperLimit(btVector3(0., 0., 0.));
+	dofConstraint->setAngularLowerLimit(btVector3(0., 0., 0.));
+	mWorld->addConstraint(dofConstraint);
+
+	mChildComponents.push_back(new ChainBodyComponent(mSceneMgr,
+							  mWorld,
+							  Ogre::Vector3(mPos.x + 38.5, mPos.y, mPos.z),
+							  mOrient,
+							  ChainBodyComponent::DIR_RIGHT));
+
+	frameInA = btTransform::getIdentity();
+	frameInA.setOrigin(btVector3(38.5, 0., 0.));
+	frameInB = mChildComponents[1]->getRootAnchor();
+
+	dofConstraint = new btGeneric6DofConstraint(*wheelBody, *mChildComponents[1]->getRootBody(), frameInA, frameInB, true);
+	dofConstraint->setOverrideNumSolverIterations(100);
+	dofConstraint->setLinearUpperLimit(btVector3(0., 0., 0.));
+	dofConstraint->setLinearLowerLimit(btVector3(0., 0., 0.));
+	dofConstraint->setAngularUpperLimit(btVector3(0., 0., 0.));
+	dofConstraint->setAngularLowerLimit(btVector3(0., 0., 0.));
+	mWorld->addConstraint(dofConstraint);
+
+	mChildComponents.push_back(new ChainBodyComponent(mSceneMgr,
+							  mWorld,
+							  Ogre::Vector3(mPos.x - 38.5, mPos.y, mPos.z),
+							  mOrient,
+							  ChainBodyComponent::DIR_LEFT));
+
+	frameInA = btTransform::getIdentity();
+	frameInA.setOrigin(btVector3(-38.5, 0., 0.));
+	frameInB = mChildComponents[2]->getRootAnchor();
+
+	dofConstraint = new btGeneric6DofConstraint(*wheelBody, *mChildComponents[2]->getRootBody(), frameInA, frameInB, true);
 	dofConstraint->setOverrideNumSolverIterations(100);
 	dofConstraint->setLinearUpperLimit(btVector3(0., 0., 0.));
 	dofConstraint->setLinearLowerLimit(btVector3(0., 0., 0.));
@@ -66,11 +101,10 @@ WheelBodyComponent::WheelBodyComponent(Ogre::SceneManager *aSceneMgr,
 							  ChainBodyComponent::DIR_UP));
 
 	frameInA = btTransform::getIdentity();
-	frameInB = btTransform::getIdentity();
 	frameInA.setOrigin(btVector3(0., 38.5, 0.));
-	frameInB.setOrigin(btVector3(mChildComponents[1]->getRootAnchor()));
+	frameInB = mChildComponents[3]->getRootAnchor();
 
-	dofConstraint = new btGeneric6DofConstraint(*wheelBody, *mChildComponents[1]->getRootBody(), frameInA, frameInB, true);
+	dofConstraint = new btGeneric6DofConstraint(*wheelBody, *mChildComponents[3]->getRootBody(), frameInA, frameInB, true);
 	dofConstraint->setOverrideNumSolverIterations(100);
 	dofConstraint->setLinearUpperLimit(btVector3(0., 0., 0.));
 	dofConstraint->setLinearLowerLimit(btVector3(0., 0., 0.));
@@ -88,9 +122,14 @@ btRigidBody* WheelBodyComponent::getRootBody()
 	return static_cast<btRigidBody*>(mOgrePhysBody->getCollisionObject());
 }
 
-btVector3 WheelBodyComponent::getRootAnchor()
+btTransform WheelBodyComponent::getRootAnchor()
 {
-	return btVector3(0, 0, 0);
+	btTransform frame = btTransform::getIdentity();
+
+	frame.setOrigin(btVector3(0., 0., 0.));
+	frame.setRotation(btQuaternion(1, 0, 0, 0));
+
+	return frame;
 }
 
 btHingeConstraint* WheelBodyComponent::getHinge()
