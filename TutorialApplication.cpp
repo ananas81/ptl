@@ -131,7 +131,7 @@ void TutorialApplication::initPhysics()
 
 	mFlywheel1 = new Ptl::WheelBodyComponent(mSceneMgr,
 						 mWorld,
-						 Ogre::Vector3(25, 150, 0),
+						 Ogre::Vector3(25, 170, 0),
 						 Ogre::Quaternion(1, 0, 0, 0));
 
 	mDebugDrawer = new DebugDrawer(mSceneMgr, mWorld);
@@ -339,7 +339,7 @@ bool TutorialApplication::keyPressed(const OIS::KeyEvent& evt)
 			motorOn = !motorOn;
 			if (motorOn)
 				//flywheel1->setAngularVelocity(btVector3(0, 0, 5));
-				mFlywheel1->getHinge()->enableAngularMotor(true, 400, 200);
+				mFlywheel1->getHinge()->enableAngularMotor(true, 4000, 2000);
 			else
 				//flywheel1->setAngularVelocity(btVector3(0, 0, 0));
 				mFlywheel1->getHinge()->enableMotor(false);

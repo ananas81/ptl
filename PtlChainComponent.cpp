@@ -110,7 +110,7 @@ ChainBodyComponent::ChainBodyComponent(Ogre::SceneManager *aSceneMgr,
 	btCollisionShape* chainElementShape = mChainElements[0]->getCollisionShape();
 
 	int i;
-	for (i = 1; i < 4; ++i)
+	for (i = 1; i < 7; ++i)
 	{
 		sprintf(bodyName, "ChainElement_%d", ++mChainElementsCnt);
 		mChainElements.push_back(new Ptl::OgrePhysicalBody(
@@ -154,11 +154,7 @@ ChainBodyComponent::ChainBodyComponent(Ogre::SceneManager *aSceneMgr,
 	{
 		s1 = static_cast<btRigidBody*>(mChainElements[i-1]->getCollisionObject());
 		s2 = static_cast<btRigidBody*>(mChainElements[i]->getCollisionObject());
-		frameInA = btTransform::getIdentity();
-		frameInB = btTransform::getIdentity();
-		frameInA.setOrigin(btVector3(0., -CHAIN_ELEMENT_RADIUS, 0.));
-		frameInB.setOrigin(btVector3(0., CHAIN_ELEMENT_RADIUS, 0.));
-		dofConstraint = new btGeneric6DofConstraint(*s1, *s2,frameInA,frameInB,true);
+		dofConstraint = new btGeneric6DofConstraint(*s1, *s2, getTailAnchor(), getRootAnchor(), true);
 	/*	dofConstraint->setLinearUpperLimit(btVector3(0.3, 0.3, 0.3));
 		dofConstraint->setLinearLowerLimit(btVector3(0.3, 0.3, 0.3));
 		dofConstraint->setAngularUpperLimit(btVector3(0.3, 0.3, 0.3));
@@ -219,6 +215,12 @@ void ChainBodyComponent::setRotationalMotor(btGeneric6DofConstraint* dofConstrai
 		dofRotMotor->m_normalCFM = 0.0;
 		dofRotMotor->m_stopCFM = 0.0;
 		dofRotMotor->m_stopERP = 0.0;
+		dofRotMotor->m_maxLimitForce = 100.0;
+		dofRotMotor->m_maxMotorForce = 100.0;
+//		dofConstraint->setLinearUpperLimit(btVector3(0.0, 0.0, 0.0));
+//		dofConstraint->setLinearLowerLimit(btVector3(0.0, 0.0, 0.0));
+//		dofConstraint->setAngularUpperLimit(btVector3(0.0, 0.0, 0.0));
+//		dofConstraint->setAngularLowerLimit(btVector3(0.0, 0.0, 0.0));
 //		dofRotMotor->m_hiLimit = 0.2;
 //		dofRotMotor->m_loLimit = 0.2;
 		dofRotMotor->m_limitSoftness = 0.0;
@@ -229,6 +231,34 @@ btTransform ChainBodyComponent::getRootAnchor()
 {
 	btTransform frame = btTransform::getIdentity();
 	btVector3 anchorPoint(.0, CHAIN_ELEMENT_RADIUS, .0);
+
+	frame.setOrigin(anchorPoint);
+
+	switch (mDirection)
+	{
+		case DIR_LEFT:
+			frame.setRotation(btQuaternion(0, 0, sqrt(0.5), sqrt(0.5)));
+			break;
+		case DIR_UP:
+			frame.setRotation(btQuaternion(0, 0, 1, 0));
+			break;
+		case DIR_RIGHT:
+			frame.setRotation(btQuaternion(0, 0, sqrt(0.5), -sqrt(0.5)));
+			break;
+		case DIR_DOWN:
+			break;
+		default:
+			frame.setRotation(btQuaternion(0, 0, sqrt(0.5), -sqrt(0.5)));
+			break;
+	}
+
+	return frame;
+}
+
+btTransform ChainBodyComponent::getTailAnchor()
+{
+	btTransform frame = btTransform::getIdentity();
+	btVector3 anchorPoint(.0, -CHAIN_ELEMENT_RADIUS, .0);
 
 	frame.setOrigin(anchorPoint);
 

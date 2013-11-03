@@ -28,7 +28,7 @@ WheelBodyComponent::WheelBodyComponent(Ogre::SceneManager *aSceneMgr,
 	mWheelHinge = new btHingeConstraint(*wheelBody, btVector3(0,0,0), btVector3(0,0,1), true);
 
 	wheelBody->setFriction(1);
-	wheelBody->setDamping(0.01f,0.01f);
+	wheelBody->setDamping(0.1f,0.1f);
 	wheelBody->setFlags(0);
 	wheelBody->setLinearFactor(btVector3(0, 0, 0.5));
 	wheelBody->setAngularFactor(btVector3(0, 0, 0.5));
