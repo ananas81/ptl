@@ -32,7 +32,7 @@ class ChainBodyComponent : public BodyComponent
 		Ogre::Vector3 calculateChainElementPos(int elementId);
 		Ogre::Vector3 calculateWeightPos(int elementId);
 
-		static const double CHAIN_ELEMENT_RADIUS = 1.0;
+		static const double CHAIN_ELEMENT_RADIUS = 6.6;
 		static const double WEIGHT_RADIUS = 6.12;
 
 	protected:
