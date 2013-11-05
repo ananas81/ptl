@@ -24,7 +24,8 @@ class WheelBodyComponent : public BodyComponent
 		virtual btHingeConstraint* getHinge();
 
 	protected:
-		OgrePhysicalBody *mOgrePhysBody;
+		OgrePhysicalBody *mWheel;
+		OgrePhysicalBody *mRack;
 		btHingeConstraint *mWheelHinge;
 		std::vector<BodyComponent*> mChildComponents;
 };

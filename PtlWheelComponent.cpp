@@ -10,10 +10,21 @@ WheelBodyComponent::WheelBodyComponent(Ogre::SceneManager *aSceneMgr,
 				       const Ogre::Vector3& aPos,
 				       const Ogre::Quaternion& aOrient) :
 				       BodyComponent(aSceneMgr, aWorld, aPos, aOrient),
-				       mOgrePhysBody(NULL),
+				       mWheel(NULL),
 				       mWheelHinge(NULL)
 {
-	mOgrePhysBody = new Ptl::OgrePhysicalBody(mSceneMgr,
+	mRack = new Ptl::OgrePhysicalBody(mSceneMgr,
+						  "Rack",
+						  "Rack.mesh",
+						  Ogre::Vector3(mPos.x, mPos.y, mPos.z - 150),
+						  Ogre::Quaternion(sqrt(0.5), 0 , -sqrt(0.5), 0),
+						  new Ptl::BtOgreShapeDispatcher(NULL, Ptl::BtOgreShapeDispatcher::CONVEX_HULL),
+						  10.0,
+						  Ogre::Vector3(0, 0, 0),
+						  10.0,
+						  1.0);
+
+	mWheel = new Ptl::OgrePhysicalBody(mSceneMgr,
 						  "Flywheel",
 						  "Flywheel.mesh",
 						  mPos,
@@ -24,7 +35,9 @@ WheelBodyComponent::WheelBodyComponent(Ogre::SceneManager *aSceneMgr,
 						  10.0,
 						  1.0);
 
-	btRigidBody *wheelBody = static_cast<btRigidBody*>(mOgrePhysBody->getCollisionObject());
+	btRigidBody *wheelBody = static_cast<btRigidBody*>(mWheel->getCollisionObject());
+	btRigidBody *rackBody = static_cast<btRigidBody*>(mRack->getCollisionObject());
+
 	mWheelHinge = new btHingeConstraint(*wheelBody, btVector3(0,0,0), btVector3(0,0,1), true);
 
 	wheelBody->setFriction(1);
@@ -36,6 +49,7 @@ WheelBodyComponent::WheelBodyComponent(Ogre::SceneManager *aSceneMgr,
 
 	mWorld->addConstraint(mWheelHinge);              
 	mWorld->addRigidBody(wheelBody);
+	mWorld->addRigidBody(rackBody);
 
 	btTransform frameInA;
 
@@ -90,7 +104,7 @@ WheelBodyComponent::~WheelBodyComponent()
 
 btRigidBody* WheelBodyComponent::getRootBody()
 {
-	return static_cast<btRigidBody*>(mOgrePhysBody->getCollisionObject());
+	return static_cast<btRigidBody*>(mWheel->getCollisionObject());
 }
 
 btTransform WheelBodyComponent::getRootAnchor()
