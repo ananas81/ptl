@@ -13,26 +13,26 @@ WheelBodyComponent::WheelBodyComponent(Ogre::SceneManager *aSceneMgr,
 				       mWheel(NULL),
 				       mWheelHinge(NULL)
 {
+	mRack = new Ptl::OgrePhysicalBody(mSceneMgr,
+						  "Rack",
+						  "Rack.mesh",
+						  Ogre::Vector3(mPos.x, mPos.y, mPos.z - 150),
+						  Ogre::Quaternion(sqrt(0.5), 0 , -sqrt(0.5), 0),
+						  new Ptl::BtOgreShapeDispatcher(NULL, Ptl::BtOgreShapeDispatcher::CONVEX_HULL),
+						  1.0,
+						  Ogre::Vector3(0, 0, 0),
+						  0.,
+						  0.);
 //	mRack = new Ptl::OgrePhysicalBody(mSceneMgr,
 //						  "Rack",
-//						  "Rack.mesh",
-//						  Ogre::Vector3(mPos.x, mPos.y+10, mPos.z - 150),
-//						  Ogre::Quaternion(sqrt(0.5), 0 , -sqrt(0.5), 0),
+//						  "Sphere.mesh",
+//						  Ogre::Vector3(25, 10, -150),
+//						  mOrient,
 //						  new Ptl::BtOgreShapeDispatcher(NULL, Ptl::BtOgreShapeDispatcher::CONVEX_HULL),
 //						  1.0,
 //						  Ogre::Vector3(0, 0, 0),
 //						  10.0,
 //						  1.0);
-	mRack = new Ptl::OgrePhysicalBody(mSceneMgr,
-						  "Rack",
-						  "Sphere.mesh",
-						  Ogre::Vector3(25, 10, -150),
-						  Ogre::Quaternion(sqrt(0.5), 0 , -sqrt(0.5), 0),
-						  new Ptl::BtOgreShapeDispatcher(NULL, Ptl::BtOgreShapeDispatcher::CONVEX_HULL),
-						  1.0,
-						  Ogre::Vector3(0, 0, 0),
-						  10.0,
-						  1.0);
 
 	mWheel = new Ptl::OgrePhysicalBody(mSceneMgr,
 						  "Flywheel",
@@ -52,7 +52,8 @@ WheelBodyComponent::WheelBodyComponent(Ogre::SceneManager *aSceneMgr,
 	//rackBody->setActivationState(DISABLE_DEACTIVATION);
 
 	btTransform rackBottom = btTransform::getIdentity();
-	rackBottom.setOrigin(btVector3(25., 10., -150.));
+	//rackBottom.setOrigin(btVector3(25., 10., -150.));
+	rackBottom.setOrigin(btVector3(0., 0., 0.));
 	//rackBottom.setRotation(btQuaternion(0 , sqrt(0.5), 0, sqrt(0.5)));
 	btGeneric6DofConstraint *dofConstr = new btGeneric6DofConstraint(*rackBody, rackBottom, true);
 
@@ -60,8 +61,8 @@ WheelBodyComponent::WheelBodyComponent(Ogre::SceneManager *aSceneMgr,
 
 //	dofConstr->setLinearUpperLimit(btVector3(10.0, 0.0, 0.0));
 //	dofConstr->setLinearLowerLimit(btVector3(-10.0, 0.0, 0.0));
-	dofConstr->setLinearUpperLimit(btVector3(0., 0.0, 10.0));
-	dofConstr->setLinearLowerLimit(btVector3(0., 0.0, -10.0));
+	dofConstr->setLinearUpperLimit(btVector3(0., 0.0, 100.0));
+	dofConstr->setLinearLowerLimit(btVector3(0., 0.0, -100.0));
 	dofConstr->setAngularUpperLimit(btVector3(0, 0, 0));
 	dofConstr->setAngularLowerLimit(btVector3(0, 0, 0));
 /*        for (int i = 0; i < 3; ++i)
@@ -118,7 +119,7 @@ sqrt(0.5)	0	0	-sqrt(0.5)	-90° rotation around Z axis*/
 
 	mWorld->addRigidBody(wheelBody);
 	mWorld->addRigidBody(rackBody);
-//	mWorld->addConstraint(mWheelHinge);              
+	mWorld->addConstraint(mWheelHinge);              
 	mWorld->addConstraint(dofConstr);
 
 //	rackBody->setLinearVelocity(btVector3(5, 0, 0));

@@ -350,22 +350,14 @@ bool TutorialApplication::keyPressed(const OIS::KeyEvent& evt)
 		{
 			btRigidBody *rackBody = mFlywheel1->getRackBody();
 			rackBody->setActivationState(DISABLE_DEACTIVATION);
-			btVector3 pickPos(25, 180, -150);
-			btVector3 localPivot = rackBody->getCenterOfMassTransform().inverse() * pickPos;
-//			rackBody->applyCentralForce(btVector3(5, 0, 0));
-			rackBody->applyImpulse(btVector3(-50, 0, 0), btVector3(0, 0, 0));
-/*
-			rackBody->setCenterOfMassTransform( myMotionState->m_graphicsWorldTrans );
-			rackBody->setInterpolationWorldTransform( myMotionState->m_startWorldTrans );
-			rackBody->forceActivationState(ACTIVE_TAG);
-			rackBody->activate();
-			rackBody->setDeactivationTime(0);*/
-/*			btTransform boxTrans;
-			btVector3 relativeForce = btVector3(7,0,0);
-			rackBody->getMotionState()->getWorldTransform(boxTrans);
-			btVector3 correctedForce = (boxTrans * relativeForce) - boxTrans.getOrigin();
-			rackBody->applyCentralForce(correctedForce);*/
-
+			rackBody->applyImpulse(btVector3(-50, 0, 0), btVector3(0., -170., 0.));
+			break;
+		}
+		case OIS::KC_3:
+		{
+			btRigidBody *rackBody = mFlywheel1->getRackBody();
+			rackBody->setActivationState(DISABLE_DEACTIVATION);
+			rackBody->applyImpulse(btVector3(50, 0, 0), btVector3(0., -170., 0.));
 			break;
 		}
 		default:
