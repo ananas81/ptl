@@ -42,16 +42,16 @@ Ogre::Vector3 ChainBodyComponent::calculateWeightPos(int elementId)
 	switch (mDirection)
 	{
 		case DIR_LEFT:
-			offsetX += -CHAIN_ELEMENT_RADIUS - elementId*CHAIN_ELEMENT_RADIUS*2.0 - WEIGHT_RADIUS;
+			offsetX += -WEIGHT_RADIUS - elementId*CHAIN_ELEMENT_RADIUS*2.0;
 			break;
 		case DIR_UP:
-			offsetY += CHAIN_ELEMENT_RADIUS + elementId*CHAIN_ELEMENT_RADIUS*2.0 + WEIGHT_RADIUS;
+			offsetY += WEIGHT_RADIUS + elementId*CHAIN_ELEMENT_RADIUS*2.0;
 			break;
 		case DIR_RIGHT:
-			offsetX += CHAIN_ELEMENT_RADIUS + elementId*CHAIN_ELEMENT_RADIUS*2.0 + WEIGHT_RADIUS;
+			offsetX += WEIGHT_RADIUS + elementId*CHAIN_ELEMENT_RADIUS*2.0;
 			break;
 		case DIR_DOWN:
-			offsetY += -CHAIN_ELEMENT_RADIUS - elementId*CHAIN_ELEMENT_RADIUS*2.0 - WEIGHT_RADIUS;
+			offsetY += -WEIGHT_RADIUS - elementId*CHAIN_ELEMENT_RADIUS*2.0;
 			break;
 		default:
 			break;
