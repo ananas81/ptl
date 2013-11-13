@@ -19,7 +19,7 @@ WheelBodyComponent::WheelBodyComponent(Ogre::SceneManager *aSceneMgr,
 						  Ogre::Vector3(mPos.x, mPos.y, mPos.z - 150),
 						  Ogre::Quaternion(sqrt(0.5), 0 , -sqrt(0.5), 0),
 						  new Ptl::BtOgreShapeDispatcher(NULL, Ptl::BtOgreShapeDispatcher::CONVEX_HULL),
-						  1.0,
+						  100.0,
 						  Ogre::Vector3(0, 0, 0),
 						  0.,
 						  0.);
@@ -42,7 +42,7 @@ WheelBodyComponent::WheelBodyComponent(Ogre::SceneManager *aSceneMgr,
 						  new Ptl::BulletImporterShapeDispatcher("flywheel.bcs", 0),
 						  40.0,
 						  Ogre::Vector3(0, 0, 0),
-						  10.0,
+						  1.0,
 						  1.0);
 
 	btRigidBody *wheelBody = static_cast<btRigidBody*>(mWheel->getCollisionObject());
@@ -59,44 +59,12 @@ WheelBodyComponent::WheelBodyComponent(Ogre::SceneManager *aSceneMgr,
 
         btRotationalLimitMotor *dofRotMotor;
 
-//	dofConstr->setLinearUpperLimit(btVector3(10.0, 0.0, 0.0));
-//	dofConstr->setLinearLowerLimit(btVector3(-10.0, 0.0, 0.0));
+//	dofConstr->setLinearUpperLimit(btVector3(0.0, 0.0, 0.0));
+//	dofConstr->setLinearLowerLimit(btVector3(0.0, 0.0, 0.0));
 	dofConstr->setLinearUpperLimit(btVector3(0., 0.0, 100.0));
 	dofConstr->setLinearLowerLimit(btVector3(0., 0.0, -100.0));
 	dofConstr->setAngularUpperLimit(btVector3(0, 0, 0));
 	dofConstr->setAngularLowerLimit(btVector3(0, 0, 0));
-/*        for (int i = 0; i < 3; ++i)
-	{
-		dofRotMotor = dofConstr->getRotationalLimitMotor(i);
-		dofRotMotor->m_enableMotor = true;
-		dofRotMotor->m_normalCFM = 0.0;
-		dofRotMotor->m_stopCFM = 0.0;
-		dofRotMotor->m_stopERP = 0.0;
-		dofRotMotor->m_maxLimitForce = 100.0;
-		dofRotMotor->m_maxMotorForce = 100.0;
-//	      dofRotMotor->m_hiLimit = 0.2;
-//	      dofRotMotor->m_loLimit = 0.2;
-		dofRotMotor->m_limitSoftness = 0.0;
-                dofConstr->getTranslationalLimitMotor()->m_enableMotor[i] = true;
-                dofConstr->getTranslationalLimitMotor()->m_targetVelocity[i] = 5.0f;
-                dofConstr->getTranslationalLimitMotor()->m_maxMotorForce[i] = 10.0f;
-	}*/
-
-/*
-w	x	y	z	Description
-1	0	0	0	Identity quaternion, no rotation
-0	1	0	0	180° turn around X axis
-0	0	1	0	180° turn around Y axis
-0	0	0	1	180° turn around Z axis
-sqrt(0.5)	sqrt(0.5)	0	0	90° rotation around X axis
-sqrt(0.5)	0	sqrt(0.5)	0	90° rotation around Y axis
-sqrt(0.5)	0	0	sqrt(0.5)	90° rotation around Z axis
-sqrt(0.5)	-sqrt(0.5)	0	0	-90° rotation around X axis
-sqrt(0.5)	0	-sqrt(0.5)	0	-90° rotation around Y axis
-sqrt(0.5)	0	0	-sqrt(0.5)	-90° rotation around Z axis*/
-
-//	mWheelHinge = new btHingeConstraint(*wheelBody, btVector3(0,0,0), btVector3(0,0,1), true);
-//	mWheelHinge = new btHingeConstraint (btRigidBody &rbA, btRigidBody &rbB, const btVector3 &pivotInA, const btVector3 &pivotInB, const btVector3 &axisInA, const btVector3 &axisInB, bool useReferenceFrameA=false)
 
 	//mWheelHinge = new btHingeConstraint(*wheelBody, *rackBody, btVector3(0,0,0), btVector3(0,0,0), btVector3(0,0,1), btVector3(0,0,1), true);
 	btTransform wheelFrame = btTransform::getIdentity();

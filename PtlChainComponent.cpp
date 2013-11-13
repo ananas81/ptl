@@ -136,13 +136,15 @@ ChainBodyComponent::ChainBodyComponent(Ogre::SceneManager *aSceneMgr,
 					new Ptl::BtOgreShapeDispatcher(NULL, Ptl::BtOgreShapeDispatcher::SPHERE),
 					10.0,
 					Ogre::Vector3(0, 0, 0),
-					10.0,
+					100.0,
 					1.0));
 
         for (i = 0; i < mChainElements.size(); ++i)
         {
                 btRigidBody* ropeElementBody = static_cast<btRigidBody*>(mChainElements[i]->getCollisionObject());
-                ropeElementBody->setActivationState(DISABLE_DEACTIVATION);
+	         ropeElementBody->setActivationState(DISABLE_DEACTIVATION);
+//		if (i == mChainElements.size() - 1)
+//			ropeElementBody->setDamping(0.00001, 0.00001);
                 mWorld->addRigidBody(static_cast<btRigidBody*>(mChainElements[i]->getCollisionObject()));
         }
 
