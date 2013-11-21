@@ -285,4 +285,13 @@ btTransform ChainBodyComponent::getTailAnchor()
 	return frame;
 }
 
+void ChainBodyComponent::setActivationState(int actState)
+{
+	for (int i = 0; i < mChainElements.size(); ++i)
+	{
+		btRigidBody* body = static_cast<btRigidBody*>(mChainElements[i]->getCollisionObject());
+		body->setActivationState(actState);
+	}
+}
+
 };

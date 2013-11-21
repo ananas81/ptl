@@ -174,4 +174,17 @@ btHingeConstraint* WheelBodyComponent::getHinge()
 	return mWheelHinge;
 }
 
+void WheelBodyComponent::setActivationState(int actState)
+{
+	btRigidBody* body;
+
+	body = static_cast<btRigidBody*>(mRack->getCollisionObject());
+	body->setActivationState(actState);
+	body = static_cast<btRigidBody*>(mWheel->getCollisionObject());
+	body->setActivationState(actState);
+
+	for (int i = 0; i < mChildComponents.size(); ++i)
+		mChildComponents[i]->setActivationState(actState);
+}
+
 };

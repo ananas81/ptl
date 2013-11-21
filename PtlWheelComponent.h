@@ -23,6 +23,7 @@ class WheelBodyComponent : public BodyComponent
 		virtual btTransform getRootAnchor();
 		virtual void attachTo(btRigidBody* parentComponent, const btTransform& parentAnchor);
 		virtual btHingeConstraint* getHinge();
+		virtual void setActivationState(int actState);
 
 	protected:
 		OgrePhysicalBody *mWheel;

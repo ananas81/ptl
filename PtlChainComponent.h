@@ -34,6 +34,7 @@ class ChainBodyComponent : public BodyComponent
 		virtual Ogre::Vector3 calculateChainElementPos(int elementId);
 		virtual Ogre::Vector3 calculateWeightPos(int elementId);
 		virtual void setRotationalMotor(btGeneric6DofConstraint* dofConstraint);
+		virtual void setActivationState(int actState);
 
 		static const double CHAIN_ELEMENT_RADIUS = 6.6;
 		static const double WEIGHT_RADIUS = 6.12;
