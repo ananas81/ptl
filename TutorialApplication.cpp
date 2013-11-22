@@ -360,6 +360,9 @@ bool TutorialApplication::keyPressed(const OIS::KeyEvent& evt)
 			rackBody->applyImpulse(btVector3(50, 0, 0), btVector3(0., -170., 0.));
 			break;
 		}
+		case OIS::KC_4:
+			mFlywheel1->displace();
+			break;
 		default:
 			break;
 	}

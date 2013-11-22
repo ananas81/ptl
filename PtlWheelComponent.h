@@ -26,6 +26,7 @@ class WheelBodyComponent : public BodyComponent
 		virtual void setActivationState(int actState);
 		virtual void addToWorld();
 		virtual void removeFromWorld();
+		virtual void displace();
 
 	protected:
 		OgrePhysicalBody *mWheel;

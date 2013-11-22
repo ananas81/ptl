@@ -219,4 +219,17 @@ void WheelBodyComponent::removeFromWorld()
 	for (int i = 0; i < mChildComponents.size(); ++i)
 		mChildComponents[i]->removeFromWorld();
 }
+
+void WheelBodyComponent::displace()
+{
+	btTransform rackC = btTransform::getIdentity();
+	rackC.setOrigin(btVector3(-100., 0., 100.));
+	rackC.setRotation(btQuaternion(0, sqrt(0.5), 0, sqrt(0.5)));
+	btRigidBody *rackBody = static_cast<btRigidBody*>(mRack->getCollisionObject());
+
+	removeFromWorld();
+	rackBody->setWorldTransform(rackC);
+	addToWorld();
+}
+
 };
