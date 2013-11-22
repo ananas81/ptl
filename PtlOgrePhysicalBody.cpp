@@ -159,4 +159,10 @@ void OgrePhysicalBody::MotionState::setWorldTransform(const btTransform &worldTr
 	mVisualObj->setPosition(pos.x(), pos.y(), pos.z());
 }
 
+
+float OgrePhysicalBody::getMass()
+{
+	return mMass;
+}
+
 };

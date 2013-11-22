@@ -294,4 +294,26 @@ void ChainBodyComponent::setActivationState(int actState)
 	}
 }
 
+void ChainBodyComponent::addToWorld()
+{
+	for (int i = 0; i < mChainElements.size(); ++i)
+	{
+		btRigidBody *body = static_cast<btRigidBody*>(mChainElements[i]->getCollisionObject());
+                mWorld->addRigidBody(body);
+		body->setMassProps(mChainElements[i]->getMass(), btVector3(0,0,0));
+		body->setActivationState(DISABLE_DEACTIVATION);
+	}
+}
+
+void ChainBodyComponent::removeFromWorld()
+{
+	for (int i = 0; i < mChainElements.size(); ++i)
+	{
+		btRigidBody *body = static_cast<btRigidBody*>(mChainElements[i]->getCollisionObject());
+                mWorld->removeRigidBody(body);
+		body->setMassProps(0.0, btVector3(0,0,0));
+//		body->setCollisionFlags(body->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
+	}
+}
+
 };

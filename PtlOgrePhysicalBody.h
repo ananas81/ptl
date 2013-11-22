@@ -60,6 +60,7 @@ class OgrePhysicalBody : public PhysicalBody
 		virtual btCollisionShape* getCollisionShape() const;
 		virtual Ogre::Vector3 getPos() const;
 		virtual Ogre::Quaternion getOrient() const;
+		virtual float getMass();
 
 	private:
 		Ogre::SceneManager *mSceneManager;

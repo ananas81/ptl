@@ -187,4 +187,36 @@ void WheelBodyComponent::setActivationState(int actState)
 		mChildComponents[i]->setActivationState(actState);
 }
 
+void WheelBodyComponent::addToWorld()
+{
+	btRigidBody *body;
+
+	body = static_cast<btRigidBody*>(mWheel->getCollisionObject());
+	mWorld->addRigidBody(body);
+	body->setMassProps(mWheel->getMass(), btVector3(0,0,0));
+	body->setActivationState(DISABLE_DEACTIVATION);
+	body = static_cast<btRigidBody*>(mRack->getCollisionObject());
+	mWorld->addRigidBody(body);
+	body->setMassProps(mRack->getMass(), btVector3(0,0,0));
+	body->setActivationState(DISABLE_DEACTIVATION);
+	for (int i = 0; i < mChildComponents.size(); ++i)
+		mChildComponents[i]->addToWorld();
+}
+
+void WheelBodyComponent::removeFromWorld()
+{
+	btRigidBody *body;
+
+	body = static_cast<btRigidBody*>(mWheel->getCollisionObject());
+	mWorld->removeRigidBody(body);
+	body->setMassProps(0.0, btVector3(0,0,0));
+	body->setCollisionFlags(body->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
+	body = static_cast<btRigidBody*>(mRack->getCollisionObject());
+	mWorld->removeRigidBody(body);
+	body->setMassProps(0.0, btVector3(0,0,0));
+	body->setCollisionFlags(body->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
+
+	for (int i = 0; i < mChildComponents.size(); ++i)
+		mChildComponents[i]->removeFromWorld();
+}
 };
