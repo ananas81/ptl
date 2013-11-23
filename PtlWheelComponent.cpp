@@ -187,37 +187,51 @@ void WheelBodyComponent::setActivationState(int actState)
 		mChildComponents[i]->setActivationState(actState);
 }
 
-void WheelBodyComponent::addToWorld()
+void WheelBodyComponent::switchToKinematic()
 {
 	btRigidBody *body;
 
 	body = static_cast<btRigidBody*>(mWheel->getCollisionObject());
-	mWorld->addRigidBody(body);
-	body->setMassProps(mWheel->getMass(), btVector3(0,0,0));
+	mWorld->removeRigidBody(body);
+	body->setMassProps(0.0, btVector3(0,0,0));
+	body->setCollisionFlags(body->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
 	body->setActivationState(DISABLE_DEACTIVATION);
+	mWorld->addRigidBody(body);
+
 	body = static_cast<btRigidBody*>(mRack->getCollisionObject());
-	mWorld->addRigidBody(body);
-	body->setMassProps(mRack->getMass(), btVector3(0,0,0));
+	mWorld->removeRigidBody(body);
+	body->setMassProps(0.0, btVector3(0,0,0));
+	body->setCollisionFlags(body->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
 	body->setActivationState(DISABLE_DEACTIVATION);
+	mWorld->addRigidBody(body);
+
 	for (int i = 0; i < mChildComponents.size(); ++i)
-		mChildComponents[i]->addToWorld();
+		mChildComponents[i]->switchToKinematic();
 }
 
-void WheelBodyComponent::removeFromWorld()
+void WheelBodyComponent::switchToDynamic()
 {
 	btRigidBody *body;
+	btVector3 inertia(0, 0, 0);
 
 	body = static_cast<btRigidBody*>(mWheel->getCollisionObject());
 	mWorld->removeRigidBody(body);
-	body->setMassProps(0.0, btVector3(0,0,0));
-	body->setCollisionFlags(body->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
+	body->getCollisionShape()->calculateLocalInertia(mWheel->getMass(), inertia);
+	body->setMassProps(mWheel->getMass(), btVector3(0,0,0));
+	body->setCollisionFlags(body->getCollisionFlags() | btCollisionObject::CF_STATIC_OBJECT);
+	body->updateInertiaTensor();
+	mWorld->addRigidBody(body);
+
 	body = static_cast<btRigidBody*>(mRack->getCollisionObject());
 	mWorld->removeRigidBody(body);
-	body->setMassProps(0.0, btVector3(0,0,0));
-	body->setCollisionFlags(body->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
+	body->getCollisionShape()->calculateLocalInertia(mRack->getMass(), inertia);
+	body->setMassProps(mRack->getMass(), btVector3(0,0,0));
+	body->setCollisionFlags(body->getCollisionFlags() | btCollisionObject::CF_STATIC_OBJECT);
+	body->updateInertiaTensor();
+	mWorld->addRigidBody(body);
 
 	for (int i = 0; i < mChildComponents.size(); ++i)
-		mChildComponents[i]->removeFromWorld();
+		mChildComponents[i]->switchToDynamic();
 }
 
 void WheelBodyComponent::displace()
@@ -227,9 +241,9 @@ void WheelBodyComponent::displace()
 	rackC.setRotation(btQuaternion(0, sqrt(0.5), 0, sqrt(0.5)));
 	btRigidBody *rackBody = static_cast<btRigidBody*>(mRack->getCollisionObject());
 
-	removeFromWorld();
+	switchToKinematic();
 	rackBody->setWorldTransform(rackC);
-	addToWorld();
+	switchToDynamic();
 }
 
 };

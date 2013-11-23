@@ -294,26 +294,37 @@ void ChainBodyComponent::setActivationState(int actState)
 	}
 }
 
-void ChainBodyComponent::addToWorld()
+void ChainBodyComponent::switchToKinematic()
 {
+	btRigidBody *body;
+
 	for (int i = 0; i < mChainElements.size(); ++i)
 	{
-		btRigidBody *body = static_cast<btRigidBody*>(mChainElements[i]->getCollisionObject());
-                mWorld->addRigidBody(body);
-		body->setMassProps(mChainElements[i]->getMass(), btVector3(0,0,0));
+		body = static_cast<btRigidBody*>(mChainElements[i]->getCollisionObject());
+		mWorld->removeRigidBody(body);
+		body->setMassProps(0.0, btVector3(0,0,0));
+		body->setCollisionFlags(body->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
 		body->setActivationState(DISABLE_DEACTIVATION);
+		mWorld->addRigidBody(body);
 	}
 }
 
-void ChainBodyComponent::removeFromWorld()
+void ChainBodyComponent::switchToDynamic()
 {
+	btRigidBody *body;
+	btVector3 inertia(0, 0, 0);
+
 	for (int i = 0; i < mChainElements.size(); ++i)
 	{
-		btRigidBody *body = static_cast<btRigidBody*>(mChainElements[i]->getCollisionObject());
-                mWorld->removeRigidBody(body);
-		body->setMassProps(0.0, btVector3(0,0,0));
-//		body->setCollisionFlags(body->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
+		body = static_cast<btRigidBody*>(mChainElements[i]->getCollisionObject());
+		mWorld->removeRigidBody(body);
+		body->getCollisionShape()->calculateLocalInertia(mChainElements[i]->getMass(), inertia);
+		body->setMassProps(mChainElements[i]->getMass(), inertia);
+		body->setCollisionFlags(body->getCollisionFlags() | btCollisionObject::CF_STATIC_OBJECT);
+		body->updateInertiaTensor();
+		mWorld->addRigidBody(body);
 	}
+
 }
 
 };

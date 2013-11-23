@@ -24,8 +24,8 @@ class WheelBodyComponent : public BodyComponent
 		virtual void attachTo(btRigidBody* parentComponent, const btTransform& parentAnchor);
 		virtual btHingeConstraint* getHinge();
 		virtual void setActivationState(int actState);
-		virtual void addToWorld();
-		virtual void removeFromWorld();
+		virtual void switchToKinematic();
+		virtual void switchToDynamic();
 		virtual void displace();
 
 	protected:

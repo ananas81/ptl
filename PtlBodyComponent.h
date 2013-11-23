@@ -25,8 +25,8 @@ class BodyComponent
 		virtual btTransform getRootAnchor() = 0;
 		virtual void attachTo(btRigidBody* parentComponent, const btTransform& parentAnchor) = 0;
 		virtual void setActivationState(int actState) = 0;
-		virtual void addToWorld() = 0;
-		virtual void removeFromWorld() = 0;
+		virtual void switchToKinematic() = 0;
+		virtual void switchToDynamic() = 0;
 
 	protected:
 		Ogre::SceneManager* mSceneMgr;
