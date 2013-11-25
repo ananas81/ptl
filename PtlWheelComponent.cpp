@@ -59,8 +59,8 @@ WheelBodyComponent::WheelBodyComponent(Ogre::SceneManager *aSceneMgr,
 
         btRotationalLimitMotor *dofRotMotor;
 
-//	dofConstr->setLinearUpperLimit(btVector3(0.0, 0.0, 0.0));
-//	dofConstr->setLinearLowerLimit(btVector3(0.0, 0.0, 0.0));
+	//dofConstr->setLinearUpperLimit(btVector3(0.0, 0.0, 0.0));
+	//dofConstr->setLinearLowerLimit(btVector3(0.0, 0.0, 0.0));
 	dofConstr->setLinearUpperLimit(btVector3(0., 0.0, 100.0));
 	dofConstr->setLinearLowerLimit(btVector3(0., 0.0, -100.0));
 	dofConstr->setAngularUpperLimit(btVector3(0, 0, 0));
@@ -139,6 +139,21 @@ WheelBodyComponent::WheelBodyComponent(Ogre::SceneManager *aSceneMgr,
 	frameInA.setOrigin(btVector3(38.5, 0., 0.));
 
 	mChildComponents[3]->attachTo(wheelBody, frameInA);
+
+	btTransform rackC = btTransform::getIdentity();
+	rackC.setOrigin(btVector3(-100., 0., 100.));
+	rackC.setRotation(btQuaternion(0, sqrt(0.5), 0, sqrt(0.5)));
+
+//	dofConstr->getFrameOffsetA().setOrigin(btVector3(-100., 0., 100.));
+	dofConstr->getFrameOffsetA().setOrigin(btVector3(mPos.x - 150, mPos.y, mPos.z));
+	dofConstr->getFrameOffsetA().setRotation(btQuaternion(0, sqrt(0.5), 0, sqrt(0.5)));
+/*
+	removeFromWorld();
+	rackBody->setWorldTransform(rackC);
+	addToWorld();
+*/
+//	btGeneric6DofConstraint *_dofConstr = new btGeneric6DofConstraint(*rackBody, rackC, true);
+//	mWorld->addConstraint(_dofConstr);
 }
 
 WheelBodyComponent::~WheelBodyComponent()
@@ -201,7 +216,7 @@ void WheelBodyComponent::switchToKinematic()
 	body = static_cast<btRigidBody*>(mRack->getCollisionObject());
 	mWorld->removeRigidBody(body);
 	body->setMassProps(0.0, btVector3(0,0,0));
-	body->setCollisionFlags(body->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
+	body->setCollisionFlags(body->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT | btCollisionObject::CF_NO_CONTACT_RESPONSE);
 	body->setActivationState(DISABLE_DEACTIVATION);
 	mWorld->addRigidBody(body);
 
@@ -217,16 +232,22 @@ void WheelBodyComponent::switchToDynamic()
 	body = static_cast<btRigidBody*>(mWheel->getCollisionObject());
 	mWorld->removeRigidBody(body);
 	body->getCollisionShape()->calculateLocalInertia(mWheel->getMass(), inertia);
-	body->setMassProps(mWheel->getMass(), btVector3(0,0,0));
 	body->setCollisionFlags(body->getCollisionFlags() | btCollisionObject::CF_STATIC_OBJECT);
+	body->setMassProps(mWheel->getMass(), btVector3(0,0,0));
+//	body->setActivationState(WANTS_DEACTIVATION);
+	body->forceActivationState(ACTIVE_TAG);
+	body->setDeactivationTime( 0.f );
 	body->updateInertiaTensor();
 	mWorld->addRigidBody(body);
 
 	body = static_cast<btRigidBody*>(mRack->getCollisionObject());
 	mWorld->removeRigidBody(body);
 	body->getCollisionShape()->calculateLocalInertia(mRack->getMass(), inertia);
-	body->setMassProps(mRack->getMass(), btVector3(0,0,0));
 	body->setCollisionFlags(body->getCollisionFlags() | btCollisionObject::CF_STATIC_OBJECT);
+	body->setMassProps(mRack->getMass(), btVector3(0,0,0));
+	//body->setActivationState(WANTS_DEACTIVATION);
+	body->forceActivationState(ACTIVE_TAG);
+	body->setDeactivationTime( 0.f );
 	body->updateInertiaTensor();
 	mWorld->addRigidBody(body);
 

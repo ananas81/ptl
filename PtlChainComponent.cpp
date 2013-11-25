@@ -303,7 +303,7 @@ void ChainBodyComponent::switchToKinematic()
 		body = static_cast<btRigidBody*>(mChainElements[i]->getCollisionObject());
 		mWorld->removeRigidBody(body);
 		body->setMassProps(0.0, btVector3(0,0,0));
-		body->setCollisionFlags(body->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
+		//body->setCollisionFlags(body->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
 		body->setActivationState(DISABLE_DEACTIVATION);
 		mWorld->addRigidBody(body);
 	}
@@ -320,7 +320,7 @@ void ChainBodyComponent::switchToDynamic()
 		mWorld->removeRigidBody(body);
 		body->getCollisionShape()->calculateLocalInertia(mChainElements[i]->getMass(), inertia);
 		body->setMassProps(mChainElements[i]->getMass(), inertia);
-		body->setCollisionFlags(body->getCollisionFlags() | btCollisionObject::CF_STATIC_OBJECT);
+		//body->setCollisionFlags(body->getCollisionFlags() | btCollisionObject::CF_STATIC_OBJECT);
 		body->updateInertiaTensor();
 		mWorld->addRigidBody(body);
 	}
