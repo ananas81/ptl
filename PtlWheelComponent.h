@@ -33,6 +33,7 @@ class WheelBodyComponent : public BodyComponent
 		OgrePhysicalBody *mRack;
 		btHingeConstraint *mWheelHinge;
 		std::vector<BodyComponent*> mChildComponents;
+		btGeneric6DofConstraint *rackConstr;
 };
 
 };

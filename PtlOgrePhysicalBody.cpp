@@ -127,6 +127,11 @@ Ogre::SceneNode* OgrePhysicalBody::getBodyNode() const
 	return mBodyNode;
 }
 
+btMotionState* OgrePhysicalBody::getMotionState() const
+{
+	return mMotionState;
+}
+
 void OgrePhysicalBody::setKinematicPos(btTransform &currentPos)
 {
 	static_cast<MotionState*>(mMotionState)->setKinematicPos(currentPos);
@@ -162,6 +167,8 @@ void OgrePhysicalBody::MotionState::setWorldTransform(const btTransform &worldTr
 	mVisualObj->setOrientation(rot.w(), rot.x(), rot.y(), rot.z());
 	btVector3 pos = worldTrans.getOrigin();
 	mVisualObj->setPosition(pos.x(), pos.y(), pos.z());
+	mPos.setOrigin(pos);
+	mPos.setRotation(rot);
 }
 
 void OgrePhysicalBody::MotionState::setKinematicPos(btTransform &currentPos)

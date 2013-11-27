@@ -217,8 +217,8 @@ void ChainBodyComponent::setRotationalMotor(btGeneric6DofConstraint* dofConstrai
 		dofRotMotor->m_normalCFM = 0.0;
 		dofRotMotor->m_stopCFM = 0.0;
 		dofRotMotor->m_stopERP = 0.0;
-		dofRotMotor->m_maxLimitForce = 100.0;
-		dofRotMotor->m_maxMotorForce = 100.0;
+		dofRotMotor->m_maxLimitForce = 10000000.0;
+		dofRotMotor->m_maxMotorForce = 10000000.0;
 //		dofConstraint->setLinearUpperLimit(btVector3(0.0, 0.0, 0.0));
 //		dofConstraint->setLinearLowerLimit(btVector3(0.0, 0.0, 0.0));
 //		dofConstraint->setAngularUpperLimit(btVector3(0.0, 0.0, 0.0));

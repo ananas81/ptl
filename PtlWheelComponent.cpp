@@ -53,9 +53,10 @@ WheelBodyComponent::WheelBodyComponent(Ogre::SceneManager *aSceneMgr,
 
 	btTransform rackBottom = btTransform::getIdentity();
 	//rackBottom.setOrigin(btVector3(25., 10., -150.));
-	rackBottom.setOrigin(btVector3(0., 0., 0.));
+	rackBottom.setOrigin(btVector3(0., mPos.y-170.0, 0.));
 	//rackBottom.setRotation(btQuaternion(0 , sqrt(0.5), 0, sqrt(0.5)));
 	btGeneric6DofConstraint *dofConstr = new btGeneric6DofConstraint(*rackBody, rackBottom, true);
+	rackConstr = dofConstr;
 
         btRotationalLimitMotor *dofRotMotor;
 
@@ -140,13 +141,17 @@ WheelBodyComponent::WheelBodyComponent(Ogre::SceneManager *aSceneMgr,
 
 	mChildComponents[3]->attachTo(wheelBody, frameInA);
 
-	btTransform rackC = btTransform::getIdentity();
-	rackC.setOrigin(btVector3(-100., 0., 100.));
-	rackC.setRotation(btQuaternion(0, sqrt(0.5), 0, sqrt(0.5)));
+	//btTransform rackC = btTransform::getIdentity();
+	//rackC.setOrigin(btVector3(-100., 0., 100.));
+	//rackC.setRotation(btQuaternion(0, sqrt(0.5), 0, sqrt(0.5)));
 
-//	dofConstr->getFrameOffsetA().setOrigin(btVector3(-100., 0., 100.));
-	dofConstr->getFrameOffsetA().setOrigin(btVector3(mPos.x - 150, mPos.y, mPos.z));
+	//dofConstr->getFrameOffsetA().setOrigin(btVector3(-100., 0., 100.));
+	rackBody->setActivationState(DISABLE_DEACTIVATION);
+	//dofConstr->getFrameOffsetA().setOrigin(btVector3(mPos.x - 150, mPos.y, mPos.z + 100));
 	dofConstr->getFrameOffsetA().setRotation(btQuaternion(0, sqrt(0.5), 0, sqrt(0.5)));
+
+//	rackBody->forceActivationState(ACTIVE_TAG);
+//	rackBody->setDeactivationTime( 0.f );
 /*
 	removeFromWorld();
 	rackBody->setWorldTransform(rackC);
@@ -257,6 +262,27 @@ void WheelBodyComponent::switchToDynamic()
 
 void WheelBodyComponent::displace()
 {
+	btRigidBody *rackBody = static_cast<btRigidBody*>(mRack->getCollisionObject());
+	btTransform rackTrans;
+	btMotionState *motionState = rackBody->getMotionState();
+	motionState->getWorldTransform(rackTrans);
+
+	btVector3 origin = rackTrans.getOrigin();
+	printf("movedRack: x: %2.2f, y: %2.2f. z: %2.2f\n", origin.getX(), origin.getY(), origin.getZ());
+	//origin.setZ(origin.getX());
+	//origin.setZ(0);
+	//origin.setX(0);
+	//origin.setY(0);
+	//printf("movedRack2: x: %2.2f, y: %2.2f. z: %2.2f\n", origin.getX(), origin.getY(), origin.getZ());
+	//rackBottom.setOrigin(btVector3(0., mPos.y-170.0, 0.));
+	
+//	btVector3 pos = rackConstr->getFrameOffsetA().getOrigin();
+//	printf("constr pos: x: %2.2f, y: %2.2f. z: %2.2f\n", pos.getX(), pos.getY(), pos.getZ());
+	rackConstr->getFrameOffsetA().setOrigin(origin);
+	rackConstr->setLinearUpperLimit(btVector3(0., 0., 0.));
+	rackConstr->setLinearLowerLimit(btVector3(0., 0., 0.));
+
+/*
 	btTransform rackC = btTransform::getIdentity();
 	rackC.setOrigin(btVector3(-100., 0., 100.));
 	rackC.setRotation(btQuaternion(0, sqrt(0.5), 0, sqrt(0.5)));
@@ -265,6 +291,7 @@ void WheelBodyComponent::displace()
 	switchToKinematic();
 	rackBody->setWorldTransform(rackC);
 	switchToDynamic();
+*/
 }
 
 };
