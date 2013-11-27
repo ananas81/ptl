@@ -262,6 +262,8 @@ void WheelBodyComponent::switchToDynamic()
 
 void WheelBodyComponent::displace()
 {
+	static bool en = false;
+
 	btRigidBody *rackBody = static_cast<btRigidBody*>(mRack->getCollisionObject());
 	btTransform rackTrans;
 	btMotionState *motionState = rackBody->getMotionState();
@@ -269,29 +271,20 @@ void WheelBodyComponent::displace()
 
 	btVector3 origin = rackTrans.getOrigin();
 	printf("movedRack: x: %2.2f, y: %2.2f. z: %2.2f\n", origin.getX(), origin.getY(), origin.getZ());
-	//origin.setZ(origin.getX());
-	//origin.setZ(0);
-	//origin.setX(0);
-	//origin.setY(0);
-	//printf("movedRack2: x: %2.2f, y: %2.2f. z: %2.2f\n", origin.getX(), origin.getY(), origin.getZ());
-	//rackBottom.setOrigin(btVector3(0., mPos.y-170.0, 0.));
-	
-//	btVector3 pos = rackConstr->getFrameOffsetA().getOrigin();
-//	printf("constr pos: x: %2.2f, y: %2.2f. z: %2.2f\n", pos.getX(), pos.getY(), pos.getZ());
+
 	rackConstr->getFrameOffsetA().setOrigin(origin);
-	rackConstr->setLinearUpperLimit(btVector3(0., 0., 0.));
-	rackConstr->setLinearLowerLimit(btVector3(0., 0., 0.));
+	if (!en)
+	{
+		rackConstr->setLinearUpperLimit(btVector3(0., 0., 0.));
+		rackConstr->setLinearLowerLimit(btVector3(0., 0., 0.));
+	}
+	else
+	{
+		rackConstr->setLinearUpperLimit(btVector3(0., 0., 200.));
+		rackConstr->setLinearLowerLimit(btVector3(0., 0., -200.));
+	}
 
-/*
-	btTransform rackC = btTransform::getIdentity();
-	rackC.setOrigin(btVector3(-100., 0., 100.));
-	rackC.setRotation(btQuaternion(0, sqrt(0.5), 0, sqrt(0.5)));
-	btRigidBody *rackBody = static_cast<btRigidBody*>(mRack->getCollisionObject());
-
-	switchToKinematic();
-	rackBody->setWorldTransform(rackC);
-	switchToDynamic();
-*/
+	en = !en;
 }
 
 };
