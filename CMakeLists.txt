@@ -22,6 +22,7 @@ SET(SRC
     "PtlOgrePhysicalBody.cpp"
     "PtlWheelComponent.cpp"
     "PtlChainComponent.cpp"
+    "PtlRackComponent.cpp"
 )
 
 INCLUDE(FindPkgConfig)

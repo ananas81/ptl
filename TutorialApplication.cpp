@@ -129,10 +129,15 @@ void TutorialApplication::initPhysics()
 	btRigidBody* groundRigidBody = new btRigidBody(groundRigidBodyCI);
 	mWorld->addRigidBody(groundRigidBody);
 
-	mFlywheel1 = new Ptl::WheelBodyComponent(mSceneMgr,
-						 mWorld,
-						 Ogre::Vector3(25, 170, 0),
-						 Ogre::Quaternion(1, 0, 0, 0));
+	mRack1 = new Ptl::RackBodyComponent(mSceneMgr,
+						mWorld,
+						Ogre::Vector3(25., 0., 0.),
+						Ogre::Quaternion(sqrt(0.5), 0., -sqrt(0.5), 0.));
+
+	mRack1->attachTo(mRack1->getRootBody, mRack1->getRootAnchor());
+
+	mRack1->getRootBody->setActivationState(DISABLE_DEACTIVATION);
+	mRail1->getFrameOffsetA().setRotation(btQuaternion(0, sqrt(0.5), 0, sqrt(0.5)));
 
 	mDebugDrawer = new DebugDrawer(mSceneMgr, mWorld);
 	mDebugDrawer->setDebugMode(0);
@@ -338,31 +343,33 @@ bool TutorialApplication::keyPressed(const OIS::KeyEvent& evt)
 		{
 			motorOn = !motorOn;
 			if (motorOn)
-				//flywheel1->setAngularVelocity(btVector3(0, 0, 5));
-				mFlywheel1->getHinge()->enableAngularMotor(true, 4000, 2000);
+				mRack1->getHinge()->enableAngularMotor(true, 4000, 2000);
 			else
-				//flywheel1->setAngularVelocity(btVector3(0, 0, 0));
-				mFlywheel1->getHinge()->enableMotor(false);
+				mRack1->getHinge()->enableMotor(false);
 	
 			break;
 		}
 		case OIS::KC_2:
 		{
-			btRigidBody *rackBody = mFlywheel1->getRackBody();
+			btRigidBody *rackBody = mRack1->getRootBody();
 			rackBody->setActivationState(DISABLE_DEACTIVATION);
 			rackBody->applyImpulse(btVector3(-50, 0, 0), btVector3(0., -170., 0.));
 			break;
 		}
 		case OIS::KC_3:
 		{
-			btRigidBody *rackBody = mFlywheel1->getRackBody();
+			btRigidBody *rackBody = mRack1->getRootBody();
 			rackBody->setActivationState(DISABLE_DEACTIVATION);
 			rackBody->applyImpulse(btVector3(50, 0, 0), btVector3(0., -170., 0.));
 			break;
 		}
 		case OIS::KC_4:
-			mFlywheel1->displace();
+		{
+			static bool lock = true;
+			mRack1->lockPosition(lock);
+			lock = !lock;
 			break;
+		}
 		default:
 			break;
 	}
