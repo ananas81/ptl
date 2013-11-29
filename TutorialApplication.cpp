@@ -130,13 +130,13 @@ void TutorialApplication::initPhysics()
 
 	mRack1 = new Ptl::RackBodyComponent(mSceneMgr,
 						mWorld,
-						Ogre::Vector3(25., 0., 0.),
+						Ogre::Vector3(25., 170., 0.),
 						Ogre::Quaternion(sqrt(0.5), 0., -sqrt(0.5), 0.));
 
 	mRack1->attachTo(mRack1->getRootBody(), mRack1->getRootAnchor());
 
 	mRack1->getRootBody()->setActivationState(DISABLE_DEACTIVATION);
-	mRack1->getRail()->getFrameOffsetA().setRotation(btQuaternion(0, sqrt(0.5), 0, sqrt(0.5)));
+//	mRack1->getRail()->getFrameOffsetA().setRotation(btQuaternion(0, sqrt(0.5), 0, sqrt(0.5)));
 
 	mDebugDrawer = new DebugDrawer(mSceneMgr, mWorld);
 	mDebugDrawer->setDebugMode(0);

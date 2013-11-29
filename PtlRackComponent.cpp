@@ -17,8 +17,8 @@ RackBodyComponent::RackBodyComponent(Ogre::SceneManager *aSceneMgr,
 	mRack = new Ptl::OgrePhysicalBody(mSceneMgr,
 						  "Rack",
 						  "Rack.mesh",
-						  Ogre::Vector3(mPos.x, mPos.y, mPos.z),
-						  Ogre::Quaternion(sqrt(0.5), 0 , -sqrt(0.5), 0),
+						  mPos,
+						  mOrient,
 						  new Ptl::BtOgreShapeDispatcher(NULL, Ptl::BtOgreShapeDispatcher::CONVEX_HULL),
 						  100.0,
 						  Ogre::Vector3(0, 0, 0),
@@ -27,7 +27,7 @@ RackBodyComponent::RackBodyComponent(Ogre::SceneManager *aSceneMgr,
 
         mFlywheel = new Ptl::WheelBodyComponent(mSceneMgr,
                                                  mWorld,
-                                                 Ogre::Vector3(mPos.x, mPos.y + 170.0, mPos.z + 150.0),
+                                                 Ogre::Vector3(mPos.x, mPos.y, mPos.z + 150.0),
                                                  Ogre::Quaternion(1, 0, 0, 0));
 
 
