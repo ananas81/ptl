@@ -58,7 +58,7 @@ btTransform RackBodyComponent::getRootAnchor()
 	btVector3 anchorPoint(0., -170., 0.);
 
 	frame.setOrigin(anchorPoint);
-	frame.setRotation(btQuaternion(1, 0, 0, 0));
+	//frame.setRotation(btQuaternion(1, 0, 0, 0));
 
 	return frame;
 }
@@ -126,8 +126,10 @@ void RackBodyComponent::lockPosition(bool lock)
 	btVector3 origin = rackTrans.getOrigin();
 	printf("movedRack: x: %2.2f, y: %2.2f. z: %2.2f\n", origin.getX(), origin.getY(), origin.getZ());
 
+	origin.setY(origin.getY() - 170.0);
+
 	mRail->getFrameOffsetA().setOrigin(origin);
-	if (!lock)
+	if (lock)
 	{
 		mRail->setLinearUpperLimit(btVector3(0., 0., 0.));
 		mRail->setLinearLowerLimit(btVector3(0., 0., 0.));
