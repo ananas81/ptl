@@ -1,6 +1,6 @@
 #include "PtlOgrePhysicalBody.h"
+#include "PtlRackComponent.h"
 #include "PtlWheelComponent.h"
-#include "PtlChainComponent.h"
 
 namespace Ptl
 {
@@ -11,7 +11,7 @@ RackBodyComponent::RackBodyComponent(Ogre::SceneManager *aSceneMgr,
 				       const Ogre::Quaternion& aOrient) :
 				       BodyComponent(aSceneMgr, aWorld, aPos, aOrient),
 				       mRack(NULL),
-				       mFlyheel(NULL),
+				       mFlywheel(NULL),
 				       mRail(NULL)
 {
 	mRack = new Ptl::OgrePhysicalBody(mSceneMgr,
@@ -65,7 +65,7 @@ btTransform RackBodyComponent::getRootAnchor()
 
 void RackBodyComponent::attachTo(btRigidBody* parentComponent, const btTransform& parentAnchor)
 {
-	mRail = new btGeneric6DofConstraint(*parentComponent, *parentAnchor, true);
+	mRail = new btGeneric6DofConstraint(*parentComponent, parentAnchor, true);
 	mRail->setLinearUpperLimit(btVector3(0., 0.0, 300.0));
 	mRail->setLinearLowerLimit(btVector3(0., 0.0, -300.0));
 	mRail->setAngularUpperLimit(btVector3(0, 0, 0));
@@ -80,33 +80,21 @@ void RackBodyComponent::setActivationState(int actState)
 
 	body = static_cast<btRigidBody*>(mRack->getCollisionObject());
 	body->setActivationState(actState);
-	body = static_cast<btRigidBody*>(mWheel->getCollisionObject());
-	body->setActivationState(actState);
-
-	for (int i = 0; i < mChildComponents.size(); ++i)
-		mChildComponents[i]->setActivationState(actState);
+	mFlywheel->setActivationState(actState);
 }
 
 void RackBodyComponent::switchToKinematic()
 {
 	btRigidBody *body;
 
-	body = static_cast<btRigidBody*>(mWheel->getCollisionObject());
+	body = static_cast<btRigidBody*>(mRack->getCollisionObject());
 	mWorld->removeRigidBody(body);
 	body->setMassProps(0.0, btVector3(0,0,0));
 	body->setCollisionFlags(body->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
 	body->setActivationState(DISABLE_DEACTIVATION);
 	mWorld->addRigidBody(body);
 
-	body = static_cast<btRigidBody*>(mRack->getCollisionObject());
-	mWorld->removeRigidBody(body);
-	body->setMassProps(0.0, btVector3(0,0,0));
-	body->setCollisionFlags(body->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT | btCollisionObject::CF_NO_CONTACT_RESPONSE);
-	body->setActivationState(DISABLE_DEACTIVATION);
-	mWorld->addRigidBody(body);
-
-	for (int i = 0; i < mChildComponents.size(); ++i)
-		mChildComponents[i]->switchToKinematic();
+	mFlywheel->switchToKinematic();
 }
 
 void RackBodyComponent::switchToDynamic()
@@ -114,30 +102,18 @@ void RackBodyComponent::switchToDynamic()
 	btRigidBody *body;
 	btVector3 inertia(0, 0, 0);
 
-	body = static_cast<btRigidBody*>(mWheel->getCollisionObject());
+	body = static_cast<btRigidBody*>(mRack->getCollisionObject());
 	mWorld->removeRigidBody(body);
-	body->getCollisionShape()->calculateLocalInertia(mWheel->getMass(), inertia);
+	body->getCollisionShape()->calculateLocalInertia(mRack->getMass(), inertia);
 	body->setCollisionFlags(body->getCollisionFlags() | btCollisionObject::CF_STATIC_OBJECT);
-	body->setMassProps(mWheel->getMass(), btVector3(0,0,0));
+	body->setMassProps(mRack->getMass(), btVector3(0,0,0));
 //	body->setActivationState(WANTS_DEACTIVATION);
 	body->forceActivationState(ACTIVE_TAG);
 	body->setDeactivationTime( 0.f );
 	body->updateInertiaTensor();
 	mWorld->addRigidBody(body);
 
-	body = static_cast<btRigidBody*>(mRack->getCollisionObject());
-	mWorld->removeRigidBody(body);
-	body->getCollisionShape()->calculateLocalInertia(mRack->getMass(), inertia);
-	body->setCollisionFlags(body->getCollisionFlags() | btCollisionObject::CF_STATIC_OBJECT);
-	body->setMassProps(mRack->getMass(), btVector3(0,0,0));
-	//body->setActivationState(WANTS_DEACTIVATION);
-	body->forceActivationState(ACTIVE_TAG);
-	body->setDeactivationTime( 0.f );
-	body->updateInertiaTensor();
-	mWorld->addRigidBody(body);
-
-	for (int i = 0; i < mChildComponents.size(); ++i)
-		mChildComponents[i]->switchToDynamic();
+	mFlywheel->switchToDynamic();
 }
 
 void RackBodyComponent::lockPosition(bool lock)
@@ -150,29 +126,27 @@ void RackBodyComponent::lockPosition(bool lock)
 	btVector3 origin = rackTrans.getOrigin();
 	printf("movedRack: x: %2.2f, y: %2.2f. z: %2.2f\n", origin.getX(), origin.getY(), origin.getZ());
 
-	rackConstr->getFrameOffsetA().setOrigin(origin);
-	if (!en)
+	mRail->getFrameOffsetA().setOrigin(origin);
+	if (!lock)
 	{
-		rackConstr->setLinearUpperLimit(btVector3(0., 0., 0.));
-		rackConstr->setLinearLowerLimit(btVector3(0., 0., 0.));
+		mRail->setLinearUpperLimit(btVector3(0., 0., 0.));
+		mRail->setLinearLowerLimit(btVector3(0., 0., 0.));
 	}
 	else
 	{
-		rackConstr->setLinearUpperLimit(btVector3(0., 0., 200.));
-		rackConstr->setLinearLowerLimit(btVector3(0., 0., -200.));
+		mRail->setLinearUpperLimit(btVector3(0., 0., 200.));
+		mRail->setLinearLowerLimit(btVector3(0., 0., -200.));
 	}
-
-	en = !en;
 }
 
-btGeneric6DofConstraint* RackBodyComponent::getRail();
+btGeneric6DofConstraint* RackBodyComponent::getRail()
 {
 	return mRail;
 }
 
 btHingeConstraint* RackBodyComponent::getHinge()
 {
-	return mflywheel->getHinge();
+	return mFlywheel->getHinge();
 }
 
 };

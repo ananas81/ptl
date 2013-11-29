@@ -29,21 +29,12 @@ WheelBodyComponent::WheelBodyComponent(Ogre::SceneManager *aSceneMgr,
 
 	btRigidBody *wheelBody = static_cast<btRigidBody*>(mWheel->getCollisionObject());
 
-	mWheelHinge = new btHingeConstraint(*wheelBody,
-					    *rackBody,
-					    btVector3(0, 0, -3.64),
-					    btVector3(150.0, 0, 0),
-					    btVector3(0, 0, 1),
-					    btVector3(1, 0, 0), true);
-
 	wheelBody->setFriction(1);
 	wheelBody->setDamping(0.1f,0.1f);
 	wheelBody->setFlags(0);
 	wheelBody->setActivationState(DISABLE_DEACTIVATION);
 
 	mWorld->addRigidBody(wheelBody);
-	mWorld->addConstraint(mWheelHinge);              
-	mWorld->addConstraint(dofConstr);
 
 	btTransform frameInA;
 
@@ -111,21 +102,16 @@ btTransform WheelBodyComponent::getRootAnchor()
 	return frame;
 }
 		
-btHingeConstraint* WheelBodyComponent::getHinge()
-{
-	return mWheelHinge;
-}
-
 void WheelBodyComponent::attachTo(btRigidBody* parentComponent, const btTransform& parentAnchor)
 {
 	mWheelHinge = new btHingeConstraint(*getRootBody(),
 					    *parentComponent,
-					    getRootAnchor(),
-					    parentAnchor,
+					    getRootAnchor().getOrigin(),
+					    parentAnchor.getOrigin(),
 					    btVector3(0, 0, 1),
 					    btVector3(1, 0, 0),
 					    true);
-	mWorld->addConstraint(mWeelHinge);
+	mWorld->addConstraint(mWheelHinge);
 }
 
 btHingeConstraint* WheelBodyComponent::getHinge()

@@ -7,6 +7,7 @@ namespace Ptl
 {
 
 class OgrePhysicalBody;
+class WheelBodyComponent;
 
 class RackBodyComponent : public BodyComponent
 {
@@ -30,7 +31,7 @@ class RackBodyComponent : public BodyComponent
 
 	protected:
 		OgrePhysicalBody *mRack;
-		OgrePhysicalBody *mFlywheel;
+		WheelBodyComponent *mFlywheel;
 		btGeneric6DofConstraint *mRail;
 };
 
