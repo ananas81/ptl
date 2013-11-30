@@ -5,6 +5,8 @@
 namespace Ptl
 {
 
+int RackBodyComponent::mRackElementsCnt = 0;
+
 RackBodyComponent::RackBodyComponent(Ogre::SceneManager *aSceneMgr,
 				       btDiscreteDynamicsWorld *aWorld,
 				       const Ogre::Vector3& aPos,
@@ -14,8 +16,11 @@ RackBodyComponent::RackBodyComponent(Ogre::SceneManager *aSceneMgr,
 				       mFlywheel(NULL),
 				       mRail(NULL)
 {
+	char bodyName[15];
+
+	sprintf(bodyName, "Rack_%d", ++mRackElementsCnt);
 	mRack = new Ptl::OgrePhysicalBody(mSceneMgr,
-						  "Rack",
+						  bodyName,
 						  "Rack.mesh",
 						  mPos,
 						  mOrient,

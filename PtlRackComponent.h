@@ -33,6 +33,7 @@ class RackBodyComponent : public BodyComponent
 		OgrePhysicalBody *mRack;
 		WheelBodyComponent *mFlywheel;
 		btGeneric6DofConstraint *mRail;
+		static int mRackElementsCnt;
 };
 
 };

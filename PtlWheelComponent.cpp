@@ -7,6 +7,7 @@ namespace Ptl
 
 const float WheelBodyComponent::WHEEL_RADIUS;
 const float WheelBodyComponent::WHEEL_WIDTH;
+int WheelBodyComponent::mWheelElementsCnt = 0;
 
 WheelBodyComponent::WheelBodyComponent(Ogre::SceneManager *aSceneMgr,
 				       btDiscreteDynamicsWorld *aWorld,
@@ -16,8 +17,11 @@ WheelBodyComponent::WheelBodyComponent(Ogre::SceneManager *aSceneMgr,
 				       mWheel(NULL),
 				       mWheelHinge(NULL)
 {
+	char bodyName[15];
+
+	sprintf(bodyName, "Flywheel_%d", ++mWheelElementsCnt);
 	mWheel = new Ptl::OgrePhysicalBody(mSceneMgr,
-						  "Flywheel",
+						  bodyName,
 						  "Flywheel.mesh",
 						  mPos,
 						  mOrient,
