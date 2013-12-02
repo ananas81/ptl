@@ -1,6 +1,7 @@
 #include "PtlOgrePhysicalBody.h"
 #include "PtlWheelComponent.h"
 #include "PtlChainComponent.h"
+#include <math.h>
 
 namespace Ptl
 {
@@ -18,6 +19,7 @@ WheelBodyComponent::WheelBodyComponent(Ogre::SceneManager *aSceneMgr,
 				       mWheelHinge(NULL)
 {
 	char bodyName[15];
+	double x_45, y_45;
 
 	sprintf(bodyName, "Flywheel_%d", ++mWheelElementsCnt);
 	mWheel = new Ptl::OgrePhysicalBody(mSceneMgr,
@@ -38,6 +40,10 @@ WheelBodyComponent::WheelBodyComponent(Ogre::SceneManager *aSceneMgr,
 	wheelBody->setFlags(0);
 	wheelBody->setActivationState(DISABLE_DEACTIVATION);
 
+	x_45 = WHEEL_RADIUS / (2.0 * tan(45.0 *M_PI/180.0));
+	y_45 = WHEEL_RADIUS/2.0;
+	printf(">>>>> M_PI: %2.2f, x: %2.2f\n", M_PI, x_45);
+
 	mWorld->addRigidBody(wheelBody);
 
 	btTransform frameInA;
@@ -50,8 +56,7 @@ WheelBodyComponent::WheelBodyComponent(Ogre::SceneManager *aSceneMgr,
 
 	frameInA = btTransform::getIdentity();
 	frameInA.setOrigin(btVector3(0., -WHEEL_RADIUS, 0.));
-
-	mChildComponents[0]->attachTo(wheelBody, frameInA);
+	mChildComponents[mChildComponents.size() - 1]->attachTo(wheelBody, frameInA);
 
 	mChildComponents.push_back(new ChainBodyComponent(mSceneMgr,
 							  mWorld,
@@ -61,8 +66,27 @@ WheelBodyComponent::WheelBodyComponent(Ogre::SceneManager *aSceneMgr,
 
 	frameInA = btTransform::getIdentity();
 	frameInA.setOrigin(btVector3(-WHEEL_RADIUS, 0., 0.));
+	mChildComponents[mChildComponents.size() - 1]->attachTo(wheelBody, frameInA);
 
-	mChildComponents[1]->attachTo(wheelBody, frameInA);
+	/* left middle upper chain */
+	mChildComponents.push_back(new ChainBodyComponent(mSceneMgr,
+							  mWorld,
+							  Ogre::Vector3(mPos.x - x_45, mPos.y + y_45, mPos.z),
+							  mOrient,
+							  ChainBodyComponent::DIR_LEFT));
+	frameInA = btTransform::getIdentity();
+	frameInA.setOrigin(btVector3(-x_45, y_45, 0.));
+	mChildComponents[mChildComponents.size() - 1]->attachTo(wheelBody, frameInA);
+
+	/* left middle lower chain */
+	mChildComponents.push_back(new ChainBodyComponent(mSceneMgr,
+							  mWorld,
+							  Ogre::Vector3(mPos.x - x_45, mPos.y - y_45, mPos.z),
+							  mOrient,
+							  ChainBodyComponent::DIR_LEFT));
+	frameInA = btTransform::getIdentity();
+	frameInA.setOrigin(btVector3(-x_45, -y_45, 0.));
+	mChildComponents[mChildComponents.size() - 1]->attachTo(wheelBody, frameInA);
 
 	mChildComponents.push_back(new ChainBodyComponent(mSceneMgr,
 							  mWorld,
@@ -72,8 +96,7 @@ WheelBodyComponent::WheelBodyComponent(Ogre::SceneManager *aSceneMgr,
 
 	frameInA = btTransform::getIdentity();
 	frameInA.setOrigin(btVector3(0., WHEEL_RADIUS, 0.));
-
-	mChildComponents[2]->attachTo(wheelBody, frameInA);
+	mChildComponents[mChildComponents.size() - 1]->attachTo(wheelBody, frameInA);
 
 	mChildComponents.push_back(new ChainBodyComponent(mSceneMgr,
 							  mWorld,
@@ -83,8 +106,28 @@ WheelBodyComponent::WheelBodyComponent(Ogre::SceneManager *aSceneMgr,
 
 	frameInA = btTransform::getIdentity();
 	frameInA.setOrigin(btVector3(WHEEL_RADIUS, 0., 0.));
+	mChildComponents[mChildComponents.size() - 1]->attachTo(wheelBody, frameInA);
 
-	mChildComponents[3]->attachTo(wheelBody, frameInA);
+	/* right middle upper chain */
+	mChildComponents.push_back(new ChainBodyComponent(mSceneMgr,
+							  mWorld,
+							  Ogre::Vector3(mPos.x + x_45, mPos.y + y_45, mPos.z),
+							  mOrient,
+							  ChainBodyComponent::DIR_RIGHT));
+
+	frameInA = btTransform::getIdentity();
+	frameInA.setOrigin(btVector3(x_45, y_45, 0.));
+	mChildComponents[mChildComponents.size() - 1]->attachTo(wheelBody, frameInA);
+
+	/* right middle lower chain */
+	mChildComponents.push_back(new ChainBodyComponent(mSceneMgr,
+							  mWorld,
+							  Ogre::Vector3(mPos.x + x_45, mPos.y - y_45, mPos.z),
+							  mOrient,
+							  ChainBodyComponent::DIR_RIGHT));
+	frameInA = btTransform::getIdentity();
+	frameInA.setOrigin(btVector3(x_45, -y_45, 0.));
+	mChildComponents[mChildComponents.size() - 1]->attachTo(wheelBody, frameInA);
 }
 
 WheelBodyComponent::~WheelBodyComponent()
