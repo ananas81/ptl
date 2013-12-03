@@ -29,6 +29,9 @@ class RackBodyComponent : public BodyComponent
 		virtual void switchToDynamic();
 		virtual void lockPosition(bool lock);
 
+		static const double RACK_HEIGHT = 170.0;
+		static const double RACK_ARM_LENGTH = 150.0;
+
 	protected:
 		OgrePhysicalBody *mRack;
 		WheelBodyComponent *mFlywheel;

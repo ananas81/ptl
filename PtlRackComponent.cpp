@@ -6,6 +6,8 @@ namespace Ptl
 {
 
 int RackBodyComponent::mRackElementsCnt = 0;
+const double RackBodyComponent::RACK_HEIGHT;
+const double RackBodyComponent::RACK_ARM_LENGTH;
 
 RackBodyComponent::RackBodyComponent(Ogre::SceneManager *aSceneMgr,
 				       btDiscreteDynamicsWorld *aWorld,
@@ -32,7 +34,7 @@ RackBodyComponent::RackBodyComponent(Ogre::SceneManager *aSceneMgr,
 
         mFlywheel = new Ptl::WheelBodyComponent(mSceneMgr,
                                                  mWorld,
-                                                 Ogre::Vector3(mPos.x, mPos.y, mPos.z + 150.0),
+                                                 Ogre::Vector3(mPos.x, mPos.y, mPos.z + RACK_ARM_LENGTH),
                                                  Ogre::Quaternion(1, 0, 0, 0));
 
 
@@ -43,7 +45,7 @@ RackBodyComponent::RackBodyComponent(Ogre::SceneManager *aSceneMgr,
 
 	btTransform frameInA;
 	frameInA = btTransform::getIdentity();
-	frameInA.setOrigin(btVector3(150.0, 0, 0));
+	frameInA.setOrigin(btVector3(RACK_ARM_LENGTH, 0, 0));
 
 	mFlywheel->attachTo(rackBody, frameInA);
 }
@@ -131,7 +133,7 @@ void RackBodyComponent::lockPosition(bool lock)
 	btVector3 origin = rackTrans.getOrigin();
 	printf("movedRack: x: %2.2f, y: %2.2f. z: %2.2f\n", origin.getX(), origin.getY(), origin.getZ());
 
-	origin.setY(origin.getY() - 170.0);
+	origin.setY(origin.getY() - RACK_HEIGHT);
 
 	mRail->getFrameOffsetA().setOrigin(origin);
 	if (lock)
