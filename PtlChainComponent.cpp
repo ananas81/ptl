@@ -110,7 +110,7 @@ ChainBodyComponent::ChainBodyComponent(Ogre::SceneManager *aSceneMgr,
 	btCollisionShape* chainElementShape = mChainElements[0]->getCollisionShape();
 
 	int i;
-	for (i = 1; i < 7; ++i)
+	for (i = 1; i < 4; ++i)
 	{
 		sprintf(bodyName, "ChainElement_%d", ++mChainElementsCnt);
 		mChainElements.push_back(new Ptl::OgrePhysicalBody(

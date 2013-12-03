@@ -38,8 +38,8 @@ class ChainBodyComponent : public BodyComponent
                 virtual void switchToKinematic();
                 virtual void switchToDynamic();
 
-		static const double CHAIN_ELEMENT_RADIUS = 6.6;
-		static const double WEIGHT_RADIUS = 6.12;
+		static const double CHAIN_ELEMENT_RADIUS = 0.7;
+		static const double WEIGHT_RADIUS = 0.25;
 
 	protected:
 		ChainDirection mDirection;

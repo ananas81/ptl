@@ -130,7 +130,7 @@ void TutorialApplication::initPhysics()
 
 	mRack1 = new Ptl::RackBodyComponent(mSceneMgr,
 						mWorld,
-						Ogre::Vector3(200., Ptl::RackBodyComponent::RACK_HEIGHT, Ptl::RackBodyComponent::RACK_ARM_LENGTH),
+						Ogre::Vector3(5., Ptl::RackBodyComponent::RACK_HEIGHT, Ptl::RackBodyComponent::RACK_ARM_LENGTH),
 						Ogre::Quaternion(sqrt(0.5), 0., -sqrt(0.5), 0.));
 
 	mRack1->attachTo(mRack1->getRootBody(), mRack1->getRootAnchor());
@@ -140,7 +140,7 @@ void TutorialApplication::initPhysics()
 
 	mRack2 = new Ptl::RackBodyComponent(mSceneMgr,
 						mWorld,
-						Ogre::Vector3(-200., Ptl::RackBodyComponent::RACK_HEIGHT, -Ptl::RackBodyComponent::RACK_ARM_LENGTH),
+						Ogre::Vector3(-5., Ptl::RackBodyComponent::RACK_HEIGHT, -Ptl::RackBodyComponent::RACK_ARM_LENGTH),
 						Ogre::Quaternion(sqrt(0.5), 0., -sqrt(0.5), 0.));
 
 	mRack2->attachTo(mRack2->getRootBody(), mRack2->getRootAnchor());
@@ -349,7 +349,7 @@ bool TutorialApplication::keyPressed(const OIS::KeyEvent& evt)
 			static bool motorOn = false;
 			motorOn = !motorOn;
 			if (motorOn)
-				mRack1->getHinge()->enableAngularMotor(true, 10000, 5000);
+				mRack1->getHinge()->enableAngularMotor(true, 1000, 500);
 			else
 				mRack1->getHinge()->enableMotor(false);
 	
@@ -359,14 +359,14 @@ bool TutorialApplication::keyPressed(const OIS::KeyEvent& evt)
 		{
 			btRigidBody *rackBody = mRack1->getRootBody();
 			rackBody->setActivationState(DISABLE_DEACTIVATION);
-			rackBody->applyImpulse(btVector3(-250, 0, 0), btVector3(0., -Ptl::RackBodyComponent::RACK_HEIGHT, 0.));
+			rackBody->applyImpulse(btVector3(-20, 0, 0), btVector3(0., -Ptl::RackBodyComponent::RACK_HEIGHT, 0.));
 			break;
 		}
 		case OIS::KC_3:
 		{
 			btRigidBody *rackBody = mRack1->getRootBody();
 			rackBody->setActivationState(DISABLE_DEACTIVATION);
-			rackBody->applyImpulse(btVector3(250, 0, 0), btVector3(0., -Ptl::RackBodyComponent::RACK_HEIGHT, 0.));
+			rackBody->applyImpulse(btVector3(20, 0, 0), btVector3(0., -Ptl::RackBodyComponent::RACK_HEIGHT, 0.));
 			break;
 		}
 		case OIS::KC_4:
@@ -381,7 +381,7 @@ bool TutorialApplication::keyPressed(const OIS::KeyEvent& evt)
 			static bool motorOn = false;
 			motorOn = !motorOn;
 			if (motorOn)
-				mRack2->getHinge()->enableAngularMotor(true, 10000, 5000);
+				mRack2->getHinge()->enableAngularMotor(true, 1000, 500);
 			else
 				mRack2->getHinge()->enableMotor(false);
 	
@@ -391,14 +391,14 @@ bool TutorialApplication::keyPressed(const OIS::KeyEvent& evt)
 		{
 			btRigidBody *rackBody = mRack2->getRootBody();
 			rackBody->setActivationState(DISABLE_DEACTIVATION);
-			rackBody->applyImpulse(btVector3(-250, 0, 0), btVector3(0., -Ptl::RackBodyComponent::RACK_HEIGHT, 0.));
+			rackBody->applyImpulse(btVector3(-20, 0, 0), btVector3(0., -Ptl::RackBodyComponent::RACK_HEIGHT, 0.));
 			break;
 		}
 		case OIS::KC_C:
 		{
 			btRigidBody *rackBody = mRack2->getRootBody();
 			rackBody->setActivationState(DISABLE_DEACTIVATION);
-			rackBody->applyImpulse(btVector3(250, 0, 0), btVector3(0., -Ptl::RackBodyComponent::RACK_HEIGHT, 0.));
+			rackBody->applyImpulse(btVector3(20, 0, 0), btVector3(0., -Ptl::RackBodyComponent::RACK_HEIGHT, 0.));
 			break;
 		}
 		case OIS::KC_V:

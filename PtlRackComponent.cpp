@@ -62,7 +62,7 @@ btRigidBody* RackBodyComponent::getRootBody()
 btTransform RackBodyComponent::getRootAnchor()
 {
 	btTransform frame = btTransform::getIdentity();
-	btVector3 anchorPoint(0., -170., 0.);
+	btVector3 anchorPoint(0., -RACK_HEIGHT, 0.);
 
 	frame.setOrigin(anchorPoint);
 	//frame.setRotation(btQuaternion(1, 0, 0, 0));
@@ -73,8 +73,8 @@ btTransform RackBodyComponent::getRootAnchor()
 void RackBodyComponent::attachTo(btRigidBody* parentComponent, const btTransform& parentAnchor)
 {
 	mRail = new btGeneric6DofConstraint(*parentComponent, parentAnchor, true);
-	mRail->setLinearUpperLimit(btVector3(0., 0.0, 300.0));
-	mRail->setLinearLowerLimit(btVector3(0., 0.0, -300.0));
+	mRail->setLinearUpperLimit(btVector3(0., 0.0, 30.0));
+	mRail->setLinearLowerLimit(btVector3(0., 0.0, -30.0));
 	mRail->setAngularUpperLimit(btVector3(0, 0, 0));
 	mRail->setAngularLowerLimit(btVector3(0, 0, 0));
 
@@ -143,8 +143,8 @@ void RackBodyComponent::lockPosition(bool lock)
 	}
 	else
 	{
-		mRail->setLinearUpperLimit(btVector3(0., 0., 200.));
-		mRail->setLinearLowerLimit(btVector3(0., 0., -200.));
+		mRail->setLinearUpperLimit(btVector3(0., 0., 20.));
+		mRail->setLinearLowerLimit(btVector3(0., 0., -20.));
 	}
 }
 
