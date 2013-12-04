@@ -161,7 +161,10 @@ void TutorialApplication::createFrameListener(void){
 bool TutorialApplication::frameRenderingQueued(const Ogre::FrameEvent &evt){
 //	mWorld->stepSimulation(1/60.f,10);
 
-	mWorld->stepSimulation(evt.timeSinceLastFrame,50);
+//	mWorld->stepSimulation(evt.timeSinceLastFrame,50);
+	float fixedsubstep = 1.f/240.f;
+	int maxNumSubsteps = 5;
+	mWorld->stepSimulation(evt.timeSinceLastFrame, maxNumSubsteps, fixedsubstep);
 	
 	if (!BaseApplication::frameRenderingQueued(evt))
 		return false;
@@ -349,7 +352,7 @@ bool TutorialApplication::keyPressed(const OIS::KeyEvent& evt)
 			static bool motorOn = false;
 			motorOn = !motorOn;
 			if (motorOn)
-				mRack1->getHinge()->enableAngularMotor(true, 1000, 500);
+				mRack1->getHinge()->enableAngularMotor(true, 100, 50);
 			else
 				mRack1->getHinge()->enableMotor(false);
 	
@@ -381,7 +384,7 @@ bool TutorialApplication::keyPressed(const OIS::KeyEvent& evt)
 			static bool motorOn = false;
 			motorOn = !motorOn;
 			if (motorOn)
-				mRack2->getHinge()->enableAngularMotor(true, 1000, 500);
+				mRack2->getHinge()->enableAngularMotor(true, 100, 50);
 			else
 				mRack2->getHinge()->enableMotor(false);
 	

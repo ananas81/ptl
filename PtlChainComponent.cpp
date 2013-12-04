@@ -143,8 +143,8 @@ ChainBodyComponent::ChainBodyComponent(Ogre::SceneManager *aSceneMgr,
         {
                 btRigidBody* ropeElementBody = static_cast<btRigidBody*>(mChainElements[i]->getCollisionObject());
 	         ropeElementBody->setActivationState(DISABLE_DEACTIVATION);
-//		if (i == mChainElements.size() - 1)
-//			ropeElementBody->setDamping(0.00001, 0.00001);
+		if (i == mChainElements.size() - 1)
+			ropeElementBody->setDamping(0.0001, 0.0001);
                 mWorld->addRigidBody(static_cast<btRigidBody*>(mChainElements[i]->getCollisionObject()));
         }
 

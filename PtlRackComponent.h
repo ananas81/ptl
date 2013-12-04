@@ -29,7 +29,7 @@ class RackBodyComponent : public BodyComponent
 		virtual void switchToDynamic();
 		virtual void lockPosition(bool lock);
 
-		static const double RACK_HEIGHT = 8.52;
+		static const double RACK_HEIGHT = 10.0;
 		static const double RACK_ARM_LENGTH = 7.52;
 
 	protected:

@@ -30,8 +30,8 @@ WheelBodyComponent::WheelBodyComponent(Ogre::SceneManager *aSceneMgr,
 						  new Ptl::BulletImporterShapeDispatcher("flywheel.bcs", 0),
 						  40.0,
 						  Ogre::Vector3(0, 0, 0),
-						  1.0,
-						  1.0);
+						  1000.0,
+						  1000.0);
 
 	btRigidBody *wheelBody = static_cast<btRigidBody*>(mWheel->getCollisionObject());
 
