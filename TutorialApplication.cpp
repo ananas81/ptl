@@ -113,7 +113,7 @@ void TutorialApplication::initPhysics()
 	mWorld = new btDiscreteDynamicsWorld(dispatcher,broadphase,solver,collisionConfiguration);
 
 	mWorld->getDispatchInfo().m_enableSPU = true;
-	mWorld->setGravity(btVector3(0,-10,0));
+	mWorld->setGravity(btVector3(0,-100,0));
 	mWorld->setInternalTickCallback(pickingPreTickCallback,this,true);
 
 	//      clientResetScene();
@@ -349,7 +349,7 @@ bool TutorialApplication::keyPressed(const OIS::KeyEvent& evt)
 			static bool motorOn = false;
 			motorOn = !motorOn;
 			if (motorOn)
-				mRack1->getHinge()->enableAngularMotor(true, 10000, 5000);
+				mRack1->getHinge()->enableAngularMotor(true, 100000, 50000);
 			else
 				mRack1->getHinge()->enableMotor(false);
 	
@@ -381,7 +381,7 @@ bool TutorialApplication::keyPressed(const OIS::KeyEvent& evt)
 			static bool motorOn = false;
 			motorOn = !motorOn;
 			if (motorOn)
-				mRack2->getHinge()->enableAngularMotor(true, 10000, 5000);
+				mRack2->getHinge()->enableAngularMotor(true, 100000, 50000);
 			else
 				mRack2->getHinge()->enableMotor(false);
 	

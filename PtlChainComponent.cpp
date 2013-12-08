@@ -134,7 +134,7 @@ ChainBodyComponent::ChainBodyComponent(Ogre::SceneManager *aSceneMgr,
 					calculateWeightPos(i),
 					mOrient,
 					new Ptl::BtOgreShapeDispatcher(NULL, Ptl::BtOgreShapeDispatcher::SPHERE),
-					10.0,
+					30.0,
 					Ogre::Vector3(0, 0, 0),
 					100.0,
 					1.0));
@@ -217,8 +217,8 @@ void ChainBodyComponent::setRotationalMotor(btGeneric6DofConstraint* dofConstrai
 		dofRotMotor->m_normalCFM = 0.0;
 		dofRotMotor->m_stopCFM = 0.0;
 		dofRotMotor->m_stopERP = 0.0;
-		dofRotMotor->m_maxLimitForce = 10000000.0;
-		dofRotMotor->m_maxMotorForce = 10000000.0;
+		dofRotMotor->m_maxLimitForce = 1000000000.0;
+		dofRotMotor->m_maxMotorForce = 1000000000.0;
 //		dofConstraint->setLinearUpperLimit(btVector3(0.0, 0.0, 0.0));
 //		dofConstraint->setLinearLowerLimit(btVector3(0.0, 0.0, 0.0));
 //		dofConstraint->setAngularUpperLimit(btVector3(0.0, 0.0, 0.0));

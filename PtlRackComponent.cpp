@@ -62,7 +62,7 @@ btRigidBody* RackBodyComponent::getRootBody()
 btTransform RackBodyComponent::getRootAnchor()
 {
 	btTransform frame = btTransform::getIdentity();
-	btVector3 anchorPoint(0., -170., 0.);
+	btVector3 anchorPoint(0., -RACK_HEIGHT, 0.);
 
 	frame.setOrigin(anchorPoint);
 	//frame.setRotation(btQuaternion(1, 0, 0, 0));
