@@ -130,7 +130,7 @@ void TutorialApplication::initPhysics()
 
 	mRack1 = new Ptl::RackBodyComponent(mSceneMgr,
 						mWorld,
-						Ogre::Vector3(200., Ptl::RackBodyComponent::RACK_HEIGHT, Ptl::RackBodyComponent::RACK_ARM_LENGTH),
+						Ogre::Vector3(200., Ptl::RackBodyComponent::RACK_HEIGHT, Ptl::RackBodyComponent::RACK_ARM_LENGTH+40.),
 						Ogre::Quaternion(sqrt(0.5), 0., -sqrt(0.5), 0.));
 
 	mRack1->attachTo(mRack1->getRootBody(), mRack1->getRootAnchor());
@@ -140,7 +140,7 @@ void TutorialApplication::initPhysics()
 
 	mRack2 = new Ptl::RackBodyComponent(mSceneMgr,
 						mWorld,
-						Ogre::Vector3(-200., Ptl::RackBodyComponent::RACK_HEIGHT, -Ptl::RackBodyComponent::RACK_ARM_LENGTH),
+						Ogre::Vector3(-200., Ptl::RackBodyComponent::RACK_HEIGHT, -Ptl::RackBodyComponent::RACK_ARM_LENGTH-40.),
 						Ogre::Quaternion(sqrt(0.5), 0., -sqrt(0.5), 0.));
 
 	mRack2->attachTo(mRack2->getRootBody(), mRack2->getRootAnchor());
