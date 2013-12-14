@@ -160,8 +160,11 @@ void TutorialApplication::createFrameListener(void){
 
 bool TutorialApplication::frameRenderingQueued(const Ogre::FrameEvent &evt){
 //	mWorld->stepSimulation(1/60.f,10);
+	float fixedSubstep = 1.f/240.f;
+	int maxNumSubsteps = 10;
 
-	mWorld->stepSimulation(evt.timeSinceLastFrame,50);
+//	mWorld->stepSimulation(evt.timeSinceLastFrame,50);
+	mWorld->stepSimulation(evt.timeSinceLastFrame, maxNumSubsteps, fixedSubstep);
 	
 	if (!BaseApplication::frameRenderingQueued(evt))
 		return false;

@@ -36,7 +36,7 @@ WheelBodyComponent::WheelBodyComponent(Ogre::SceneManager *aSceneMgr,
 	btRigidBody *wheelBody = static_cast<btRigidBody*>(mWheel->getCollisionObject());
 
 	wheelBody->setFriction(1);
-	wheelBody->setDamping(0.1f,0.1f);
+	wheelBody->setDamping(0.001f,0.001f);
 	wheelBody->setFlags(0);
 	wheelBody->setActivationState(DISABLE_DEACTIVATION);
 

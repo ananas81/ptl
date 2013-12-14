@@ -217,8 +217,9 @@ void ChainBodyComponent::setRotationalMotor(btGeneric6DofConstraint* dofConstrai
 		dofRotMotor->m_normalCFM = 0.0;
 		dofRotMotor->m_stopCFM = 0.0;
 		dofRotMotor->m_stopERP = 0.0;
-		dofRotMotor->m_maxLimitForce = 1000000000.0;
-		dofRotMotor->m_maxMotorForce = 1000000000.0;
+		dofRotMotor->m_maxLimitForce = 10000000.0;
+		dofRotMotor->m_maxMotorForce = 10000000.0;
+		dofRotMotor->m_currentLimitError = 1.0;
 //		dofConstraint->setLinearUpperLimit(btVector3(0.0, 0.0, 0.0));
 //		dofConstraint->setLinearLowerLimit(btVector3(0.0, 0.0, 0.0));
 //		dofConstraint->setAngularUpperLimit(btVector3(0.0, 0.0, 0.0));
@@ -226,6 +227,7 @@ void ChainBodyComponent::setRotationalMotor(btGeneric6DofConstraint* dofConstrai
 //		dofRotMotor->m_hiLimit = 0.2;
 //		dofRotMotor->m_loLimit = 0.2;
 		dofRotMotor->m_limitSoftness = 0.0;
+		dofRotMotor->m_bounce = 0.0;
 	}
 }
 
