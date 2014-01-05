@@ -40,8 +40,8 @@ WheelBodyComponent::WheelBodyComponent(Ogre::SceneManager *aSceneMgr,
 	wheelBody->setFlags(0);
 	wheelBody->setActivationState(DISABLE_DEACTIVATION);
 
-	x_45 = WHEEL_RADIUS / (2.0 * tan(45.0 *M_PI/180.0));
-	y_45 = WHEEL_RADIUS/2.0;
+	x_45 = cos(45.0 *M_PI/180.0) * WHEEL_RADIUS;
+	y_45 = sin(45.0 *M_PI/180.0) * WHEEL_RADIUS;
 	printf(">>>>> M_PI: %2.2f, x: %2.2f\n", M_PI, x_45);
 
 	mWorld->addRigidBody(wheelBody);
