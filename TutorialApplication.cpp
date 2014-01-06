@@ -362,14 +362,14 @@ bool TutorialApplication::keyPressed(const OIS::KeyEvent& evt)
 		{
 			btRigidBody *rackBody = mRack1->getRootBody();
 			rackBody->setActivationState(DISABLE_DEACTIVATION);
-			rackBody->applyImpulse(btVector3(-250, 0, 0), btVector3(0., -Ptl::RackBodyComponent::RACK_HEIGHT, 0.));
+			rackBody->applyImpulse(btVector3(-2500, 0, 0), btVector3(0., -Ptl::RackBodyComponent::RACK_HEIGHT, 0.));
 			break;
 		}
 		case OIS::KC_3:
 		{
 			btRigidBody *rackBody = mRack1->getRootBody();
 			rackBody->setActivationState(DISABLE_DEACTIVATION);
-			rackBody->applyImpulse(btVector3(250, 0, 0), btVector3(0., -Ptl::RackBodyComponent::RACK_HEIGHT, 0.));
+			rackBody->applyImpulse(btVector3(2500, 0, 0), btVector3(0., -Ptl::RackBodyComponent::RACK_HEIGHT, 0.));
 			break;
 		}
 		case OIS::KC_4:
@@ -394,14 +394,14 @@ bool TutorialApplication::keyPressed(const OIS::KeyEvent& evt)
 		{
 			btRigidBody *rackBody = mRack2->getRootBody();
 			rackBody->setActivationState(DISABLE_DEACTIVATION);
-			rackBody->applyImpulse(btVector3(-250, 0, 0), btVector3(0., -Ptl::RackBodyComponent::RACK_HEIGHT, 0.));
+			rackBody->applyImpulse(btVector3(-2500, 0, 0), btVector3(0., -Ptl::RackBodyComponent::RACK_HEIGHT, 0.));
 			break;
 		}
 		case OIS::KC_C:
 		{
 			btRigidBody *rackBody = mRack2->getRootBody();
 			rackBody->setActivationState(DISABLE_DEACTIVATION);
-			rackBody->applyImpulse(btVector3(250, 0, 0), btVector3(0., -Ptl::RackBodyComponent::RACK_HEIGHT, 0.));
+			rackBody->applyImpulse(btVector3(2500, 0, 0), btVector3(0., -Ptl::RackBodyComponent::RACK_HEIGHT, 0.));
 			break;
 		}
 		case OIS::KC_V:
