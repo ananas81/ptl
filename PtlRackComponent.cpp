@@ -23,7 +23,7 @@ RackBodyComponent::RackBodyComponent(Ogre::SceneManager *aSceneMgr,
 	sprintf(bodyName, "Rack_%d", ++mRackElementsCnt);
 	mRack = new Ptl::OgrePhysicalBody(mSceneMgr,
 						  bodyName,
-						  "Rack.mesh",
+						  "resources/Rack.mesh",
 						  mPos,
 						  mOrient,
 						  new Ptl::BtOgreShapeDispatcher(NULL, Ptl::BtOgreShapeDispatcher::CONVEX_HULL),
