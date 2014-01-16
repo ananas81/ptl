@@ -33,8 +33,7 @@ This source file is part of the
 #include <RendererModules/Ogre/CEGUIOgreRenderer.h>
 #include <vector>
 #include "DebugDraw.hpp"
-#include "PtlOgrePhysicalBody.h"
-#include "PtlRackComponent.h"
+#include "PtlBaseDeviceScene.h"
 
 class DebugDrawer : public CDebugDraw
 {
@@ -121,8 +120,7 @@ protected:
     Ogre::RaySceneQuery* mRayScnQuery;      //pointer to our ray scene query
     CEGUI::Renderer* mGUIRenderer;          //our CEGUI renderer
 
-    Ptl::RackBodyComponent *mRack1;
-    Ptl::RackBodyComponent *mRack2;
+    Ptl::BaseDeviceScene *mDeviceScene;
     Ogre::Vector3 mCurHitPoint;
     DebugDrawer *mDebugDrawer;
 
