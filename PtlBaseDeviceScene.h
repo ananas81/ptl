@@ -3,6 +3,7 @@
 
 #include <OgreSceneManager.h>
 #include <btBulletDynamicsCommon.h>
+#include <OISKeyboard.h>
 
 namespace Ptl
 {
@@ -10,12 +11,13 @@ namespace Ptl
 class BaseDeviceScene
 {
 	public:
-		BodyComponent(btDiscreteDynamicsWorld* aWorld,
+		BaseDeviceScene(btDiscreteDynamicsWorld* aWorld,
 			      Ogre::SceneManager* aSceneMgr) :
-				mWorld(aWorld)
+				mWorld(aWorld),
 				mSceneMgr(aSceneMgr) {}
-		virtual ~BodyComponent() {}
+		virtual ~BaseDeviceScene() {}
 
+		virtual void createScene() = 0;
 		virtual void keyPressed(const OIS::KeyEvent& evt) = 0;
 
 	protected:

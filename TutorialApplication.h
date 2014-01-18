@@ -33,7 +33,7 @@ This source file is part of the
 #include <RendererModules/Ogre/CEGUIOgreRenderer.h>
 #include <vector>
 #include "DebugDraw.hpp"
-#include "PtlBaseDeviceScene.h"
+#include "PtlFlywheelChainWeights.h"
 
 class DebugDrawer : public CDebugDraw
 {

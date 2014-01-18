@@ -13,11 +13,6 @@ Filename:    TutorialApplication.cpp
 -----------------------------------------------------------------------------
 */
 #include "TutorialApplication.h"
-#include "PtlCollisionShapeDispatcher.h"
-#include "PtlBulletImporterShapeDispatcher.h"
-#include "PtlBtOgreShapeDispatcher.h"
-#include "PtlCollisionShapeDispatcherData.h"
-#include "PtlFlywheelChainWeights.h"
 
 
 #define BULLET_TRIANGLE_COLLISION 1
@@ -29,8 +24,7 @@ bRMouseDown(false),
 mCurrentObject(NULL),
 mRayScnQuery(NULL),
 mGUIRenderer(NULL),
-mRack1(NULL),
-mRack2(NULL),
+mDeviceScene(NULL),
 mDebugDrawer(NULL)
 {
 }
@@ -42,8 +36,6 @@ TutorialApplication::~TutorialApplication(void)
 //-------------------------------------------------------------------------------------
 void TutorialApplication::createScene(void)
 {
-	btCollisionShape *shape;
-
 	mSceneMgr->setAmbientLight(Ogre::ColourValue(0.0f, 0.0f, 0.5f));
 	mSceneMgr->setShadowTechnique(Ogre::SHADOWTYPE_STENCIL_ADDITIVE);
 
