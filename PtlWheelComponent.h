@@ -26,8 +26,8 @@ class WheelBodyComponent : public BodyComponent
 		virtual void switchToDynamic();
 		virtual btHingeConstraint* getHinge();
 
-		static const float WHEEL_RADIUS = 38.5;
-		static const float WHEEL_WIDTH = 7.28;
+		static const float WHEEL_RADIUS = 40.0;
+		static const float WHEEL_WIDTH = 8.0;
 
 	protected:
 		OgrePhysicalBody *mWheel;

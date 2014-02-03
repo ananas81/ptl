@@ -28,7 +28,7 @@ WheelBodyComponent::WheelBodyComponent(Ogre::SceneManager *aSceneMgr,
 						  mPos,
 						  mOrient,
 						  new Ptl::BulletImporterShapeDispatcher("resources/flywheel.bcs", 0),
-						  100.0,
+						  20.0,
 						  Ogre::Vector3(0, 0, 0),
 						  1.0,
 						  1.0);
