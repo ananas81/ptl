@@ -1,5 +1,5 @@
-#ifndef __PARALLEL_FLYWHEELS
-	#define __PARALLEL_FLYWHEELS
+#ifndef __PARALLEL_RINGWHEELS
+	#define __PARALLEL_RINGWHEELS
 
 #include "PtlBaseDeviceScene.h"
 #include "PtlRackComponent.h"
@@ -7,13 +7,13 @@
 namespace Ptl
 {
 
-class ParallelFlywheels : public BaseDeviceScene
+class ParallelRingwheels : public BaseDeviceScene
 {
 	public:
-		ParallelFlywheels(btDiscreteDynamicsWorld* aWorld,
+		ParallelRingwheels(btDiscreteDynamicsWorld* aWorld,
 			      Ogre::SceneManager* aSceneMgr) :
 				BaseDeviceScene(aWorld, aSceneMgr) {};
-		virtual ~ParallelFlywheels() {};
+		virtual ~ParallelRingwheels() {};
 
 		void createScene();
 		virtual void keyPressed(const OIS::KeyEvent& evt);
@@ -25,4 +25,4 @@ class ParallelFlywheels : public BaseDeviceScene
 
 };
 	
-#endif //__PARALLEL_FLYWHEELS
+#endif //__PARALLEL_RINGWHEELS

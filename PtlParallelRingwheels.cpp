@@ -1,9 +1,9 @@
-#include "PtlParallelFlywheels.h"
+#include "PtlParallelRingwheels.h"
 
 namespace Ptl
 {
 
-void ParallelFlywheels::createScene()
+void ParallelRingwheels::createScene()
 {
 	mRack1 = new Ptl::RackBodyComponent(mSceneMgr,
 						mWorld,
@@ -23,7 +23,7 @@ void ParallelFlywheels::createScene()
 	mRack2->attachTo(mRack2->getRootBody(), mRack2->getRootAnchor());
 }
 
-void ParallelFlywheels::keyPressed(const OIS::KeyEvent& evt)
+void ParallelRingwheels::keyPressed(const OIS::KeyEvent& evt)
 {
 	switch (evt.key)
 	{
