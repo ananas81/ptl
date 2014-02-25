@@ -34,6 +34,7 @@ This source file is part of the
 #include <vector>
 #include "DebugDraw.hpp"
 #include "PtlFlywheelChainWeights.h"
+#include "PtlParallelRingwheels.h"
 
 class DebugDrawer : public CDebugDraw
 {

@@ -121,7 +121,8 @@ void TutorialApplication::initPhysics()
 	btRigidBody* groundRigidBody = new btRigidBody(groundRigidBodyCI);
 	mWorld->addRigidBody(groundRigidBody);
 
-	mDeviceScene = new Ptl::FlywheelChainWeights(mWorld, mSceneMgr);
+//	mDeviceScene = new Ptl::FlywheelChainWeights(mWorld, mSceneMgr);
+	mDeviceScene = new Ptl::ParallelRingwheels(mWorld, mSceneMgr);
 	mDeviceScene->createScene();
 
 	mDebugDrawer = new DebugDrawer(mSceneMgr, mWorld);

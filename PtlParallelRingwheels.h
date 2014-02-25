@@ -2,7 +2,7 @@
 	#define __PARALLEL_RINGWHEELS
 
 #include "PtlBaseDeviceScene.h"
-#include "PtlRackComponent.h"
+#include "PtlRingwheelComponent.h"
 
 namespace Ptl
 {
@@ -19,8 +19,7 @@ class ParallelRingwheels : public BaseDeviceScene
 		virtual void keyPressed(const OIS::KeyEvent& evt);
 
 	private:
-	    Ptl::RackBodyComponent *mRack1;
-	    Ptl::RackBodyComponent *mRack2;
+	    Ptl::RingwheelBodyComponent *mRingwheel;
 };
 
 };
