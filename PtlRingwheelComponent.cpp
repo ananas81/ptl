@@ -21,7 +21,7 @@ RingwheelBodyComponent::RingwheelBodyComponent(Ogre::SceneManager *aSceneMgr,
 	char bodyName[15];
 	double x_45, y_45;
 
-	sprintf(bodyName, "Ringheel_%d", ++mRingwheelElementsCnt);
+	sprintf(bodyName, "Ringwheel_%d", ++mRingwheelElementsCnt);
 	mRingwheel = new Ptl::OgrePhysicalBody(mSceneMgr,
 						  bodyName,
 						  "resources/Ringwheel.mesh",
@@ -65,13 +65,16 @@ btTransform RingwheelBodyComponent::getRootAnchor()
 		
 void RingwheelBodyComponent::attachTo(btRigidBody* parentComponent, const btTransform& parentAnchor)
 {
-	mRingwheelHinge = new btHingeConstraint(*getRootBody(),
+/*	mRingwheelHinge = new btHingeConstraint(*getRootBody(),
 					    *parentComponent,
 					    getRootAnchor().getOrigin(),
 					    parentAnchor.getOrigin(),
 					    btVector3(0, 0, 1),
 					    btVector3(1, 0, 0),
-					    true);
+					    true);*/
+	mRingwheelHinge = new btHingeConstraint(*getRootBody(),
+					    getRootAnchor().getOrigin(),
+					    btVector3(0, 0, 1));
 	mWorld->addConstraint(mRingwheelHinge);
 }
 

@@ -7,8 +7,8 @@ void ParallelRingwheels::createScene()
 {
 	mRingwheel = new Ptl::RingwheelBodyComponent(mSceneMgr,
 						mWorld,
-						Ogre::Vector3(0, 0, 0),
-						Ogre::Quaternion(sqrt(0.5), 0., -sqrt(0.5), 0.));
+						Ogre::Vector3(0, 100, 0),
+						Ogre::Quaternion(1., 0., 0., 0.));
 
 	mRingwheel->attachTo(mRingwheel->getRootBody(), mRingwheel->getRootAnchor());
 
@@ -18,19 +18,19 @@ void ParallelRingwheels::createScene()
 
 void ParallelRingwheels::keyPressed(const OIS::KeyEvent& evt)
 {
-//	switch (evt.key)
-//	{
-//		case OIS::KC_1:
-//		{
-//			static bool motorOn = false;
-//			motorOn = !motorOn;
-//			if (motorOn)
-//				mRack1->getHinge()->enableAngularMotor(true, 100000, 50000);
-//			else
-//				mRack1->getHinge()->enableMotor(false);
-//	
-//			break;
-//		}
+	switch (evt.key)
+	{
+		case OIS::KC_1:
+		{
+			static bool motorOn = false;
+			motorOn = !motorOn;
+			if (motorOn)
+				mRingwheel->getHinge()->enableAngularMotor(true, 100, 50);
+			else
+				mRingwheel->getHinge()->enableMotor(false);
+	
+			break;
+		}
 //		case OIS::KC_2:
 //		{
 //			btRigidBody *rackBody = mRack1->getRootBody();
@@ -84,9 +84,9 @@ void ParallelRingwheels::keyPressed(const OIS::KeyEvent& evt)
 //			lock = !lock;
 //			break;
 //		}
-//		default:
-//			break;
-//	}
+		default:
+			break;
+	}
 }
 
 };
