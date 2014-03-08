@@ -16,6 +16,7 @@ RingwheelBodyComponent::RingwheelBodyComponent(Ogre::SceneManager *aSceneMgr,
 				       const Ogre::Quaternion& aOrient) :
 				       BodyComponent(aSceneMgr, aWorld, aPos, aOrient),
 				       mRingwheel(NULL),
+				       mRingweight(NULL),
 				       mRingwheelHinge(NULL)
 {
 	char bodyName[15];
@@ -28,6 +29,17 @@ RingwheelBodyComponent::RingwheelBodyComponent(Ogre::SceneManager *aSceneMgr,
 						  mPos,
 						  mOrient,
 						  new Ptl::BulletImporterShapeDispatcher("resources/ringwheel.bcs", 0),
+						  2.0,
+						  Ogre::Vector3(0, 0, 0),
+						  1.0,
+						  1.0);
+
+	mRingweight = new Ptl::OgrePhysicalBody(mSceneMgr,
+						  "ringweight",
+						  "resources/Ringweight.mesh",
+						  Ogre::Vector3(aPos.x, aPos.y + RINGWHEEL_RADIUS - 2, aPos.z),
+						  mOrient,
+						  new Ptl::BtOgreShapeDispatcher(NULL, Ptl::BtOgreShapeDispatcher::SPHERE),
 						  20.0,
 						  Ogre::Vector3(0, 0, 0),
 						  1.0,
@@ -35,12 +47,18 @@ RingwheelBodyComponent::RingwheelBodyComponent(Ogre::SceneManager *aSceneMgr,
 
 	btRigidBody *wheelBody = static_cast<btRigidBody*>(mRingwheel->getCollisionObject());
 
-	wheelBody->setFriction(1);
-	wheelBody->setDamping(0.1f,0.1f);
+//	wheelBody->setFriction(1);
+	wheelBody->setDamping(1.0,1.0);
 	wheelBody->setFlags(0);
 	wheelBody->setActivationState(DISABLE_DEACTIVATION);
 
+	btRigidBody *ringweightBody = static_cast<btRigidBody*>(mRingweight->getCollisionObject());
 
+//	ringweightBody->setFriction(1);
+//	ringweightBody->setDamping(0.1f,0.1f);
+	ringweightBody->setFlags(0);
+
+	mWorld->addRigidBody(ringweightBody);
 	mWorld->addRigidBody(wheelBody);
 }
 

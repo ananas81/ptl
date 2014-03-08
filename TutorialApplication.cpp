@@ -39,11 +39,11 @@ void TutorialApplication::createScene(void)
 	mSceneMgr->setAmbientLight(Ogre::ColourValue(0.0f, 0.0f, 0.5f));
 	mSceneMgr->setShadowTechnique(Ogre::SHADOWTYPE_STENCIL_ADDITIVE);
 
-	Ogre::Light* pointLight = mSceneMgr->createLight("pointLight");
-	pointLight->setType(Ogre::Light::LT_POINT);
-	pointLight->setPosition(Ogre::Vector3(0, 150, 250));
-	pointLight->setDiffuseColour(1.0, 0.0, 0.0);
-	pointLight->setSpecularColour(1.0, 0.0, 0.0);
+//	Ogre::Light* pointLight = mSceneMgr->createLight("pointLight");
+//	pointLight->setType(Ogre::Light::LT_POINT);
+//	pointLight->setPosition(Ogre::Vector3(0, 150, 250));
+//	pointLight->setDiffuseColour(1.0, 0.0, 0.0);
+//	pointLight->setSpecularColour(1.0, 0.0, 0.0);
 
 	Ogre::Light* directionalLight = mSceneMgr->createLight("directionalLight");
 	directionalLight->setType(Ogre::Light::LT_DIRECTIONAL);

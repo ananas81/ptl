@@ -26,11 +26,12 @@ class RingwheelBodyComponent : public BodyComponent
 		virtual void switchToDynamic();
 		virtual btHingeConstraint* getHinge();
 
-		static const float RINGWHEEL_RADIUS = 40.0;
+		static const float RINGWHEEL_RADIUS = 20.0;
 		static const float RINGWHEEL_WIDTH = 4.0;
 
 	protected:
 		OgrePhysicalBody *mRingwheel;
+		OgrePhysicalBody *mRingweight;
 		btHingeConstraint *mRingwheelHinge;
 		std::vector<BodyComponent*> mChildComponents;
 		static int mRingwheelElementsCnt;
