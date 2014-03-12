@@ -32,6 +32,7 @@ class RingwheelBodyComponent : public BodyComponent
 	protected:
 		OgrePhysicalBody *mRingwheel;
 		OgrePhysicalBody *mRingweight;
+		OgrePhysicalBody *mRearBlocker[3];
 		btHingeConstraint *mRingwheelHinge;
 		std::vector<BodyComponent*> mChildComponents;
 		static int mRingwheelElementsCnt;
