@@ -76,8 +76,24 @@ RingwheelBodyComponent::RingwheelBodyComponent(Ogre::SceneManager *aSceneMgr,
 	btRigidBody *rearblocker1Body = static_cast<btRigidBody*>(mRearBlocker[0]->getCollisionObject());
 	mWorld->addRigidBody(rearblocker1Body);
 
+	mFrontBlocker[0] = new Ptl::OgrePhysicalBody(mSceneMgr,
+						  "frontblocker",
+						  "resources/front_blocker.mesh",
+						  Ogre::Vector3(aPos.x + 6.4, aPos.y + 12.94, aPos.z),
+						  Ogre::Quaternion(1, 0, 0, 0),
+						  //Ogre::Quaternion(0.995, 0.012, 0.1, 0.02),
+						  new Ptl::BtOgreShapeDispatcher(NULL, Ptl::BtOgreShapeDispatcher::CONVEX_HULL),
+						  0.1,
+						  Ogre::Vector3(0, 0, 0),
+						  1.0,
+						  1.0);
+
+	btRigidBody *frontblocker1Body = static_cast<btRigidBody*>(mFrontBlocker[0]->getCollisionObject());
+	mWorld->addRigidBody(frontblocker1Body);
+
 	btTransform frameInA;
 	btTransform frameInB;
+	btGeneric6DofSpringConstraint* pGen6DOFSpring;
 
 	frameInA = btTransform::getIdentity();
 	frameInA.setOrigin(btVector3(0., 16., 0.));
@@ -86,7 +102,7 @@ RingwheelBodyComponent::RingwheelBodyComponent(Ogre::SceneManager *aSceneMgr,
 	frameInB.setOrigin(btVector3(-3., 0., 0.));
 	//frameInB.setRotation(btQuaternion(0.003, 0.237, -0.002, 1.074));
 
-	btGeneric6DofSpringConstraint* pGen6DOFSpring = new btGeneric6DofSpringConstraint(*wheelBody, *rearblocker1Body, frameInA, frameInB, true);
+	pGen6DOFSpring = new btGeneric6DofSpringConstraint(*wheelBody, *rearblocker1Body, frameInA, frameInB, true);
 	pGen6DOFSpring->setLinearUpperLimit(btVector3(0., 0., 0.));
 	pGen6DOFSpring->setLinearLowerLimit(btVector3(0., 0., 0.));
 	
@@ -94,13 +110,21 @@ RingwheelBodyComponent::RingwheelBodyComponent(Ogre::SceneManager *aSceneMgr,
 	pGen6DOFSpring->setAngularUpperLimit(btVector3(0.f, 0.f, 0.f));
 	
 	mWorld->addConstraint(pGen6DOFSpring, true);
-	pGen6DOFSpring->enableSpring(0, false);
-	pGen6DOFSpring->setStiffness(0, 0.1f);
-	pGen6DOFSpring->setDamping(0, 0.1f);
-	pGen6DOFSpring->enableSpring(5, false);
-	pGen6DOFSpring->setStiffness(5, 0.1f);
-	pGen6DOFSpring->setDamping(0, 0.1f);
-	pGen6DOFSpring->setEquilibriumPoint();
+
+	frameInA = btTransform::getIdentity();
+	frameInA.setOrigin(btVector3(0., 12.94, 0.));
+
+	frameInB = btTransform::getIdentity();
+	frameInB.setOrigin(btVector3(3., 0., 0.));
+
+	pGen6DOFSpring = new btGeneric6DofSpringConstraint(*wheelBody, *frontblocker1Body, frameInA, frameInB, true);
+	pGen6DOFSpring->setLinearUpperLimit(btVector3(0., 0., 0.));
+	pGen6DOFSpring->setLinearLowerLimit(btVector3(0., 0., 0.));
+	
+	pGen6DOFSpring->setAngularLowerLimit(btVector3(0.f, 0.f, 0.f));
+	pGen6DOFSpring->setAngularUpperLimit(btVector3(0.f, 0.f, 0.f));
+	
+	mWorld->addConstraint(pGen6DOFSpring, true);
 }
 
 RingwheelBodyComponent::~RingwheelBodyComponent()

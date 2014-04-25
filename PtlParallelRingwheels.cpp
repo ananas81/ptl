@@ -8,7 +8,7 @@ void ParallelRingwheels::createScene()
 	mRingwheel = new Ptl::RingwheelBodyComponent(mSceneMgr,
 						mWorld,
 						Ogre::Vector3(0, 100, 0),
-						Ogre::Quaternion(1., 0., 0., 0.));
+						Ogre::Quaternion(0., 0., 1., 0.));
 
 	mRingwheel->attachTo(mRingwheel->getRootBody(), mRingwheel->getRootAnchor());
 
