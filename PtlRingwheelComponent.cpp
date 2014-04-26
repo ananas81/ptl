@@ -64,8 +64,8 @@ RingwheelBodyComponent::RingwheelBodyComponent(Ogre::SceneManager *aSceneMgr,
 	mRearBlocker[0] = new Ptl::OgrePhysicalBody(mSceneMgr,
 						  "rearblocker",
 						  "resources/rear_blocker.mesh",
-						  Ogre::Vector3(aPos.x + 3.2, aPos.y + RINGWHEEL_RADIUS - 4, aPos.z),
-						  Ogre::Quaternion(1, 0, 0, 0),
+						  Ogre::Vector3(aPos.x + 6.8, aPos.y + 14.62, aPos.z),
+						  Ogre::Quaternion(0, 0, 1, 0),
 						  //Ogre::Quaternion(0.995, 0.012, 0.1, 0.02),
 						  new Ptl::BtOgreShapeDispatcher(NULL, Ptl::BtOgreShapeDispatcher::CONVEX_HULL),
 						  0.1,
@@ -80,9 +80,9 @@ RingwheelBodyComponent::RingwheelBodyComponent(Ogre::SceneManager *aSceneMgr,
 						  "frontblocker",
 						  "resources/front_blocker.mesh",
 						  Ogre::Vector3(aPos.x + 6.4, aPos.y + 12.94, aPos.z),
-						  Ogre::Quaternion(1, 0, 0, 0),
-						  //Ogre::Quaternion(0.995, 0.012, 0.1, 0.02),
-						  new Ptl::BtOgreShapeDispatcher(NULL, Ptl::BtOgreShapeDispatcher::CONVEX_HULL),
+						  //Ogre::Quaternion(1, 0, 0, 0),
+						  Ogre::Quaternion(0.000796, -0.252, -0.968, 0.000349),
+						  new Ptl::BulletImporterShapeDispatcher("resources/front_blocker.bcs", 0),
 						  0.1,
 						  Ogre::Vector3(0, 0, 0),
 						  1.0,
@@ -96,11 +96,11 @@ RingwheelBodyComponent::RingwheelBodyComponent(Ogre::SceneManager *aSceneMgr,
 	btGeneric6DofSpringConstraint* pGen6DOFSpring;
 
 	frameInA = btTransform::getIdentity();
-	frameInA.setOrigin(btVector3(0., 16., 0.));
+	frameInA.setOrigin(btVector3(6.8, 14.62, 0.));
 
 	frameInB = btTransform::getIdentity();
-	frameInB.setOrigin(btVector3(-3., 0., 0.));
-	//frameInB.setRotation(btQuaternion(0.003, 0.237, -0.002, 1.074));
+	frameInB.setOrigin(btVector3(0., 0., 0.));
+	frameInB.setRotation(btQuaternion(-0.252, -0.968, 0.000349, 0.000796));
 
 	pGen6DOFSpring = new btGeneric6DofSpringConstraint(*wheelBody, *rearblocker1Body, frameInA, frameInB, true);
 	pGen6DOFSpring->setLinearUpperLimit(btVector3(0., 0., 0.));
