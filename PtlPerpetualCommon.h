@@ -40,6 +40,29 @@ private:
 	double mZ;
 };
 
+class Vector3 {
+
+public:
+	Vector3(double x, double y, double z) :
+		mX(x), mY(y), mZ(z) {}
+	~Vector3() {}
+
+	operator Ogre::Vector3()
+	{
+		return Ogre::Vector3(mX, mY, mZ);
+	}
+
+	operator btVector3()
+	{
+		return btVector3(mX, mY, mZ);
+	}
+
+private:
+	double mX;
+	double mY;
+	double mZ;
+};
+
 }
 
 #endif //__PTL_PERPETUAL_COMMON_H
