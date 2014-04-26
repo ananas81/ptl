@@ -20,8 +20,8 @@ RingwheelBodyComponent::RingwheelBodyComponent(Ogre::SceneManager *aSceneMgr,
 				       mRingwheelHinge(NULL)
 {
 	char bodyName[15];
-	double x_45, y_45;
 
+	/* Crete ringwheel */
 	sprintf(bodyName, "Ringwheel_%d", ++mRingwheelElementsCnt);
 	mRingwheel = new Ptl::OgrePhysicalBody(mSceneMgr,
 						  bodyName,
@@ -34,6 +34,7 @@ RingwheelBodyComponent::RingwheelBodyComponent(Ogre::SceneManager *aSceneMgr,
 						  1.0,
 						  1.0);
 
+	/* Crete sphere weight */
 	mRingweight = new Ptl::OgrePhysicalBody(mSceneMgr,
 						  "ringweight",
 						  "resources/Ringweight.mesh",
@@ -61,69 +62,78 @@ RingwheelBodyComponent::RingwheelBodyComponent(Ogre::SceneManager *aSceneMgr,
 	mWorld->addRigidBody(ringweightBody);
 	mWorld->addRigidBody(wheelBody);
 
-	mRearBlocker[0] = new Ptl::OgrePhysicalBody(mSceneMgr,
-						  "rearblocker",
-						  "resources/rear_blocker.mesh",
-						  Ogre::Vector3(aPos.x + 6.8, aPos.y + 14.62, aPos.z),
-						  Ogre::Quaternion(0.000796, -0.252, -0.968, 0.000349),
-						  new Ptl::BtOgreShapeDispatcher(NULL, Ptl::BtOgreShapeDispatcher::CONVEX_HULL),
-						  0.1,
-						  Ogre::Vector3(0, 0, 0),
-						  1.0,
-						  1.0);
+	Ptl::Quaternion rear_blocker_rot[] = { Ptl::Quaternion(0.000796, -0.252, -0.968, 0.000349) };
+	Ptl::Quaternion front_blocker_rot[] = { Ptl::Quaternion(0.002, 0.0436, 0.999, -0.00052) };
 
-	btRigidBody *rearblocker1Body = static_cast<btRigidBody*>(mRearBlocker[0]->getCollisionObject());
-	mWorld->addRigidBody(rearblocker1Body);
-
-	mFrontBlocker[0] = new Ptl::OgrePhysicalBody(mSceneMgr,
-						  "frontblocker",
-						  "resources/front_blocker.mesh",
-						  Ogre::Vector3(aPos.x + 3.33, aPos.y + 15.65, aPos.z),
-						  Ogre::Quaternion(0.002, 0.0436, 0.999, -0.00052),
-						  new Ptl::BulletImporterShapeDispatcher("resources/front_blocker.bcs", 0),
-						  0.1,
-						  Ogre::Vector3(0, 0, 0),
-						  1.0,
-						  1.0);
-
-	btRigidBody *frontblocker1Body = static_cast<btRigidBody*>(mFrontBlocker[0]->getCollisionObject());
-	mWorld->addRigidBody(frontblocker1Body);
-
-	btTransform frameInA;
-	btTransform frameInB;
-	btGeneric6DofSpringConstraint* pGen6DOFSpring;
-
-	frameInA = btTransform::getIdentity();
-	frameInA.setOrigin(btVector3(6.8, 14.62, 0.));
-
-	frameInB = btTransform::getIdentity();
-	frameInB.setOrigin(btVector3(0., 0., 0.));
-	frameInB.setRotation(btQuaternion(-0.252, -0.968, 0.000349, 0.000796));
-
-	pGen6DOFSpring = new btGeneric6DofSpringConstraint(*wheelBody, *rearblocker1Body, frameInA, frameInB, true);
-	pGen6DOFSpring->setLinearUpperLimit(btVector3(0., 0., 0.));
-	pGen6DOFSpring->setLinearLowerLimit(btVector3(0., 0., 0.));
+	for (int i = 0; i < 1; ++i) {
+		/* Create rearblocker */
+		mRearBlocker[0] = new Ptl::OgrePhysicalBody(mSceneMgr,
+							  "rearblocker",
+							  "resources/rear_blocker.mesh",
+							  Ogre::Vector3(aPos.x + 6.8, aPos.y + 14.62, aPos.z),
+							  rear_blocker_rot[i],
+							  new Ptl::BtOgreShapeDispatcher(NULL, Ptl::BtOgreShapeDispatcher::CONVEX_HULL),
+							  0.1,
+							  Ogre::Vector3(0, 0, 0),
+							  1.0,
+							  1.0);
 	
-	pGen6DOFSpring->setAngularLowerLimit(btVector3(0.f, 0.f, 0.f));
-	pGen6DOFSpring->setAngularUpperLimit(btVector3(0.f, 0.f, 0.f));
+		btRigidBody *rearblockerBody = static_cast<btRigidBody*>(mRearBlocker[0]->getCollisionObject());
+		mWorld->addRigidBody(rearblockerBody);
 	
-	mWorld->addConstraint(pGen6DOFSpring, true);
-
-	frameInA = btTransform::getIdentity();
-	frameInA.setOrigin(btVector3(3.33, 15.65, 0.));
-
-	frameInB = btTransform::getIdentity();
-	frameInB.setOrigin(btVector3(0., 0., 0.));
-	frameInB.setRotation(btQuaternion(0.0436, 0.999, -0.00052, 0.002));
-
-	pGen6DOFSpring = new btGeneric6DofSpringConstraint(*wheelBody, *frontblocker1Body, frameInA, frameInB, true);
-	pGen6DOFSpring->setLinearUpperLimit(btVector3(0., 0., 0.));
-	pGen6DOFSpring->setLinearLowerLimit(btVector3(0., 0., 0.));
+		/* Create frontblocker */
+		mFrontBlocker[0] = new Ptl::OgrePhysicalBody(mSceneMgr,
+							  "frontblocker",
+							  "resources/front_blocker.mesh",
+							  Ogre::Vector3(aPos.x + 3.33, aPos.y + 15.65, aPos.z),
+							  front_blocker_rot[i],
+							  new Ptl::BulletImporterShapeDispatcher("resources/front_blocker.bcs", 0),
+							  0.1,
+							  Ogre::Vector3(0, 0, 0),
+							  1.0,
+							  1.0);
 	
-	pGen6DOFSpring->setAngularLowerLimit(btVector3(0.f, 0.f, 0.f));
-	pGen6DOFSpring->setAngularUpperLimit(btVector3(0.f, 0.f, 0.f));
+		btRigidBody *frontblockerBody = static_cast<btRigidBody*>(mFrontBlocker[0]->getCollisionObject());
+		mWorld->addRigidBody(frontblockerBody);
 	
-	mWorld->addConstraint(pGen6DOFSpring, true);
+		btTransform frameInA;
+		btTransform frameInB;
+		btGeneric6DofSpringConstraint* pGen6DOFSpring;
+	
+		/* Attach rearblocker */
+		frameInA = btTransform::getIdentity();
+		frameInA.setOrigin(btVector3(6.8, 14.62, 0.));
+	
+		frameInB = btTransform::getIdentity();
+		frameInB.setOrigin(btVector3(0., 0., 0.));
+		frameInB.setRotation(rear_blocker_rot[i]);
+	
+		pGen6DOFSpring = new btGeneric6DofSpringConstraint(*wheelBody, *rearblockerBody, frameInA, frameInB, true);
+		pGen6DOFSpring->setLinearUpperLimit(btVector3(0., 0., 0.));
+		pGen6DOFSpring->setLinearLowerLimit(btVector3(0., 0., 0.));
+		
+		pGen6DOFSpring->setAngularLowerLimit(btVector3(0.f, 0.f, 0.f));
+		pGen6DOFSpring->setAngularUpperLimit(btVector3(0.f, 0.f, 0.f));
+		
+		mWorld->addConstraint(pGen6DOFSpring, true);
+	
+		/* Attach frontblocker */
+		frameInA = btTransform::getIdentity();
+		frameInA.setOrigin(btVector3(3.33, 15.65, 0.));
+	
+		frameInB = btTransform::getIdentity();
+		frameInB.setOrigin(btVector3(0., 0., 0.));
+		frameInB.setRotation(front_blocker_rot[i]);
+	
+		pGen6DOFSpring = new btGeneric6DofSpringConstraint(*wheelBody, *frontblockerBody, frameInA, frameInB, true);
+		pGen6DOFSpring->setLinearUpperLimit(btVector3(0., 0., 0.));
+		pGen6DOFSpring->setLinearLowerLimit(btVector3(0., 0., 0.));
+		
+		pGen6DOFSpring->setAngularLowerLimit(btVector3(0.f, 0.f, 0.f));
+		pGen6DOFSpring->setAngularUpperLimit(btVector3(0.f, 0.f, 0.f));
+		
+		mWorld->addConstraint(pGen6DOFSpring, true);
+	}
 }
 
 RingwheelBodyComponent::~RingwheelBodyComponent()
