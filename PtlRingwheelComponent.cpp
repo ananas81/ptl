@@ -9,6 +9,7 @@ namespace Ptl
 const float RingwheelBodyComponent::RINGWHEEL_RADIUS;
 const float RingwheelBodyComponent::RINGWHEEL_WIDTH;
 int RingwheelBodyComponent::mRingwheelElementsCnt = 0;
+int RingwheelBodyComponent::mBlockerElementsCnt = 0;
 
 RingwheelBodyComponent::RingwheelBodyComponent(Ogre::SceneManager *aSceneMgr,
 				       btDiscreteDynamicsWorld *aWorld,
@@ -62,15 +63,20 @@ RingwheelBodyComponent::RingwheelBodyComponent(Ogre::SceneManager *aSceneMgr,
 	mWorld->addRigidBody(ringweightBody);
 	mWorld->addRigidBody(wheelBody);
 
-	Ptl::Quaternion rear_blocker_rot[] = { Ptl::Quaternion(0.000796, -0.252, -0.968, 0.000349) };
-	Ptl::Quaternion front_blocker_rot[] = { Ptl::Quaternion(0.002, 0.0436, 0.999, -0.00052) };
-	Ptl::Vector3 rear_blocker_dpos[] = { Ptl::Vector3(6.8, 14.62, 0.) };
-	Ptl::Vector3 front_blocker_dpos[] = { Ptl::Vector3(3.33, 15.65, 0.) };
+	Ptl::Quaternion rear_blocker_rot[] = { Ptl::Quaternion(0., -0.252, -0.968, 0),
+					       Ptl::Quaternion(0., 0., 0., 1.) };
+	Ptl::Quaternion front_blocker_rot[] = { Ptl::Quaternion(0., 0.0436, 1., 0.),
+					        Ptl::Quaternion(0., 0.55, 0., 0.833) };
+	Ptl::Vector3 rear_blocker_dpos[] = { Ptl::Vector3(9.4, 12.94, 0.),
+					     Ptl::Vector3(10.9, -10.7, 0.) };
+	Ptl::Vector3 front_blocker_dpos[] = { Ptl::Vector3(0., 16., 0.), 
+					      Ptl::Vector3(9.4, -12.94, 0.) };
 
-	for (int i = 0; i < 1; ++i) {
+	for (int i = 0; i < 2; ++i) {
 		/* Create rearblocker */
+		sprintf(bodyName, "RingwheelBlocker_%d", ++mBlockerElementsCnt);
 		mRearBlocker[0] = new Ptl::OgrePhysicalBody(mSceneMgr,
-							  "rearblocker",
+							  bodyName,
 							  "resources/rear_blocker.mesh",
 							  aPos + rear_blocker_dpos[i],
 							  rear_blocker_rot[i],
@@ -84,8 +90,9 @@ RingwheelBodyComponent::RingwheelBodyComponent(Ogre::SceneManager *aSceneMgr,
 		mWorld->addRigidBody(rearblockerBody);
 	
 		/* Create frontblocker */
+		sprintf(bodyName, "RingwheelBlocker_%d", ++mBlockerElementsCnt);
 		mFrontBlocker[0] = new Ptl::OgrePhysicalBody(mSceneMgr,
-							  "frontblocker",
+							  bodyName,
 							  "resources/front_blocker.mesh",
 							  aPos + front_blocker_dpos[i],
 							  front_blocker_rot[i],
@@ -107,7 +114,7 @@ RingwheelBodyComponent::RingwheelBodyComponent(Ogre::SceneManager *aSceneMgr,
 		frameInA.setOrigin(rear_blocker_dpos[i]);
 	
 		frameInB = btTransform::getIdentity();
-		frameInB.setOrigin(btVector3(0., 0., 0.));
+		frameInB.setOrigin(btVector3(0., 0., 0.) + btVector3(-3., 0., 0.));
 		frameInB.setRotation(rear_blocker_rot[i]);
 	
 		pGen6DOFSpring = new btGeneric6DofSpringConstraint(*wheelBody, *rearblockerBody, frameInA, frameInB, true);
@@ -124,7 +131,7 @@ RingwheelBodyComponent::RingwheelBodyComponent(Ogre::SceneManager *aSceneMgr,
 		frameInA.setOrigin(front_blocker_dpos[i]);
 	
 		frameInB = btTransform::getIdentity();
-		frameInB.setOrigin(btVector3(0., 0., 0.));
+		frameInB.setOrigin(btVector3(0., 0., 0.) + btVector3(3., 0., 0.));
 		frameInB.setRotation(front_blocker_rot[i]);
 	
 		pGen6DOFSpring = new btGeneric6DofSpringConstraint(*wheelBody, *frontblockerBody, frameInA, frameInB, true);
