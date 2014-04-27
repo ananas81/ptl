@@ -64,15 +64,19 @@ RingwheelBodyComponent::RingwheelBodyComponent(Ogre::SceneManager *aSceneMgr,
 	mWorld->addRigidBody(wheelBody);
 
 	Ptl::Quaternion rear_blocker_rot[] = { Ptl::Quaternion(0., -0.252, -0.968, 0),
-					       Ptl::Quaternion(0., 0., 0., 1.) };
-	Ptl::Quaternion front_blocker_rot[] = { Ptl::Quaternion(0., 0.0436, 1., 0.),
-					        Ptl::Quaternion(0., 0.55, 0., 0.833) };
+					       Ptl::Quaternion(0., -0.709, 0.705, 0.),
+					       Ptl::Quaternion(0., -0.967, -0.256, 0.) };
+	Ptl::Quaternion front_blocker_rot[] = { Ptl::Quaternion(0., 0.044, 1., 0.),
+					        Ptl::Quaternion(0., -0.835, 0.55, 0.),
+					        Ptl::Quaternion(0., -0.893, -0.451, 0.) };
 	Ptl::Vector3 rear_blocker_dpos[] = { Ptl::Vector3(9.4, 12.94, 0.),
-					     Ptl::Vector3(10.9, -10.7, 0.) };
+					     Ptl::Vector3(-15.91, 1.67, 0.),	
+					     Ptl::Vector3(6.5, -14.61, 0.) };
 	Ptl::Vector3 front_blocker_dpos[] = { Ptl::Vector3(0., 16., 0.), 
-					      Ptl::Vector3(9.4, -12.94, 0.) };
+					      Ptl::Vector3(-13.86, -8., 0.),
+					      Ptl::Vector3(13.86, -8., 0.) };
 
-	for (int i = 0; i < 2; ++i) {
+	for (int i = 0; i < 3; ++i) {
 		/* Create rearblocker */
 		sprintf(bodyName, "RingwheelBlocker_%d", ++mBlockerElementsCnt);
 		mRearBlocker[0] = new Ptl::OgrePhysicalBody(mSceneMgr,
