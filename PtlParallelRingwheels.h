@@ -3,7 +3,6 @@
 
 #include "PtlBaseDeviceScene.h"
 #include "PtlRingwheelComponent.h"
-#include "PtlLeverComponent.h"
 
 namespace Ptl
 {
@@ -21,7 +20,6 @@ class ParallelRingwheels : public BaseDeviceScene
 
 	private:
 		Ptl::RingwheelBodyComponent *mRingwheel;
-		Ptl::LeverBodyComponent *mLever;
 };
 
 };

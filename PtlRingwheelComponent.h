@@ -2,6 +2,7 @@
 	#define __RINGWHEEL_BODY_COMPONENT_H
 
 #include "PtlBodyComponent.h"
+#include "PtlLeverComponent.h"
 
 namespace Ptl
 {
@@ -34,6 +35,7 @@ class RingwheelBodyComponent : public BodyComponent
 		OgrePhysicalBody *mRingweight;
 		OgrePhysicalBody *mRearBlocker[3];
 		OgrePhysicalBody *mFrontBlocker[3];
+		Ptl::LeverBodyComponent *mLever;
 		btHingeConstraint *mRingwheelHinge;
 		std::vector<BodyComponent*> mChildComponents;
 		static int mRingwheelElementsCnt;

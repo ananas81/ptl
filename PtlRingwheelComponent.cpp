@@ -1,6 +1,6 @@
 #include "PtlOgrePhysicalBody.h"
 #include "PtlRingwheelComponent.h"
-#include "PtlChainComponent.h"
+#include "PtlLeverComponent.h"
 #include <math.h>
 
 namespace Ptl
@@ -147,6 +147,13 @@ RingwheelBodyComponent::RingwheelBodyComponent(Ogre::SceneManager *aSceneMgr,
 		
 		mWorld->addConstraint(pGen6DOFSpring, true);
 	}
+
+	mLever = new Ptl::LeverBodyComponent(mSceneMgr,
+						mWorld,
+						aPos + Ogre::Vector3(11.0, 13.0, -10.0),
+						Ogre::Quaternion(sqrt(0.5), 0.0, sqrt(0.5), 0.0));
+
+	mLever->attachTo(mLever->getRootBody(), mLever->getRootAnchor());
 }
 
 RingwheelBodyComponent::~RingwheelBodyComponent()
