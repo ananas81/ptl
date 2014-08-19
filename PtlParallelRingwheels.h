@@ -3,6 +3,7 @@
 
 #include "PtlBaseDeviceScene.h"
 #include "PtlRingwheelComponent.h"
+#include "PtlLeverComponent.h"
 
 namespace Ptl
 {
@@ -19,7 +20,8 @@ class ParallelRingwheels : public BaseDeviceScene
 		virtual void keyPressed(const OIS::KeyEvent& evt);
 
 	private:
-	    Ptl::RingwheelBodyComponent *mRingwheel;
+		Ptl::RingwheelBodyComponent *mRingwheel;
+		Ptl::LeverBodyComponent *mLever;
 };
 
 };

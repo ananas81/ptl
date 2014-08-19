@@ -12,6 +12,13 @@ void ParallelRingwheels::createScene()
 
 	mRingwheel->attachTo(mRingwheel->getRootBody(), mRingwheel->getRootAnchor());
 
+	mLever = new Ptl::LeverBodyComponent(mSceneMgr,
+						mWorld,
+						Ogre::Vector3(0, Ptl::LeverBodyComponent::LEVER_HEIGHT, 0),
+						Ogre::Quaternion(0., 0., 1., 0.));
+
+	mLever->attachTo(mLever->getRootBody(), mLever->getRootAnchor());
+
 //	mRack1->getRootBody()->setActivationState(DISABLE_DEACTIVATION);
 //	mRack1->getRail()->getFrameOffsetA().setRotation(btQuaternion(0, sqrt(0.5), 0, sqrt(0.5)));
 }

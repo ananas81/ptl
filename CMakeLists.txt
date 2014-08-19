@@ -26,6 +26,7 @@ SET(SRC
     "PtlFlywheelChainWeights.cpp"
     "PtlRingwheelComponent.cpp"
     "PtlParallelRingwheels.cpp"
+    "PtlLeverComponent.cpp"
 )
 
 INCLUDE(FindPkgConfig)
