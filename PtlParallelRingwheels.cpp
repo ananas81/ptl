@@ -1,4 +1,5 @@
 #include "PtlParallelRingwheels.h"
+#include "PtlPerpetualCommon.h"
 
 namespace Ptl
 {
@@ -7,8 +8,8 @@ void ParallelRingwheels::createScene()
 {
 	mRingwheel = new Ptl::RingwheelBodyComponent(mSceneMgr,
 						mWorld,
-						Ogre::Vector3(0, 100, 0),
-						Ogre::Quaternion(0., 0., 1., 0.));
+						Ptl::Vector3(0, 100, 0),
+						Ptl::Quaternion(1., 0., 0., 0.));
 
 	mRingwheel->attachTo(mRingwheel->getRootBody(), mRingwheel->getRootAnchor());
 
