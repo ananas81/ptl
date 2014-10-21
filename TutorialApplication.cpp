@@ -13,6 +13,7 @@ Filename:    TutorialApplication.cpp
 -----------------------------------------------------------------------------
 */
 #include "TutorialApplication.h"
+#include <CEGUI/GUIContext.h>
 
 
 #define BULLET_TRIANGLE_COLLISION 1
@@ -74,8 +75,8 @@ void TutorialApplication::createScene(void)
 	mGUIRenderer = &CEGUI::OgreRenderer::bootstrapSystem();
  
 	//show the CEGUI cursor
-	CEGUI::SchemeManager::getSingleton().create((CEGUI::utf8*)"TaharezLook.scheme");
-	CEGUI::MouseCursor::getSingleton().setImage("TaharezLook", "MouseArrow");
+	CEGUI::SchemeManager::getSingleton().createFromFile("TaharezLook.scheme");
+	CEGUI::System::getSingleton().getDefaultGUIContext().getMouseCursor().setDefaultImage("TaharezLook/MouseArrow");
 
 	initPhysics();
 }
@@ -202,13 +203,15 @@ btRigidBody* TutorialApplication::getRigidBodyByNode(Ogre::SceneNode *node)
 bool TutorialApplication::mouseMoved(const OIS::MouseEvent& arg)
 {
 	//updates CEGUI with mouse movement
-	CEGUI::System::getSingleton().injectMouseMove(arg.state.X.rel, arg.state.Y.rel);
+
+	CEGUI::GUIContext& context = CEGUI::System::getSingleton().getDefaultGUIContext();
+	context.injectMouseMove(arg.state.X.rel, arg.state.Y.rel);
 
 	//if the left mouse button is held down
 	if(bLMouseDown)
 	{
 	        //find the current mouse position
-	        CEGUI::Point mousePos = CEGUI::MouseCursor::getSingleton().getPosition();
+		CEGUI::Vector2f mousePos = context.getMouseCursor().getPosition();
 
 	        //create a raycast straight out from the camera at the mouse's location
 	        Ogre::Ray mouseRay = mCamera->getCameraToViewportRay(mousePos.d_x/float(arg.state.width), mousePos.d_y/float(arg.state.height));
@@ -246,6 +249,8 @@ bool TutorialApplication::mouseMoved(const OIS::MouseEvent& arg)
 
 bool TutorialApplication::mousePressed(const OIS::MouseEvent& arg, OIS::MouseButtonID id)
 {
+	CEGUI::GUIContext& context = CEGUI::System::getSingleton().getDefaultGUIContext();
+
 	if(id == OIS::MB_Left)
 	{
 	        //show that the current object has been deselected by removing the bounding box visual
@@ -255,7 +260,7 @@ bool TutorialApplication::mousePressed(const OIS::MouseEvent& arg, OIS::MouseBut
 	        }
 
 	        //find the current mouse position
-	        CEGUI::Point mousePos = CEGUI::MouseCursor::getSingleton().getPosition();
+		CEGUI::Vector2f mousePos = context.getMouseCursor().getPosition();
 
 	        //then send a raycast straight out from the camera at the mouse's position
 	        Ogre::Ray mouseRay = mCamera->getCameraToViewportRay(mousePos.d_x/float(arg.state.width), mousePos.d_y/float(arg.state.height));
@@ -300,7 +305,7 @@ bool TutorialApplication::mousePressed(const OIS::MouseEvent& arg, OIS::MouseBut
 	}
 	else if(id == OIS::MB_Right)    // if the right mouse button is held we hide the mouse cursor for view mode
 	{
-	        CEGUI::MouseCursor::getSingleton().hide();
+		context.getMouseCursor().hide();
 	        bRMouseDown = true;
 	}
 
@@ -309,13 +314,15 @@ bool TutorialApplication::mousePressed(const OIS::MouseEvent& arg, OIS::MouseBut
 
 bool TutorialApplication::mouseReleased(const OIS::MouseEvent& arg, OIS::MouseButtonID id)
 {
+	CEGUI::GUIContext& context = CEGUI::System::getSingleton().getDefaultGUIContext();
+
 	if(id  == OIS::MB_Left)
 	{
 	        bLMouseDown = false;
 	}
 	else if(id == OIS::MB_Right)    //when the right mouse is released we then unhide the cursor
 	{
-	        CEGUI::MouseCursor::getSingleton().show();
+		context.getMouseCursor().show();
 	        bRMouseDown = false;
 	}
 	return true;

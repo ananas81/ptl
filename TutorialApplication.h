@@ -28,9 +28,9 @@ This source file is part of the
 #include "BulletSoftBody/btSoftBodyRigidBodyCollisionConfiguration.h"
 #include "BulletSoftBody/btSoftBodyHelpers.h"
 #include <stdio.h>
-#include <CEGUISystem.h>
-#include <CEGUISchemeManager.h>
-#include <RendererModules/Ogre/CEGUIOgreRenderer.h>
+#include <CEGUI/System.h>
+#include <CEGUI/SchemeManager.h>
+#include <CEGUI/RendererModules/Ogre/Renderer.h>
 #include <vector>
 #include "DebugDraw.hpp"
 #include "PtlFlywheelChainWeights.h"
