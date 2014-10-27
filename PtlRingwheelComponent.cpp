@@ -102,7 +102,7 @@ RingwheelBodyComponent::RingwheelBodyComponent(Ogre::SceneManager *aSceneMgr,
 							  front_blocker_rot[i],
 							  new Ptl::BtOgreShapeDispatcher(NULL, Ptl::BtOgreShapeDispatcher::CONVEX_HULL),
 							  5.,
-							  Ogre::Vector3(0, -10.0, 0),
+							  Ogre::Vector3(0, 0, -15.0),
 							  1.0,
 							  1.0);
 	
