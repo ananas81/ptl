@@ -63,18 +63,18 @@ RingwheelBodyComponent::RingwheelBodyComponent(Ogre::SceneManager *aSceneMgr,
 	mWorld->addRigidBody(ringweightBody);
 	mWorld->addRigidBody(wheelBody);
 
-	Ptl::Quaternion rear_blocker_rot[] = { Ptl::Quaternion(0., -0.252, -0.968, 0),
-					       Ptl::Quaternion(0., -0.709, 0.705, 0.),
-					       Ptl::Quaternion(0., -0.967, -0.256, 0.) };
+	Ptl::Quaternion rear_blocker_rot[] = { Ptl::Quaternion(1., 0., 0., 0.047),
+					       Ptl::Quaternion(0.451, 0., 0., 0.893),
+					       Ptl::Quaternion(-0.545, 0., 0., 0.838) };
 	Ptl::Quaternion front_blocker_rot[] = { Ptl::Quaternion(0.9, 0., 0., 0.1),
 					        Ptl::Quaternion(0.415, 0., 0., 0.91),
 					        Ptl::Quaternion(-0.586, 0., 0., 0.810) };
-	Ptl::Vector3 rear_blocker_dpos[] = { Ptl::Vector3(9.4, 12.94, 0.),
-					     Ptl::Vector3(-15.91, 1.67, 0.),	
-					     Ptl::Vector3(6.5, -14.61, 0.) };
-	Ptl::Vector3 front_blocker_dpos[] = { Ptl::Vector3(4., 20.4, -2.9),
-					     Ptl::Vector3(15.75, -13.38, -2.9),
-					     Ptl::Vector3(-19.62, -7., -2.9) };
+	Ptl::Vector3 rear_blocker_dpos[] = { Ptl::Vector3(0., 16., 0.),
+					     Ptl::Vector3(13.85, -8., 0.),	
+					     Ptl::Vector3(-13.85, -8., 0.) };
+	Ptl::Vector3 front_blocker_dpos[] = { Ptl::Vector3(9., 20.11, -4.21),
+					     Ptl::Vector3(12.75, -17.73, -4.21),
+					     Ptl::Vector3(-21.69, -2.24, -4.21) };
 
 	for (int i = 0; i < 3; ++i) {
 		/* Create rearblocker */
@@ -85,7 +85,7 @@ RingwheelBodyComponent::RingwheelBodyComponent(Ogre::SceneManager *aSceneMgr,
 							  aPos + rear_blocker_dpos[i],
 							  rear_blocker_rot[i],
 							  new Ptl::BtOgreShapeDispatcher(NULL, Ptl::BtOgreShapeDispatcher::CONVEX_HULL),
-							  0.2,
+							  0.1,
 							  Ogre::Vector3(0, 0, 0),
 							  1.0,
 							  1.0);
@@ -148,7 +148,7 @@ RingwheelBodyComponent::RingwheelBodyComponent(Ogre::SceneManager *aSceneMgr,
 		//pGen6DOF->setAngularLowerLimit(btVector3(0., 0., 0.));
 		//pGen6DOF->setAngularUpperLimit(btVector3(0., 0., 0.));
 		
-		mWorld->addConstraint(pGen6DOF, true);
+//		mWorld->addConstraint(pGen6DOF, true);
 	}
 }
 
