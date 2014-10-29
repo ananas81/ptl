@@ -66,9 +66,9 @@ RingwheelBodyComponent::RingwheelBodyComponent(Ogre::SceneManager *aSceneMgr,
 	Ptl::Quaternion rear_blocker_rot[] = { Ptl::Quaternion(1., 0., 0., 0.047),
 					       Ptl::Quaternion(0.451, 0., 0., 0.893),
 					       Ptl::Quaternion(-0.545, 0., 0., 0.838) };
-	Ptl::Quaternion front_blocker_rot[] = { Ptl::Quaternion(0.9, 0., 0., 0.1),
-					        Ptl::Quaternion(0.415, 0., 0., 0.91),
-					        Ptl::Quaternion(-0.586, 0., 0., 0.810) };
+	Ptl::Quaternion front_blocker_rot[] = { Ptl::Quaternion(0.976, 0., 0., 0.216),
+					        Ptl::Quaternion(0.309, 0., 0., 0.951),
+					        Ptl::Quaternion(-0.672, 0., 0., 0.741) };
 	Ptl::Vector3 rear_blocker_dpos[] = { Ptl::Vector3(0., 16., 0.),
 					     Ptl::Vector3(13.85, -8., 0.),	
 					     Ptl::Vector3(-13.85, -8., 0.) };
@@ -136,7 +136,7 @@ RingwheelBodyComponent::RingwheelBodyComponent(Ogre::SceneManager *aSceneMgr,
 		frameInA.setOrigin(front_blocker_dpos[i]);
 	
 		frameInB = btTransform::getIdentity();
-		frameInB.setOrigin(btVector3(0.5, 0., 0.));
+		frameInB.setOrigin(btVector3(0.5, 0., 0.) + btVector3(0.125, 0., 0.));
 		frameInB.setRotation(front_blocker_rot[i]);
 	
 		pGen6DOF = new btGeneric6DofConstraint(*wheelBody, *frontblockerBody, frameInA, frameInB, true);
