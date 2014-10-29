@@ -72,9 +72,9 @@ RingwheelBodyComponent::RingwheelBodyComponent(Ogre::SceneManager *aSceneMgr,
 	Ptl::Vector3 rear_blocker_dpos[] = { Ptl::Vector3(0., 16., 0.),
 					     Ptl::Vector3(13.85, -8., 0.),	
 					     Ptl::Vector3(-13.85, -8., 0.) };
-	Ptl::Vector3 front_blocker_dpos[] = { Ptl::Vector3(9., 20.11, -4.21),
-					     Ptl::Vector3(12.75, -17.73, -4.21),
-					     Ptl::Vector3(-21.69, -2.24, -4.21) };
+	Ptl::Vector3 front_blocker_dpos[] = { Ptl::Vector3(8.87, 19.88, -4.08),
+					     Ptl::Vector3(12.81, -17.73, -4.08),
+					     Ptl::Vector3(-21.65, -2.25, -4.08) };
 
 	for (int i = 0; i < 3; ++i) {
 		/* Create rearblocker */
@@ -148,7 +148,7 @@ RingwheelBodyComponent::RingwheelBodyComponent(Ogre::SceneManager *aSceneMgr,
 		//pGen6DOF->setAngularLowerLimit(btVector3(0., 0., 0.));
 		//pGen6DOF->setAngularUpperLimit(btVector3(0., 0., 0.));
 		
-//		mWorld->addConstraint(pGen6DOF, true);
+		mWorld->addConstraint(pGen6DOF, true);
 	}
 }
 
