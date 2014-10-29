@@ -136,7 +136,7 @@ RingwheelBodyComponent::RingwheelBodyComponent(Ogre::SceneManager *aSceneMgr,
 		frameInA.setOrigin(front_blocker_dpos[i]);
 	
 		frameInB = btTransform::getIdentity();
-		frameInB.setOrigin(btVector3(0.5, 0., 0.) + btVector3(0.125, 0., 0.));
+		frameInB.setOrigin(btVector3(0.125, 0., 0.));
 		frameInB.setRotation(front_blocker_rot[i]);
 	
 		pGen6DOF = new btGeneric6DofConstraint(*wheelBody, *frontblockerBody, frameInA, frameInB, true);
