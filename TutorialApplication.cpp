@@ -17,6 +17,7 @@ Filename:    TutorialApplication.cpp
 
 
 #define BULLET_TRIANGLE_COLLISION 1
+//#define CAPTURE_SCREENSHOTS
 
 //-------------------------------------------------------------------------------------
 TutorialApplication::TutorialApplication(void) :
@@ -143,6 +144,15 @@ bool TutorialApplication::frameRenderingQueued(const Ogre::FrameEvent &evt){
 //	mWorld->stepSimulation(1/60.f,10);
 	float fixedSubstep = 1.f/240.f;
 	int maxNumSubsteps = 10;
+
+#ifdef CAPTURE_SCREENSHOTS
+	char screenshotName[20];
+	static int frameId = 0;
+
+	sprintf(screenshotName, "screenshots/screen_shot%05d.png", frameId++);
+
+	mWindow->writeContentsToFile(screenshotName);
+#endif
 
 //	mWorld->stepSimulation(evt.timeSinceLastFrame,50);
 	mWorld->stepSimulation(evt.timeSinceLastFrame, maxNumSubsteps, fixedSubstep);
