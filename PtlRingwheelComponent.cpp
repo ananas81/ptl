@@ -1,6 +1,6 @@
 #include "PtlOgrePhysicalBody.h"
 #include "PtlRingwheelComponent.h"
-#include "PtlLeverComponent.h"
+#include "PtlSlotBlockerComponent.h"
 #include <math.h>
 
 namespace Ptl
@@ -66,15 +66,15 @@ RingwheelBodyComponent::RingwheelBodyComponent(Ogre::SceneManager *aSceneMgr,
 	Ptl::Quaternion rear_blocker_rot[] = { Ptl::Quaternion(1., 0., 0., 0.047),
 					       Ptl::Quaternion(0.451, 0., 0., 0.893),
 					       Ptl::Quaternion(-0.545, 0., 0., 0.838) };
-	Ptl::Quaternion front_blocker_rot[] = { Ptl::Quaternion(0.976, 0., 0., 0.216),
-					        Ptl::Quaternion(0.309, 0., 0., 0.951),
-					        Ptl::Quaternion(-0.672, 0., 0., 0.741) };
+	Ptl::Quaternion front_blocker_rot[] = { Ptl::Quaternion(0.96, 0., 0., 0.26),
+					        Ptl::Quaternion(0.26, 0., 0., 0.96),
+					        Ptl::Quaternion(-0.71, 0., 0., 0.71) };
 	Ptl::Vector3 rear_blocker_dpos[] = { Ptl::Vector3(0., 16., 0.),
 					     Ptl::Vector3(13.85, -8., 0.),	
 					     Ptl::Vector3(-13.85, -8., 0.) };
-	Ptl::Vector3 front_blocker_dpos[] = { Ptl::Vector3(8.87, 19.88, -4.08),
-					     Ptl::Vector3(12.81, -17.73, -4.08),
-					     Ptl::Vector3(-21.65, -2.25, -4.08) };
+	Ptl::Vector3 front_blocker_dpos[] = { Ptl::Vector3(9.94, 17.23, 0.),
+					     Ptl::Vector3(9.94, -17.22, 0.),
+					     Ptl::Vector3(-19.89, 0., 0.) };
 
 	for (int i = 0; i < 3; ++i) {
 		/* Create rearblocker */
@@ -92,22 +92,6 @@ RingwheelBodyComponent::RingwheelBodyComponent(Ogre::SceneManager *aSceneMgr,
 	
 		btRigidBody *rearblockerBody = static_cast<btRigidBody*>(mRearBlocker[i]->getCollisionObject());
 		mWorld->addRigidBody(rearblockerBody);
-	
-		/* Create frontblocker */
-		sprintf(bodyName, "RingwheelBlocker_%d", ++mBlockerElementsCnt);
-		mFrontBlocker[i] = new Ptl::OgrePhysicalBody(mSceneMgr,
-							  bodyName,
-							  "resources/slot_blocker.mesh",
-							  aPos + front_blocker_dpos[i],
-							  front_blocker_rot[i],
-							  new Ptl::BtOgreShapeDispatcher(NULL, Ptl::BtOgreShapeDispatcher::CONVEX_HULL),
-							  5.,
-							  Ogre::Vector3(0, 0, -15.0),
-							  1.0,
-							  1.0);
-	
-		btRigidBody *frontblockerBody = static_cast<btRigidBody*>(mFrontBlocker[i]->getCollisionObject());
-		mWorld->addRigidBody(frontblockerBody);
 	
 		btTransform frameInA;
 		btTransform frameInB;
@@ -131,24 +115,12 @@ RingwheelBodyComponent::RingwheelBodyComponent(Ogre::SceneManager *aSceneMgr,
 		mWorld->addConstraint(pGen6DOFSpring, true);
 	
 		/* Attach frontblocker */
-		btGeneric6DofConstraint* pGen6DOF;
+		mSlotBlocker[i] = new Ptl::SlotBlockerComponent(aSceneMgr, aWorld, front_blocker_dpos[i], front_blocker_rot[i]);
+
 		frameInA = btTransform::getIdentity();
 		frameInA.setOrigin(front_blocker_dpos[i]);
-	
-		frameInB = btTransform::getIdentity();
-		frameInB.setOrigin(btVector3(0.125, 0., 0.));
-		frameInB.setRotation(front_blocker_rot[i]);
-	
-		pGen6DOF = new btGeneric6DofConstraint(*wheelBody, *frontblockerBody, frameInA, frameInB, true);
-		pGen6DOF->setLinearUpperLimit(btVector3(0., 0., 0.));
-		pGen6DOF->setLinearLowerLimit(btVector3(0., 0., 0.));
-		
-		pGen6DOF->setAngularLowerLimit(btVector3(-SIMD_INFINITY, 0., 0.));
-		pGen6DOF->setAngularUpperLimit(btVector3(SIMD_INFINITY, 0., 0.));
-		//pGen6DOF->setAngularLowerLimit(btVector3(0., 0., 0.));
-		//pGen6DOF->setAngularUpperLimit(btVector3(0., 0., 0.));
-		
-		mWorld->addConstraint(pGen6DOF, true);
+
+		mSlotBlocker[i]->attachTo(wheelBody, frameInA);
 	}
 }
 

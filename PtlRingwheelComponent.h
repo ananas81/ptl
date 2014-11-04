@@ -2,12 +2,12 @@
 	#define __RINGWHEEL_BODY_COMPONENT_H
 
 #include "PtlBodyComponent.h"
-#include "PtlLeverComponent.h"
 
 namespace Ptl
 {
 
 class OgrePhysicalBody;
+class SlotBlockerComponent;
 
 class RingwheelBodyComponent : public BodyComponent
 {
@@ -34,8 +34,7 @@ class RingwheelBodyComponent : public BodyComponent
 		OgrePhysicalBody *mRingwheel;
 		OgrePhysicalBody *mRingweight;
 		OgrePhysicalBody *mRearBlocker[3];
-		OgrePhysicalBody *mFrontBlocker[3];
-		Ptl::LeverBodyComponent *mLever;
+		Ptl::SlotBlockerComponent *mSlotBlocker[3];
 		btHingeConstraint *mRingwheelHinge;
 		std::vector<BodyComponent*> mChildComponents;
 		static int mRingwheelElementsCnt;
