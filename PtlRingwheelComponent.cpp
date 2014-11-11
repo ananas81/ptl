@@ -39,7 +39,7 @@ RingwheelBodyComponent::RingwheelBodyComponent(Ogre::SceneManager *aSceneMgr,
 	mRingweight = new Ptl::OgrePhysicalBody(mSceneMgr,
 						  "ringweight",
 						  "resources/Ringweight.mesh",
-						  Ogre::Vector3(aPos.x, aPos.y + RINGWHEEL_RADIUS - 2, aPos.z),
+						  Ogre::Vector3(aPos.x, aPos.y + RINGWHEEL_RADIUS - 2., aPos.z),
 						  mOrient,
 						  new Ptl::BtOgreShapeDispatcher(NULL, Ptl::BtOgreShapeDispatcher::SPHERE),
 						  20.0,
@@ -56,9 +56,9 @@ RingwheelBodyComponent::RingwheelBodyComponent(Ogre::SceneManager *aSceneMgr,
 
 	btRigidBody *ringweightBody = static_cast<btRigidBody*>(mRingweight->getCollisionObject());
 
-//	ringweightBody->setFriction(1);
-//	ringweightBody->setDamping(0.1f,0.1f);
-	ringweightBody->setFlags(0);
+	ringweightBody->setFriction(1);
+	ringweightBody->setDamping(0.1f,0.1f);
+//+	ringweightBody->setFlags(0);
 
 	mWorld->addRigidBody(ringweightBody);
 	mWorld->addRigidBody(wheelBody);
@@ -115,7 +115,7 @@ RingwheelBodyComponent::RingwheelBodyComponent(Ogre::SceneManager *aSceneMgr,
 		mWorld->addConstraint(pGen6DOFSpring, true);
 	
 		/* Attach frontblocker */
-		mSlotBlocker[i] = new Ptl::SlotBlockerComponent(aSceneMgr, aWorld, front_blocker_dpos[i], front_blocker_rot[i]);
+		mSlotBlocker[i] = new Ptl::SlotBlockerComponent(aSceneMgr, aWorld, aPos + front_blocker_dpos[i], front_blocker_rot[i]);
 
 		frameInA = btTransform::getIdentity();
 		frameInA.setOrigin(front_blocker_dpos[i]);

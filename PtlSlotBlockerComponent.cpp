@@ -4,34 +4,67 @@
 namespace Ptl
 {
 
-int SlotBlockerComponent::mSlotBlockerElementsCnt = 0;
+int SlotBlockerComponent::mBlockerRackElementsCnt = 0;
+int SlotBlockerComponent::mBlockerArmElementsCnt = 0;
 
 SlotBlockerComponent::SlotBlockerComponent(Ogre::SceneManager *aSceneMgr,
 				       btDiscreteDynamicsWorld *aWorld,
 				       const Ogre::Vector3& aPos,
 				       const Ogre::Quaternion& aOrient) :
 				       BodyComponent(aSceneMgr, aWorld, aPos, aOrient),
-				       mSlotBlocker(NULL)
+				       mBlockerRack(NULL)
 {
 	char bodyName[15];
 
-	sprintf(bodyName, "SlotBlocker_%d", ++mSlotBlockerElementsCnt);
-	mSlotBlocker = new Ptl::OgrePhysicalBody(mSceneMgr,
+	sprintf(bodyName, "SlotBlocker_Racl%d", ++mBlockerRackElementsCnt);
+	mBlockerRack = new Ptl::OgrePhysicalBody(mSceneMgr,
 						  bodyName,
 						  "resources/arm_cuboid.mesh",
 						  mPos,
 						  mOrient,
 						  new Ptl::BtOgreShapeDispatcher(NULL, Ptl::BtOgreShapeDispatcher::CONVEX_HULL),
-						  10.0,
+						  1.0,
 						  Ogre::Vector3(0, 0, 0),
-						  0.,
-						  0.);
+						  1.0,
+						  1.0);
 
 
-	btRigidBody *slotBlockerBody = static_cast<btRigidBody*>(mSlotBlocker->getCollisionObject());
-	slotBlockerBody->setLinearFactor(btVector3(1, 1, 1));
+	btRigidBody *rackBody = static_cast<btRigidBody*>(mBlockerRack->getCollisionObject());
+//	rackBody->setLinearFactor(btVector3(1, 1, 1));
 
-	mWorld->addRigidBody(slotBlockerBody);
+	mWorld->addRigidBody(rackBody);
+
+	sprintf(bodyName, "SlotBlocker_Arm%d", ++mBlockerRackElementsCnt);
+	mBlockerArm = new Ptl::OgrePhysicalBody(mSceneMgr,
+						  bodyName,
+						  "resources/slot_blocker.mesh",
+						  mPos,
+						  mOrient,
+						  new Ptl::BtOgreShapeDispatcher(NULL, Ptl::BtOgreShapeDispatcher::CONVEX_HULL),
+						  1.0,
+						  Ogre::Vector3(0, 0, 0),
+						  1.0,
+						  1.0);
+
+
+	btRigidBody *armBody = static_cast<btRigidBody*>(mBlockerArm->getCollisionObject());
+//	rackBody->setLinearFactor(btVector3(1, 1, 1));
+
+	mWorld->addRigidBody(armBody);
+
+	btTransform frameA = btTransform::getIdentity();
+	btTransform frameB = btTransform::getIdentity();
+
+	frameA.setOrigin(btVector3(0., 0., -4.));
+	frameB.setOrigin(btVector3(0.125, 0., 0.));
+
+	mBlockerArmConstr = new btGeneric6DofConstraint(*rackBody, *armBody, frameA, frameB, true);
+	mBlockerArmConstr->setLinearUpperLimit(btVector3(0.0, 0.0, 0.0));
+	mBlockerArmConstr->setLinearLowerLimit(btVector3(0.0, 0.0, 0.0));
+	mBlockerArmConstr->setAngularUpperLimit(btVector3(0., 0., 0.));
+	mBlockerArmConstr->setAngularLowerLimit(btVector3(0., 0., 0.));
+
+	mWorld->addConstraint(mBlockerArmConstr);
 }
 
 SlotBlockerComponent::~SlotBlockerComponent()
@@ -40,7 +73,7 @@ SlotBlockerComponent::~SlotBlockerComponent()
 
 btRigidBody* SlotBlockerComponent::getRootBody()
 {
-	return static_cast<btRigidBody*>(mSlotBlocker->getCollisionObject());
+	return static_cast<btRigidBody*>(mBlockerRack->getCollisionObject());
 }
 
 btTransform SlotBlockerComponent::getRootAnchor()
@@ -55,15 +88,15 @@ btTransform SlotBlockerComponent::getRootAnchor()
 
 void SlotBlockerComponent::attachTo(btRigidBody* parentComponent, const btTransform& parentAnchor)
 {
-	btRigidBody *slotBlockerBody = static_cast<btRigidBody*>(mSlotBlocker->getCollisionObject());
+	btRigidBody *rackBody = static_cast<btRigidBody*>(mBlockerRack->getCollisionObject());
 
-	mSlotBlockerConstr = new btGeneric6DofConstraint(*parentComponent, *slotBlockerBody, parentAnchor, getRootAnchor(), true);
-	mSlotBlockerConstr->setLinearUpperLimit(btVector3(0., 0.0, 0.0));
-	mSlotBlockerConstr->setLinearLowerLimit(btVector3(0., 0.0, 0.0));
-	mSlotBlockerConstr->setAngularUpperLimit(btVector3(0, 0, 0));
-	mSlotBlockerConstr->setAngularLowerLimit(btVector3(0, 0, 0));
+	mBlockerRackConstr = new btGeneric6DofConstraint(*parentComponent, *rackBody, parentAnchor, getRootAnchor(), true);
+	mBlockerRackConstr->setLinearUpperLimit(btVector3(0.0, 0.0, 0.0));
+	mBlockerRackConstr->setLinearLowerLimit(btVector3(0.0, 0.0, 0.0));
+	mBlockerRackConstr->setAngularUpperLimit(btVector3(0., -1., -1.));
+	mBlockerRackConstr->setAngularLowerLimit(btVector3(0., 1., 1.));
 
-	mWorld->addConstraint(mSlotBlockerConstr);
+	mWorld->addConstraint(mBlockerRackConstr);
 }
 
 void SlotBlockerComponent::setActivationState(int actState)

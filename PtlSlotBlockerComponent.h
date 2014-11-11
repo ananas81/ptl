@@ -26,9 +26,12 @@ class SlotBlockerComponent : public BodyComponent
 		virtual void switchToDynamic();
 
 	protected:
-		OgrePhysicalBody *mSlotBlocker;
-		btGeneric6DofConstraint *mSlotBlockerConstr;
-		static int mSlotBlockerElementsCnt;
+		OgrePhysicalBody *mBlockerRack;
+		OgrePhysicalBody *mBlockerArm;
+		btGeneric6DofConstraint *mBlockerRackConstr;
+		btGeneric6DofConstraint *mBlockerArmConstr;
+		static int mBlockerRackElementsCnt;
+		static int mBlockerArmElementsCnt;
 };
 
 };

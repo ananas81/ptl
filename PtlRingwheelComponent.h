@@ -34,7 +34,7 @@ class RingwheelBodyComponent : public BodyComponent
 		OgrePhysicalBody *mRingwheel;
 		OgrePhysicalBody *mRingweight;
 		OgrePhysicalBody *mRearBlocker[3];
-		Ptl::SlotBlockerComponent *mSlotBlocker[3];
+		SlotBlockerComponent *mSlotBlocker[3];
 		btHingeConstraint *mRingwheelHinge;
 		std::vector<BodyComponent*> mChildComponents;
 		static int mRingwheelElementsCnt;
