@@ -76,6 +76,9 @@ RingwheelBodyComponent::RingwheelBodyComponent(Ogre::SceneManager *aSceneMgr,
 					     Ptl::Vector3(9.94, -17.22, 0.),
 					     Ptl::Vector3(-19.89, 0., 0.) };
 
+	btTransform frameInA;
+	btTransform frameInB;
+
 	for (int i = 0; i < 3; ++i) {
 		/* Create rearblocker */
 		sprintf(bodyName, "RingwheelBlocker_%d", ++mBlockerElementsCnt);
@@ -93,8 +96,6 @@ RingwheelBodyComponent::RingwheelBodyComponent(Ogre::SceneManager *aSceneMgr,
 		btRigidBody *rearblockerBody = static_cast<btRigidBody*>(mRearBlocker[i]->getCollisionObject());
 		mWorld->addRigidBody(rearblockerBody);
 	
-		btTransform frameInA;
-		btTransform frameInB;
 		btGeneric6DofSpringConstraint* pGen6DOFSpring;
 	
 		/* Attach rearblocker */

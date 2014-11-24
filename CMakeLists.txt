@@ -51,7 +51,7 @@ add_executable(ogrePhysics ${SRC})
 target_link_libraries(ogrePhysics ${ogre_deps_LDFLAGS}
 		      ${PROJECT_SOURCE_DIR}/libBtOgre.a
 		      ${PROJECT_SOURCE_DIR}/libBulletWorldImporter.a
-		      ${PROJECT_SOURCE_DIR}/libOpenGLSupport_gmake.a
+		      ${PROJECT_SOURCE_DIR}/libOpenGLSupport.a
 		      ${PROJECT_SOURCE_DIR}/libBulletFileLoader.a
 		      ${GLUT_glut_LIBRARY}
 		      ${OPENGL_gl_LIBRARY}

@@ -30,6 +30,7 @@ SlotBlockerComponent::SlotBlockerComponent(Ogre::SceneManager *aSceneMgr,
 
 
 	btRigidBody *rackBody = static_cast<btRigidBody*>(mBlockerRack->getCollisionObject());
+	rackBody->getCollisionShape()->setMargin(0.1);
 //	rackBody->setLinearFactor(btVector3(1, 1, 1));
 
 	mWorld->addRigidBody(rackBody);
@@ -61,8 +62,8 @@ SlotBlockerComponent::SlotBlockerComponent(Ogre::SceneManager *aSceneMgr,
 	mBlockerArmConstr = new btGeneric6DofConstraint(*rackBody, *armBody, frameA, frameB, true);
 	mBlockerArmConstr->setLinearUpperLimit(btVector3(0.0, 0.0, 0.0));
 	mBlockerArmConstr->setLinearLowerLimit(btVector3(0.0, 0.0, 0.0));
-	mBlockerArmConstr->setAngularUpperLimit(btVector3(0., 0., 0.));
-	mBlockerArmConstr->setAngularLowerLimit(btVector3(0., 0., 0.));
+	mBlockerArmConstr->setAngularUpperLimit(btVector3(-1., 0., 0.));
+	mBlockerArmConstr->setAngularLowerLimit(btVector3(1., 0., 0.));
 
 	mWorld->addConstraint(mBlockerArmConstr);
 }
@@ -93,10 +94,24 @@ void SlotBlockerComponent::attachTo(btRigidBody* parentComponent, const btTransf
 	mBlockerRackConstr = new btGeneric6DofConstraint(*parentComponent, *rackBody, parentAnchor, getRootAnchor(), true);
 	mBlockerRackConstr->setLinearUpperLimit(btVector3(0.0, 0.0, 0.0));
 	mBlockerRackConstr->setLinearLowerLimit(btVector3(0.0, 0.0, 0.0));
-	mBlockerRackConstr->setAngularUpperLimit(btVector3(0., -1., -1.));
-	mBlockerRackConstr->setAngularLowerLimit(btVector3(0., 1., 1.));
+	mBlockerRackConstr->setAngularUpperLimit(btVector3(0., -0.001, -0.001));
+	mBlockerRackConstr->setAngularLowerLimit(btVector3(0., 0.001, 0.001));
+
+	mBlockerRackConstr->setDbgDrawSize(btScalar(5.f));
 
 	mWorld->addConstraint(mBlockerRackConstr);
+/*
+	btVector3 axisA(0.f, 1.f, 0.f);
+	btVector3 axisB(0.f, 1.f, 0.f);
+	btVector3 pivotA(-1.f, 0.f, 0.f);
+	btVector3 pivotB(1.f, 0.f, 0.f);
+	btHingeConstraint *hingeConstr = new btHingeConstraint(*parentComponent, *rackBody,
+								parentAnchor.getOrigin(),
+								getRootAnchor().getOrigin(), axisA, axisB);
+	hingeConstr->setLimit(0., 0., 0.);
+
+	mWorld->addConstraint(hingeConstr);
+*/
 }
 
 void SlotBlockerComponent::setActivationState(int actState)
