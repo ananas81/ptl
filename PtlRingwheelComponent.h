@@ -38,6 +38,7 @@ class RingwheelBodyComponent : public BodyComponent
 		btHingeConstraint *mRingwheelHinge;
 		std::vector<BodyComponent*> mChildComponents;
 		static int mRingwheelElementsCnt;
+		static int mRingweightElementsCnt;
 		static int mBlockerElementsCnt;
 };
 

@@ -9,6 +9,7 @@ namespace Ptl
 const float RingwheelBodyComponent::RINGWHEEL_RADIUS;
 const float RingwheelBodyComponent::RINGWHEEL_WIDTH;
 int RingwheelBodyComponent::mRingwheelElementsCnt = 0;
+int RingwheelBodyComponent::mRingweightElementsCnt = 0;
 int RingwheelBodyComponent::mBlockerElementsCnt = 0;
 
 RingwheelBodyComponent::RingwheelBodyComponent(Ogre::SceneManager *aSceneMgr,
@@ -29,15 +30,16 @@ RingwheelBodyComponent::RingwheelBodyComponent(Ogre::SceneManager *aSceneMgr,
 						  "resources/Ringwheel4.mesh",
 						  mPos,
 						  mOrient,
-						  new Ptl::BulletImporterShapeDispatcher("resources/ringwheel.bcs", 0),
+						  new Ptl::BulletImporterShapeDispatcher("resources/ringwheel4.bcs", 0),
 						  2.0,
 						  Ogre::Vector3(0, 0, 0),
 						  1.0,
 						  1.0);
 
 	/* Crete sphere weight */
+	sprintf(bodyName, "Ringweight_%d", ++mRingweightElementsCnt);
 	mRingweight = new Ptl::OgrePhysicalBody(mSceneMgr,
-						  "ringweight",
+						  bodyName,
 						  "resources/Ringweight.mesh",
 						  Ogre::Vector3(aPos.x, aPos.y + RINGWHEEL_RADIUS - 2., aPos.z),
 						  mOrient,
