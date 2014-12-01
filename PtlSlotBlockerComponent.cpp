@@ -30,11 +30,11 @@ SlotBlockerComponent::SlotBlockerComponent(Ogre::SceneManager *aSceneMgr,
 
 
 	btRigidBody *rackBody = static_cast<btRigidBody*>(mBlockerRack->getCollisionObject());
-	rackBody->getCollisionShape()->setMargin(0.1);
+//	rackBody->getCollisionShape()->setMargin(0.1);
 //	rackBody->setLinearFactor(btVector3(1, 1, 1));
 
 	mWorld->addRigidBody(rackBody);
-
+/*
 	sprintf(bodyName, "SlotBlocker_Arm%d", ++mBlockerRackElementsCnt);
 	mBlockerArm = new Ptl::OgrePhysicalBody(mSceneMgr,
 						  bodyName,
@@ -57,7 +57,7 @@ SlotBlockerComponent::SlotBlockerComponent(Ogre::SceneManager *aSceneMgr,
 	btTransform frameB = btTransform::getIdentity();
 
 	frameA.setOrigin(btVector3(0., 0., -4.));
-	frameB.setOrigin(btVector3(0.125, 0., 0.));
+	frameB.setOrigin(btVector3(-0.125, 0., 0.));
 
 	mBlockerArmConstr = new btGeneric6DofConstraint(*rackBody, *armBody, frameA, frameB, true);
 	mBlockerArmConstr->setLinearUpperLimit(btVector3(0.0, 0.0, 0.0));
@@ -65,7 +65,7 @@ SlotBlockerComponent::SlotBlockerComponent(Ogre::SceneManager *aSceneMgr,
 	mBlockerArmConstr->setAngularUpperLimit(btVector3(-1., 0., 0.));
 	mBlockerArmConstr->setAngularLowerLimit(btVector3(1., 0., 0.));
 
-	mWorld->addConstraint(mBlockerArmConstr);
+	mWorld->addConstraint(mBlockerArmConstr);*/
 }
 
 SlotBlockerComponent::~SlotBlockerComponent()
@@ -81,7 +81,7 @@ btTransform SlotBlockerComponent::getRootAnchor()
 {
 	btTransform frame = btTransform::getIdentity();
 
-	frame.setOrigin(btVector3(0., -2., 0.));
+	frame.setOrigin(btVector3(0., -2., 2.));
 	frame.setRotation(btQuaternion(mOrient.x, mOrient.y, mOrient.z, mOrient.w));
 
 	return frame;
@@ -94,8 +94,8 @@ void SlotBlockerComponent::attachTo(btRigidBody* parentComponent, const btTransf
 	mBlockerRackConstr = new btGeneric6DofConstraint(*parentComponent, *rackBody, parentAnchor, getRootAnchor(), true);
 	mBlockerRackConstr->setLinearUpperLimit(btVector3(0.0, 0.0, 0.0));
 	mBlockerRackConstr->setLinearLowerLimit(btVector3(0.0, 0.0, 0.0));
-	mBlockerRackConstr->setAngularUpperLimit(btVector3(0., -0.001, -0.001));
-	mBlockerRackConstr->setAngularLowerLimit(btVector3(0., 0.001, 0.001));
+	mBlockerRackConstr->setAngularUpperLimit(btVector3(0., 0., 0.));
+	mBlockerRackConstr->setAngularLowerLimit(btVector3(0., 0., 0.));
 
 	mBlockerRackConstr->setDbgDrawSize(btScalar(5.f));
 

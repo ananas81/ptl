@@ -26,7 +26,7 @@ void ParallelRingwheels::keyPressed(const OIS::KeyEvent& evt)
 			static bool motorOn = false;
 			motorOn = !motorOn;
 			if (motorOn)
-				mRingwheel->getHinge()->enableAngularMotor(true, -1000, 500);
+				mRingwheel->getHinge()->enableAngularMotor(true, -250, 125);
 			else
 				mRingwheel->getHinge()->enableMotor(false);
 	
