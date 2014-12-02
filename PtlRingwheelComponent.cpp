@@ -148,6 +148,16 @@ btTransform RingwheelBodyComponent::getRootAnchor()
 
 	return frame;
 }
+
+btTransform RingwheelBodyComponent::getRootAnchor(int anchorId)
+{
+	btTransform frame = btTransform::getIdentity();
+
+	frame.setOrigin(btVector3(0, 0, RINGWHEEL_WIDTH/2.0));
+	frame.setRotation(btQuaternion(1, 0, 0, 0));
+
+	return frame;
+}
 		
 void RingwheelBodyComponent::attachTo(btRigidBody* parentComponent, const btTransform& parentAnchor)
 {
@@ -162,6 +172,29 @@ void RingwheelBodyComponent::attachTo(btRigidBody* parentComponent, const btTran
 					    getRootAnchor().getOrigin(),
 					    btVector3(0, 0, 1));
 	mWorld->addConstraint(mRingwheelHinge);
+}
+
+void RingwheelBodyComponent::attachTo(btRigidBody* parentComponent, const btTransform& parentAnchor, int anchorId)
+{
+	btGeneric6DofConstraint *pGen6DOF;
+
+	btTransform frameInB;
+
+	/* Attach rearblocker */
+	frameInB = btTransform::getIdentity();
+	frameInB.setOrigin(btVector3(0., 0., -RINGWHEEL_WIDTH/2.0));
+	frameInB.setRotation(Ptl::Quaternion(1., 0., 0., 0.));
+
+	btRigidBody *wheelBody = static_cast<btRigidBody*>(mRingwheel->getCollisionObject());
+
+	pGen6DOF = new btGeneric6DofConstraint(*parentComponent, *wheelBody, parentAnchor, frameInB, true);
+	pGen6DOF->setLinearUpperLimit(btVector3(0., 0., 0.));
+	pGen6DOF->setLinearLowerLimit(btVector3(0., 0., 0.));
+	
+	pGen6DOF->setAngularLowerLimit(btVector3(0.f, 0.f, 0.f));
+	pGen6DOF->setAngularUpperLimit(btVector3(0.f, 0.f, 0.f));
+	
+	mWorld->addConstraint(pGen6DOF, true);
 }
 
 btHingeConstraint* RingwheelBodyComponent::getHinge()

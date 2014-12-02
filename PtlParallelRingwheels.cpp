@@ -21,7 +21,7 @@ void ParallelRingwheels::createScene()
 						Ptl::Vector3(0., 100., 8.),
 						Ptl::Quaternion(1., 0., 0., 0.));
 
-	mRingwheel[rwId]->attachTo(mRingwheel[rwId]->getRootBody(), mRingwheel[rwId]->getRootAnchor());
+	mRingwheel[rwId]->attachTo(mRingwheel[rwId - 1]->getRootBody(), mRingwheel[rwId - 1]->getRootAnchor(0), 0);
 	++rwId;
 
 	mRingwheel[rwId] = new Ptl::RingwheelBodyComponent(mSceneMgr,
@@ -29,7 +29,7 @@ void ParallelRingwheels::createScene()
 						Ptl::Vector3(0., 100., 16.),
 						Ptl::Quaternion(1., 0., 0., 0.));
 
-	mRingwheel[rwId]->attachTo(mRingwheel[rwId]->getRootBody(), mRingwheel[rwId]->getRootAnchor());
+	mRingwheel[rwId]->attachTo(mRingwheel[rwId - 1]->getRootBody(), mRingwheel[rwId - 1]->getRootAnchor(0), 1);
 
 }
 

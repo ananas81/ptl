@@ -21,14 +21,16 @@ class RingwheelBodyComponent : public BodyComponent
 		virtual ~RingwheelBodyComponent();
 		virtual btRigidBody* getRootBody();
 		virtual btTransform getRootAnchor();
+		virtual btTransform getRootAnchor(int anchorId);
 		virtual void attachTo(btRigidBody* parentComponent, const btTransform& parentAnchor);
+		virtual void attachTo(btRigidBody* parentComponent, const btTransform& parentAnchor, int anchorId);
 		virtual void setActivationState(int actState);
 		virtual void switchToKinematic();
 		virtual void switchToDynamic();
 		virtual btHingeConstraint* getHinge();
 
 		static const float RINGWHEEL_RADIUS = 20.0;
-		static const float RINGWHEEL_WIDTH = 4.0;
+		static const float RINGWHEEL_WIDTH = 16.0;
 
 	protected:
 		OgrePhysicalBody *mRingwheel;

@@ -23,6 +23,7 @@ class BodyComponent
 		virtual ~BodyComponent() {}
 		virtual btRigidBody* getRootBody() = 0;
 		virtual btTransform getRootAnchor() = 0;
+		virtual btTransform getRootAnchor(int anchorId) { btTransform fakeFrame; return fakeFrame; }
 		virtual void attachTo(btRigidBody* parentComponent, const btTransform& parentAnchor) = 0;
 		virtual void attachTo(btRigidBody* parentComponent, const btTransform& parentAnchor, int anchorId) {}
 		virtual void setActivationState(int actState) = 0;
