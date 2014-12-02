@@ -24,6 +24,7 @@ class BodyComponent
 		virtual btRigidBody* getRootBody() = 0;
 		virtual btTransform getRootAnchor() = 0;
 		virtual void attachTo(btRigidBody* parentComponent, const btTransform& parentAnchor) = 0;
+		virtual void attachTo(btRigidBody* parentComponent, const btTransform& parentAnchor, int anchorId) {}
 		virtual void setActivationState(int actState) = 0;
 		virtual void switchToKinematic() = 0;
 		virtual void switchToDynamic() = 0;
