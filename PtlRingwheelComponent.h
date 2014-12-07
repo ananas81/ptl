@@ -30,7 +30,7 @@ class RingwheelBodyComponent : public BodyComponent
 		virtual btHingeConstraint* getHinge();
 
 		static const float RINGWHEEL_RADIUS = 20.0;
-		static const float RINGWHEEL_WIDTH = 16.0;
+		static const float RINGWHEEL_WIDTH = 8.0;
 
 	protected:
 		OgrePhysicalBody *mRingwheel;
