@@ -21,6 +21,10 @@ class Quaternion {
 public:
 	Quaternion(double w, double x, double y, double z) :
 		mW(w), mX(x), mY(y), mZ(z) {}
+	Quaternion(Ogre::Quaternion &q) :
+		mW(q.w), mX(q.x), mY(q.y), mZ(q.z) {}
+	Quaternion(btQuaternion &q) :
+		mW(q.getW()), mX(q.getX()), mY(q.getY()), mZ(q.getX()) {}
 	~Quaternion() {}
 
 	operator Ogre::Quaternion()

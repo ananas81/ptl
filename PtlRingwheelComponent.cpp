@@ -144,7 +144,7 @@ btTransform RingwheelBodyComponent::getRootAnchor()
 	btTransform frame = btTransform::getIdentity();
 
 	frame.setOrigin(btVector3(0, 0, -RINGWHEEL_WIDTH/2.0));
-	frame.setRotation(btQuaternion(1, 0, 0, 0));
+	frame.setRotation(Ptl::Quaternion(mOrient));
 
 	return frame;
 }
@@ -154,7 +154,7 @@ btTransform RingwheelBodyComponent::getRootAnchor(int anchorId)
 	btTransform frame = btTransform::getIdentity();
 
 	frame.setOrigin(btVector3(0, 0, RINGWHEEL_WIDTH/2.0));
-	frame.setRotation(btQuaternion(1, 0, 0, 0));
+	frame.setRotation(Ptl::Quaternion(mOrient));
 
 	return frame;
 }
@@ -183,7 +183,7 @@ void RingwheelBodyComponent::attachTo(btRigidBody* parentComponent, const btTran
 	/* Attach rearblocker */
 	frameInB = btTransform::getIdentity();
 	frameInB.setOrigin(btVector3(0., 0., -RINGWHEEL_WIDTH/2.0));
-	frameInB.setRotation(Ptl::Quaternion(1., 0., 0., 0.));
+	frameInB.setRotation(Ptl::Quaternion(mOrient));
 
 	btRigidBody *wheelBody = static_cast<btRigidBody*>(mRingwheel->getCollisionObject());
 
