@@ -21,7 +21,7 @@ void ParallelRingwheels::createScene()
 						Ptl::Vector3(0., 100., 4.),
 						Ptl::Quaternion(1., 0., 0., 0.));
 
-	mRingwheel[rwId]->attachTo(mRingwheel[rwId - 1]->getRootBody(), mRingwheel[rwId - 1]->getRootAnchor(0), 0);
+	mRingwheel[rwId]->attachTo(mRingwheel[rwId - 1]->getRootBody(), mRingwheel[rwId - 1]->getRootAnchor(1), 0);
 	++rwId;
 
 	mRingwheel[rwId] = new Ptl::RingwheelBodyComponent(mSceneMgr,
@@ -29,7 +29,7 @@ void ParallelRingwheels::createScene()
 						Ptl::Vector3(0., 100., 8.),
 						Ptl::Quaternion(1., 0., 0., 0.));
 
-	mRingwheel[rwId]->attachTo(mRingwheel[rwId - 1]->getRootBody(), mRingwheel[rwId - 1]->getRootAnchor(0), 1);
+	mRingwheel[rwId]->attachTo(mRingwheel[rwId - 1]->getRootBody(), mRingwheel[rwId - 1]->getRootAnchor(1), 1);
 
 }
 
@@ -42,7 +42,8 @@ void ParallelRingwheels::keyPressed(const OIS::KeyEvent& evt)
 			static bool motorOn = false;
 			motorOn = !motorOn;
 			if (motorOn)
-				mRingwheel[0]->getHinge()->enableAngularMotor(true, -250, 125);
+//				mRingwheel[0]->getHinge()->enableAngularMotor(true, -350, 125);
+				mRingwheel[0]->getHinge()->enableAngularMotor(true, -1000, 500);
 			else
 				mRingwheel[0]->getHinge()->enableMotor(false);
 	

@@ -52,7 +52,7 @@ RingwheelBodyComponent::RingwheelBodyComponent(Ogre::SceneManager *aSceneMgr,
 	btRigidBody *wheelBody = static_cast<btRigidBody*>(mRingwheel->getCollisionObject());
 
 //	wheelBody->setFriction(1);
-	wheelBody->setDamping(0.5,0.5);
+	wheelBody->setDamping(0.8,0.8);
 	wheelBody->setFlags(0);
 	wheelBody->setActivationState(DISABLE_DEACTIVATION);
 
@@ -154,7 +154,7 @@ btTransform RingwheelBodyComponent::getRootAnchor(int anchorId)
 	btTransform frame = btTransform::getIdentity();
 
 	frame.setOrigin(btVector3(0, 0, RINGWHEEL_WIDTH/2.0));
-	frame.setRotation(Ptl::Quaternion(mOrient));
+	frame.setRotation(Ptl::Quaternion(0.5, 0., 0., 0.866));
 
 	return frame;
 }
