@@ -33,8 +33,8 @@ RingwheelBodyComponent::RingwheelBodyComponent(Ogre::SceneManager *aSceneMgr,
 						  new Ptl::BulletImporterShapeDispatcher("resources/ringwheel4.bcs", 0),
 						  2.0,
 						  Ogre::Vector3(0, 0, 0),
-						  1.0,
-						  1.0);
+						  0.1,
+						  0.1);
 
 	/* Create sphere weight */
 	sprintf(bodyName, "Ringweight_%d", ++mRingweightElementsCnt);
@@ -52,7 +52,7 @@ RingwheelBodyComponent::RingwheelBodyComponent(Ogre::SceneManager *aSceneMgr,
 	btRigidBody *wheelBody = static_cast<btRigidBody*>(mRingwheel->getCollisionObject());
 
 //	wheelBody->setFriction(1);
-	wheelBody->setDamping(1.0, 1.0);
+	wheelBody->setDamping(0.01, 0.01);
 	wheelBody->setFlags(0);
 	wheelBody->setActivationState(DISABLE_DEACTIVATION);
 
@@ -101,6 +101,9 @@ RingwheelBodyComponent::RingwheelBodyComponent(Ogre::SceneManager *aSceneMgr,
 							  1.0);
 	
 		btRigidBody *rearblockerBody = static_cast<btRigidBody*>(mRearBlocker[i]->getCollisionObject());
+
+		rearblockerBody->setDamping(1.0, 1.0);
+
 		mWorld->addRigidBody(rearblockerBody);
 	
 		/* Attach rearblocker */
@@ -136,6 +139,9 @@ RingwheelBodyComponent::RingwheelBodyComponent(Ogre::SceneManager *aSceneMgr,
 							  1.0);
 	
 		btRigidBody *frontblockerBody = static_cast<btRigidBody*>(mFrontBlocker[i]->getCollisionObject());
+
+		frontblockerBody->setDamping(1.0, 1.0);
+
 		mWorld->addRigidBody(frontblockerBody);
 	
 		/* Attach frontblocker */
@@ -143,7 +149,6 @@ RingwheelBodyComponent::RingwheelBodyComponent(Ogre::SceneManager *aSceneMgr,
 		frameInA.setOrigin(front_blocker_dpos[i]);
 	
 		frameInB = btTransform::getIdentity();
-		frameInB.setOrigin(btVector3(0., 0., 0.) + btVector3(-3., 0., 0.));
 		frameInB.setRotation(front_blocker_rot[i]);
 	
 		pGen6DOFSpring = new btGeneric6DofSpringConstraint(*wheelBody, *frontblockerBody, frameInA, frameInB, true);
@@ -163,7 +168,7 @@ RingwheelBodyComponent::RingwheelBodyComponent(Ogre::SceneManager *aSceneMgr,
 	mLever = new Ptl::OgrePhysicalBody(mSceneMgr,
 						  bodyName,
 						  "resources/Lever.mesh",
-						  Ogre::Vector3(aPos.x, aPos.y + RINGWHEEL_RADIUS - 2.8, aPos.z - 4.5),
+						  Ogre::Vector3(aPos.x + 6, aPos.y + 15.54, aPos.z - 4.5),
 						  mOrient,
 						  new Ptl::BtOgreShapeDispatcher(NULL, Ptl::BtOgreShapeDispatcher::CONVEX_HULL),
 						  20.0,
@@ -176,7 +181,7 @@ RingwheelBodyComponent::RingwheelBodyComponent(Ogre::SceneManager *aSceneMgr,
 	mWorld->addRigidBody(leverBody);
 
 	frameInA = btTransform::getIdentity();
-	frameInA.setOrigin(Ptl::Vector3(aPos.x, aPos.y + RINGWHEEL_RADIUS - 3.5, aPos.z - 1.0));
+	frameInA.setOrigin(Ptl::Vector3(aPos.x, aPos.y + RINGWHEEL_RADIUS - 3.2, aPos.z - 1.0));
 
 	mLeverConstr = new btGeneric6DofConstraint(*leverBody, frameInA, true);
 	mLeverConstr->setLinearUpperLimit(btVector3(0., 0., 0.));
