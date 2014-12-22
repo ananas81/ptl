@@ -31,7 +31,7 @@ RingwheelBodyComponent::RingwheelBodyComponent(Ogre::SceneManager *aSceneMgr,
 						  mPos,
 						  mOrient,
 						  new Ptl::BulletImporterShapeDispatcher("resources/ringwheel4.bcs", 0),
-						  2.0,
+						  10.0,
 						  Ogre::Vector3(0, 0, 0),
 						  0.1,
 						  0.1);
@@ -44,7 +44,7 @@ RingwheelBodyComponent::RingwheelBodyComponent(Ogre::SceneManager *aSceneMgr,
 						  Ogre::Vector3(aPos.x, aPos.y + RINGWHEEL_RADIUS - 2., aPos.z),
 						  mOrient,
 						  new Ptl::BtOgreShapeDispatcher(NULL, Ptl::BtOgreShapeDispatcher::SPHERE),
-						  20.0,
+						  50.0,
 						  Ogre::Vector3(0, 0, 0),
 						  1.0,
 						  1.0);
@@ -52,7 +52,7 @@ RingwheelBodyComponent::RingwheelBodyComponent(Ogre::SceneManager *aSceneMgr,
 	btRigidBody *wheelBody = static_cast<btRigidBody*>(mRingwheel->getCollisionObject());
 
 //	wheelBody->setFriction(1);
-	wheelBody->setDamping(0.01, 0.01);
+	wheelBody->setDamping(0.1, 0.1);
 	wheelBody->setFlags(0);
 	wheelBody->setActivationState(DISABLE_DEACTIVATION);
 
@@ -118,9 +118,9 @@ RingwheelBodyComponent::RingwheelBodyComponent(Ogre::SceneManager *aSceneMgr,
 		pGen6DOFSpring->setLinearUpperLimit(btVector3(0., 0., 0.));
 		pGen6DOFSpring->setLinearLowerLimit(btVector3(0., 0., 0.));
 		
-		pGen6DOFSpring->setAngularLowerLimit(btVector3(0.f, 0.f, -1.5f));
+		pGen6DOFSpring->setAngularLowerLimit(btVector3(0.f, 0.f, 0.f));
 		pGen6DOFSpring->setAngularUpperLimit(btVector3(0.f, 0.f, 1.5f));
-		pGen6DOFSpring->setStiffness(5, 2500.0f);
+		pGen6DOFSpring->setStiffness(5, 10000.0f);
 		pGen6DOFSpring->enableSpring(5, true);
 		
 		mWorld->addConstraint(pGen6DOFSpring, true);
@@ -156,8 +156,8 @@ RingwheelBodyComponent::RingwheelBodyComponent(Ogre::SceneManager *aSceneMgr,
 		pGen6DOFSpring->setLinearLowerLimit(btVector3(0., 0., 0.));
 		
 		pGen6DOFSpring->setAngularLowerLimit(btVector3(0.f, 0.f, -1.5f));
-		pGen6DOFSpring->setAngularUpperLimit(btVector3(0.f, 0.f, 1.5f));
-		pGen6DOFSpring->setStiffness(5, 2500.0f);
+		pGen6DOFSpring->setAngularUpperLimit(btVector3(0.f, 0.f, 0.f));
+		pGen6DOFSpring->setStiffness(5, 500.0f);
 		pGen6DOFSpring->enableSpring(5, true);
 		
 		mWorld->addConstraint(pGen6DOFSpring, true);

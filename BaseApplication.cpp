@@ -83,7 +83,7 @@ void BaseApplication::createCamera(void)
     // Position it at 500 in Z direction
 
 //    mCamera->setPosition(Ogre::Vector3(25,481,826));
-    mCamera->setPosition(Ogre::Vector3(-42,78,380));
+    mCamera->setPosition(Ogre::Vector3(0, 100, 100));
 
     // Look back along -Z
     mCamera->lookAt(Ogre::Vector3(0,0,-1300));
