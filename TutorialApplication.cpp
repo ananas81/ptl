@@ -144,10 +144,10 @@ bool TutorialApplication::frameRenderingQueued(const Ogre::FrameEvent &evt){
 //	mWorld->stepSimulation(1/60.f,10);
 	float fixedSubstep = 1.f/240.f;
 	int maxNumSubsteps = 10;
+	static int frameId = 0;
 
 #ifdef CAPTURE_SCREENSHOTS
 	char screenshotName[20];
-	static int frameId = 0;
 
 	sprintf(screenshotName, "screenshots/screen_shot%05d.png", frameId++);
 
@@ -159,6 +159,11 @@ bool TutorialApplication::frameRenderingQueued(const Ogre::FrameEvent &evt){
 	
 	if (!BaseApplication::frameRenderingQueued(evt))
 		return false;
+
+	if (frameId == 25)
+		mDeviceScene->postInit();
+
+	++frameId;
 
 	/* 
 	This next big chunk basically sends a raycast straight down from the camera's position 

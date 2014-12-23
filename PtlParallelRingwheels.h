@@ -17,8 +17,9 @@ class ParallelRingwheels : public BaseDeviceScene
 
 		void createScene();
 		virtual void keyPressed(const OIS::KeyEvent& evt);
+		virtual void postInit();
 
-		static const int NUM_RINGWHEELS = 3;
+		static const int NUM_RINGWHEELS = 1;
 
 	private:
 		Ptl::RingwheelBodyComponent *mRingwheel[NUM_RINGWHEELS];

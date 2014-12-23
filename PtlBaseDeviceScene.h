@@ -19,6 +19,7 @@ class BaseDeviceScene
 
 		virtual void createScene() = 0;
 		virtual void keyPressed(const OIS::KeyEvent& evt) = 0;
+		virtual void postInit() {};
 
 	protected:
 		btDiscreteDynamicsWorld* mWorld;

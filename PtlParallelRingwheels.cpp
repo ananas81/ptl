@@ -15,24 +15,26 @@ void ParallelRingwheels::createScene()
 
 	mRingwheel[rwId]->attachTo(mRingwheel[rwId]->getRootBody(), mRingwheel[rwId]->getRootAnchor());
 	++rwId;
-/*
-	mRingwheel[rwId] = new Ptl::RingwheelBodyComponent(mSceneMgr,
-						mWorld,
-						Ptl::Vector3(0., 100., Ptl::RingwheelBodyComponent::RINGWHEEL_WIDTH),
-						Ptl::Quaternion(1., 0., 0., 0.));
 
-	mRingwheel[rwId]->attachTo(mRingwheel[rwId]->getRootBody(), mRingwheel[rwId]->getRootAnchor());
-	mRingwheel[rwId]->attachTo(mRingwheel[rwId - 1]->getRootBody(), mRingwheel[rwId - 1]->getRootAnchor(1), 0);
-	++rwId;
+	for (rwId = 1; rwId < NUM_RINGWHEELS; ++rwId) {
+		mRingwheel[rwId] = new Ptl::RingwheelBodyComponent(mSceneMgr,
+							mWorld,
+							Ptl::Vector3(0., 100., Ptl::RingwheelBodyComponent::RINGWHEEL_WIDTH * rwId),
+							Ptl::Quaternion(1., 0., 0., 0.));
+	
+		mRingwheel[rwId]->attachTo(mRingwheel[rwId]->getRootBody(), mRingwheel[rwId]->getRootAnchor());
+		mRingwheel[rwId]->attachTo(mRingwheel[rwId - 1]->getRootBody(), mRingwheel[rwId - 1]->getRootAnchor(1), 0);
+	}
+}
 
-	mRingwheel[rwId] = new Ptl::RingwheelBodyComponent(mSceneMgr,
-						mWorld,
-						Ptl::Vector3(0., 100., Ptl::RingwheelBodyComponent::RINGWHEEL_WIDTH * 2),
-						Ptl::Quaternion(1., 0., 0., 0.));
+void ParallelRingwheels::postInit()
+{
+	int rwId;
+	double xPos[] = {-8.44, -12.24, 17.44};
+	double yPos[] = {-15.88, 13.07, 4.06};
 
-	mRingwheel[rwId]->attachTo(mRingwheel[rwId]->getRootBody(), mRingwheel[rwId]->getRootAnchor());
-	mRingwheel[rwId]->attachTo(mRingwheel[rwId - 1]->getRootBody(), mRingwheel[rwId - 1]->getRootAnchor(1), 1);
-*/
+	for (rwId = 0; rwId < NUM_RINGWHEELS; ++rwId)
+		mRingwheel[rwId]->addRingweight(xPos[rwId], yPos[rwId]);
 }
 
 void ParallelRingwheels::keyPressed(const OIS::KeyEvent& evt)
@@ -44,8 +46,8 @@ void ParallelRingwheels::keyPressed(const OIS::KeyEvent& evt)
 			static bool motorOn = false;
 			motorOn = !motorOn;
 			if (motorOn)
-				mRingwheel[0]->getHinge()->enableAngularMotor(true, -800, 400);
-//				mRingwheel[0]->getHinge()->enableAngularMotor(true, -2000, 1000);
+//				mRingwheel[0]->getHinge()->enableAngularMotor(true, -800, 400);
+				mRingwheel[0]->getHinge()->enableAngularMotor(true, -2000, 1000);
 			else
 				mRingwheel[0]->getHinge()->enableMotor(false);
 	

@@ -36,18 +36,6 @@ RingwheelBodyComponent::RingwheelBodyComponent(Ogre::SceneManager *aSceneMgr,
 						  0.001,
 						  0.001);
 
-	/* Create sphere weight */
-	sprintf(bodyName, "Ringweight_%d", ++mRingweightElementsCnt);
-	mRingweight = new Ptl::OgrePhysicalBody(mSceneMgr,
-						  bodyName,
-						  "resources/Ringweight.mesh",
-						  Ogre::Vector3(aPos.x - 8.44, aPos.y - 15.88, aPos.z),
-						  mOrient,
-						  new Ptl::BtOgreShapeDispatcher(NULL, Ptl::BtOgreShapeDispatcher::SPHERE),
-						  50.0,
-						  Ogre::Vector3(0, 0, 0),
-						  1.0,
-						  1.0);
 
 	btRigidBody *wheelBody = static_cast<btRigidBody*>(mRingwheel->getCollisionObject());
 
@@ -56,14 +44,6 @@ RingwheelBodyComponent::RingwheelBodyComponent(Ogre::SceneManager *aSceneMgr,
 	wheelBody->setFlags(0);
 	wheelBody->setActivationState(DISABLE_DEACTIVATION);
 
-	btRigidBody *ringweightBody = static_cast<btRigidBody*>(mRingweight->getCollisionObject());
-
-	ringweightBody->setFriction(1);
-//	ringweightBody->setRollingFriction(1);
-	ringweightBody->setDamping(0.1f,0.1f);
-//+	ringweightBody->setFlags(0);
-
-	mWorld->addRigidBody(ringweightBody);
 	mWorld->addRigidBody(wheelBody);
 
 	Ptl::Quaternion rear_blocker_rot[] = { Ptl::Quaternion(1., 0., 0., 0.047),
@@ -191,6 +171,33 @@ RingwheelBodyComponent::RingwheelBodyComponent(Ogre::SceneManager *aSceneMgr,
 	mLeverConstr->setAngularLowerLimit(btVector3(0., 0., 0.));
 
 	mWorld->addConstraint(mLeverConstr);
+}
+
+void RingwheelBodyComponent::addRingweight(double x, double y)
+{
+	char bodyName[15];
+
+	/* Create sphere weight */
+	sprintf(bodyName, "Ringweight_%d", ++mRingweightElementsCnt);
+	mRingweight = new Ptl::OgrePhysicalBody(mSceneMgr,
+						  bodyName,
+						  "resources/Ringweight.mesh",
+						  Ogre::Vector3(mPos.x + x, mPos.y + y, mPos.z),
+						  mOrient,
+						  new Ptl::BtOgreShapeDispatcher(NULL, Ptl::BtOgreShapeDispatcher::SPHERE),
+						  50.0,
+						  Ogre::Vector3(0, 0, 0),
+						  1.0,
+						  1.0);
+
+	btRigidBody *ringweightBody = static_cast<btRigidBody*>(mRingweight->getCollisionObject());
+
+	ringweightBody->setFriction(1);
+//	ringweightBody->setRollingFriction(1);
+	ringweightBody->setDamping(0.1f,0.1f);
+//	ringweightBody->setFlags(0);
+
+	mWorld->addRigidBody(ringweightBody);
 }
 
 RingwheelBodyComponent::~RingwheelBodyComponent()
