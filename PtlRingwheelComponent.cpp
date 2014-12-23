@@ -31,10 +31,10 @@ RingwheelBodyComponent::RingwheelBodyComponent(Ogre::SceneManager *aSceneMgr,
 						  mPos,
 						  mOrient,
 						  new Ptl::BulletImporterShapeDispatcher("resources/ringwheel4.bcs", 0),
-						  10.0,
+						  30.0,
 						  Ogre::Vector3(0, 0, 0),
-						  1.0,
-						  1.0);
+						  0.001,
+						  0.001);
 
 	/* Create sphere weight */
 	sprintf(bodyName, "Ringweight_%d", ++mRingweightElementsCnt);
@@ -120,7 +120,7 @@ RingwheelBodyComponent::RingwheelBodyComponent(Ogre::SceneManager *aSceneMgr,
 		pGen6DOFSpring->setLinearLowerLimit(btVector3(0., 0., 0.));
 		
 		pGen6DOFSpring->setAngularLowerLimit(btVector3(0.f, 0.f, 0.f));
-		pGen6DOFSpring->setAngularUpperLimit(btVector3(0.f, 0.f, 1.5f));
+		pGen6DOFSpring->setAngularUpperLimit(btVector3(0.f, 0.f, 1.0f));
 		pGen6DOFSpring->setStiffness(5, 1000.0f);
 		pGen6DOFSpring->enableSpring(5, true);
 		
@@ -158,7 +158,7 @@ RingwheelBodyComponent::RingwheelBodyComponent(Ogre::SceneManager *aSceneMgr,
 		
 		pGen6DOFSpring->setAngularLowerLimit(btVector3(0.f, 0.f, -1.5f));
 		pGen6DOFSpring->setAngularUpperLimit(btVector3(0.f, 0.f, 0.f));
-		pGen6DOFSpring->setStiffness(5, 2500.0f);
+		pGen6DOFSpring->setStiffness(5, 100.0f);
 		pGen6DOFSpring->enableSpring(5, true);
 		
 		mWorld->addConstraint(pGen6DOFSpring, true);
