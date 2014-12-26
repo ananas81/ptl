@@ -31,7 +31,7 @@ RingwheelBodyComponent::RingwheelBodyComponent(Ogre::SceneManager *aSceneMgr,
 						  mPos,
 						  mOrient,
 						  new Ptl::BulletImporterShapeDispatcher("resources/ringwheel4.bcs", 0),
-						  30.0,
+						  3.0,
 						  Ogre::Vector3(0, 0, 0),
 						  0.001,
 						  0.001);
@@ -83,6 +83,8 @@ RingwheelBodyComponent::RingwheelBodyComponent(Ogre::SceneManager *aSceneMgr,
 	
 		btRigidBody *rearblockerBody = static_cast<btRigidBody*>(mRearBlocker[i]->getCollisionObject());
 
+		rearblockerBody->setActivationState(DISABLE_DEACTIVATION);
+
 		rearblockerBody->setDamping(0.1, 0.1);
 
 		mWorld->addRigidBody(rearblockerBody);
@@ -120,6 +122,7 @@ RingwheelBodyComponent::RingwheelBodyComponent(Ogre::SceneManager *aSceneMgr,
 							  1.0);
 	
 		btRigidBody *frontblockerBody = static_cast<btRigidBody*>(mFrontBlocker[i]->getCollisionObject());
+		frontblockerBody->setActivationState(DISABLE_DEACTIVATION);
 
 		frontblockerBody->setDamping(0.5, 0.5);
 
@@ -158,6 +161,7 @@ RingwheelBodyComponent::RingwheelBodyComponent(Ogre::SceneManager *aSceneMgr,
 						  0.001);
 
 	btRigidBody *leverBody = static_cast<btRigidBody*>(mLever->getCollisionObject());
+	leverBody->setActivationState(DISABLE_DEACTIVATION);
 
 	mWorld->addRigidBody(leverBody);
 
@@ -203,6 +207,7 @@ void RingwheelBodyComponent::addRingweight()
 						  1.0);
 
 	btRigidBody *ringweightBody = static_cast<btRigidBody*>(mRingweight->getCollisionObject());
+	ringweightBody->setActivationState(DISABLE_DEACTIVATION);
 
 	ringweightBody->setFriction(1);
 //	ringweightBody->setRollingFriction(1);
@@ -236,7 +241,7 @@ btTransform RingwheelBodyComponent::getRootAnchor(int anchorId)
 	btTransform frame = btTransform::getIdentity();
 
 	frame.setOrigin(btVector3(0, 0, RINGWHEEL_WIDTH/2.0));
-	frame.setRotation(Ptl::Quaternion(0.5, 0., 0., 0.866));
+	frame.setRotation(Ptl::Quaternion(0.87, 0., 0., 0.5));
 
 	return frame;
 }
