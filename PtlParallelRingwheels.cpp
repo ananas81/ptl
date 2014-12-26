@@ -30,11 +30,9 @@ void ParallelRingwheels::createScene()
 void ParallelRingwheels::postInit()
 {
 	int rwId;
-	double xPos[] = {-8.44, -12.24, 17.44};
-	double yPos[] = {-15.88, 13.07, 4.06};
 
 	for (rwId = 0; rwId < NUM_RINGWHEELS; ++rwId)
-		mRingwheel[rwId]->addRingweight(xPos[rwId], yPos[rwId]);
+		mRingwheel[rwId]->addRingweight();
 }
 
 void ParallelRingwheels::keyPressed(const OIS::KeyEvent& evt)

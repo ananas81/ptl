@@ -32,11 +32,6 @@ btCollisionObject* PhysicalBody::getCollisionObject() const
 	return mCollisionObject;
 }
 
-void PhysicalBody::setMotionState(btMotionState* motionState)
-{
-	mMotionState = motionState;
-}
-
 void PhysicalBody::initPhysics()
 {
 	mCollisionShape->calculateLocalInertia(mMass, mInertia);

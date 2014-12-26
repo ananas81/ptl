@@ -33,7 +33,6 @@ class PhysicalBody
 			     double rollingFriction);
 		virtual ~PhysicalBody();
 		virtual btCollisionObject* getCollisionObject() const;
-		virtual void setMotionState(btMotionState *motionState);
 
 	protected:
 		btMotionState *mMotionState;

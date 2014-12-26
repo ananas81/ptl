@@ -28,7 +28,7 @@ class RingwheelBodyComponent : public BodyComponent
 		virtual void switchToKinematic();
 		virtual void switchToDynamic();
 		virtual btHingeConstraint* getHinge();
-		virtual void addRingweight(double x, double y);
+		virtual void addRingweight();
 
 		static const float RINGWHEEL_RADIUS = 20.0;
 		static const float RINGWHEEL_WIDTH = 12.0;

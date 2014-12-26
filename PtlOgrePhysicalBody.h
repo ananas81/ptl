@@ -26,6 +26,7 @@ class OgrePhysicalBody : public PhysicalBody
 				virtual void getWorldTransform(btTransform &worldTrans) const;
 				virtual void setWorldTransform(const btTransform &worldTrans);
 				void setKinematicPos(btTransform &currentPos);
+			    	Ogre::SceneNode *getNode();
 
 			protected:
 			    Ogre::SceneNode *mVisualObj;
@@ -63,7 +64,7 @@ class OgrePhysicalBody : public PhysicalBody
 		virtual Ogre::Quaternion getOrient() const;
 		virtual void setKinematicPos(btTransform &currentPos);
 		virtual float getMass();
-		btMotionState* getMotionState() const;
+		OgrePhysicalBody::MotionState* getMotionState() const;
 
 	private:
 		Ogre::SceneManager *mSceneManager;

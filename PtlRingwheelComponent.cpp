@@ -173,9 +173,21 @@ RingwheelBodyComponent::RingwheelBodyComponent(Ogre::SceneManager *aSceneMgr,
 	mWorld->addConstraint(mLeverConstr);
 }
 
-void RingwheelBodyComponent::addRingweight(double x, double y)
+void RingwheelBodyComponent::addRingweight()
 {
 	char bodyName[15];
+	double x, y, cur_rad;
+	Ogre::Quaternion cur_orient;
+        Ogre::Quaternion rad_180(0., 0., 0., 1.0);
+        Ogre::Quaternion rad_16_89(0.99, 0., 0., -0.147);
+        Ogre::Quaternion rad_163_11 = rad_180 * rad_16_89;
+
+	cur_orient = mRingwheel->getMotionState()->getNode()->getOrientation();
+	cur_orient = cur_orient * rad_163_11;
+	cur_rad = cur_orient.getRoll().valueRadians();
+
+	x = cos((double) cur_rad) * 18.0,
+	y = sin((double) cur_rad) * 18.0;
 
 	/* Create sphere weight */
 	sprintf(bodyName, "Ringweight_%d", ++mRingweightElementsCnt);
