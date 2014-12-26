@@ -31,7 +31,7 @@ RingwheelBodyComponent::RingwheelBodyComponent(Ogre::SceneManager *aSceneMgr,
 						  mPos,
 						  mOrient,
 						  new Ptl::BulletImporterShapeDispatcher("resources/ringwheel4.bcs", 0),
-						  3.0,
+						  30.0,
 						  Ogre::Vector3(0, 0, 0),
 						  0.001,
 						  0.001);
@@ -241,7 +241,9 @@ btTransform RingwheelBodyComponent::getRootAnchor(int anchorId)
 	btTransform frame = btTransform::getIdentity();
 
 	frame.setOrigin(btVector3(0, 0, RINGWHEEL_WIDTH/2.0));
-	frame.setRotation(Ptl::Quaternion(0.87, 0., 0., 0.5));
+//	frame.setRotation(Ptl::Quaternion(0.87, 0., 0., 0.5)); //60 degree shift
+	frame.setRotation(Ptl::Quaternion(0.5, 0., 0., 0.866));//120 degree shift
+
 
 	return frame;
 }
