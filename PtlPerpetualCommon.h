@@ -37,7 +37,6 @@ public:
 		return btQuaternion(mX, mY, mZ, mW);
 	}
 
-private:
 	double mW;
 	double mX;
 	double mY;
@@ -61,7 +60,6 @@ public:
 		return btVector3(mX, mY, mZ);
 	}
 
-private:
 	double mX;
 	double mY;
 	double mZ;

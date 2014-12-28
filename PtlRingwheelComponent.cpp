@@ -21,7 +21,9 @@ RingwheelBodyComponent::RingwheelBodyComponent(Ogre::SceneManager *aSceneMgr,
 				       mRingweight(NULL),
 				       mRingwheelHinge(NULL)
 {
-	char bodyName[15];
+	btTransform frameInA;
+	btTransform frameInB;
+	char bodyName[30];
 
 	/* Create ringwheel */
 	sprintf(bodyName, "Ringwheel_%d", ++mRingwheelElementsCnt);
@@ -46,6 +48,7 @@ RingwheelBodyComponent::RingwheelBodyComponent(Ogre::SceneManager *aSceneMgr,
 
 	mWorld->addRigidBody(wheelBody);
 
+	/* Blockers */
 	Ptl::Quaternion rear_blocker_rot[] = { Ptl::Quaternion(1., 0., 0., 0.047),
 					       Ptl::Quaternion(0.67, 0.044, 0.02, 0.74),
 					       Ptl::Quaternion(-0.047, 0.04, 0.022, 1.),
@@ -63,8 +66,6 @@ RingwheelBodyComponent::RingwheelBodyComponent(Ogre::SceneManager *aSceneMgr,
 					     Ptl::Vector3(-8.89, -13.30, 0.),
 					     Ptl::Vector3(-13.30, 8.89, 0.) };
 
-	btTransform frameInA;
-	btTransform frameInB;
 	btGeneric6DofSpringConstraint* pGen6DOFSpring;
 
 	for (int i = 0; i < 4; ++i) {
@@ -230,7 +231,7 @@ btTransform RingwheelBodyComponent::getRootAnchor()
 {
 	btTransform frame = btTransform::getIdentity();
 
-	frame.setOrigin(btVector3(0, 0, -RINGWHEEL_WIDTH/2.0));
+	frame.setOrigin(btVector3(0., 0., 0.));
 	frame.setRotation(Ptl::Quaternion(mOrient));
 
 	return frame;
@@ -240,10 +241,16 @@ btTransform RingwheelBodyComponent::getRootAnchor(int anchorId)
 {
 	btTransform frame = btTransform::getIdentity();
 
-	frame.setOrigin(btVector3(0, 0, RINGWHEEL_WIDTH/2.0));
-//	frame.setRotation(Ptl::Quaternion(0.87, 0., 0., 0.5)); //60 degree shift
-	frame.setRotation(Ptl::Quaternion(0.5, 0., 0., 0.866));//120 degree shift
-
+	switch (anchorId) {
+	case 1:
+		frame.setOrigin(btVector3(0, 0, RINGWHEEL_WIDTH/2.0));
+		frame.setRotation(Ptl::Quaternion(0.87, 0., 0., 0.5)); //60 degree shift
+//		frame.setRotation(Ptl::Quaternion(0.5, 0., 0., 0.866));//120 degree shift
+		break;
+	case 2:
+		frame.setOrigin(btVector3(0, 0, -RINGWHEEL_WIDTH/2.0));
+		break;
+	}
 
 	return frame;
 }

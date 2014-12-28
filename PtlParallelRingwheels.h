@@ -19,10 +19,20 @@ class ParallelRingwheels : public BaseDeviceScene
 		virtual void keyPressed(const OIS::KeyEvent& evt);
 		virtual void postInit();
 
-		static const int NUM_RINGWHEELS = 3;
+		static const int NUM_RINGWHEELS = 6;
+		static const float GEARWHEEL_RADIUS = 2.5;
+		static const float GEARWHEEL_AXLE_LENGTH = 5.0;
+		static const float FLYWHEEL_RADIUS = 50.0;
 
 	private:
+		OgrePhysicalBody *mFlywheel;
+		OgrePhysicalBody *mRingwheelGear;
+		btGeneric6DofConstraint *mRwgearAxleConstr;
+		btHingeConstraint *mFlywheelHinge;
+		btGearConstraint *mFlywheelGearConstr;
 		Ptl::RingwheelBodyComponent *mRingwheel[NUM_RINGWHEELS];
+		static int mFlywheelElementsCnt;
+		static int mRingwheelGearElementsCnt;
 };
 
 };
