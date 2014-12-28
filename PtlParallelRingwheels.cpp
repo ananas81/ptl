@@ -26,9 +26,10 @@ void ParallelRingwheels::createScene()
 						  bodyName,
 						  "resources/flywheel_rw.mesh",
 						  Ptl::Vector3(pos.mX - GEARWHEEL_RADIUS - FLYWHEEL_RADIUS, pos.mY,
-							       pos.mZ - GEARWHEEL_AXLE_LENGTH - RingwheelBodyComponent::RINGWHEEL_WIDTH),
+							       pos.mZ - GEARWHEEL_AXLE_LENGTH - RingwheelBodyComponent::RINGWHEEL_WIDTH/2),
 						  orient,
 						  new Ptl::BtOgreShapeDispatcher(NULL, Ptl::BtOgreShapeDispatcher::CONVEX_HULL),
+						  //new Ptl::BulletImporterShapeDispatcher("resources/flywheel_rw.bcs", 0),
 						  100.0,
 						  Ogre::Vector3(0, 0, 0),
 						  1.0,
@@ -40,10 +41,7 @@ void ParallelRingwheels::createScene()
 	mWorld->addRigidBody(flywheelBody);
 
 	/* Add flywheel hinge */
-	frameInA.setOrigin(btVector3(0., 0., 0.));
-	frameInA.setRotation(Ptl::Quaternion(1., 0., 0., 0.));
-	mFlywheelHinge = new btHingeConstraint(*flywheelBody,
-					    frameInA, true);
+	mFlywheelHinge = new btHingeConstraint(*flywheelBody, btVector3(0., 0., 0.), btVector3(0., 0., 1.), true);
 	mWorld->addConstraint(mFlywheelHinge);
 
 	/* Add ringwheel gear */
@@ -69,9 +67,9 @@ void ParallelRingwheels::createScene()
 	btVector3 axisA(0, 0, 1);
 	btVector3 axisB(0, 0, 1);
 
-//	mFlywheelGearConstr = new btGearConstraint(*flywheelBody, *rwgearBody, axisA, axisB, 10.0);
+	mFlywheelGearConstr = new btGearConstraint(*flywheelBody, *rwgearBody, axisA, axisB, 10.0);
 
-//	mWorld->addConstraint(mFlywheelGearConstr);
+	mWorld->addConstraint(mFlywheelGearConstr);
 
 	mRingwheel[rwId] = new Ptl::RingwheelBodyComponent(mSceneMgr,
 						mWorld,
@@ -121,10 +119,12 @@ void ParallelRingwheels::keyPressed(const OIS::KeyEvent& evt)
 			static bool motorOn = false;
 			motorOn = !motorOn;
 			if (motorOn)
-				mRingwheel[0]->getHinge()->enableAngularMotor(true, -800, 400);
+//				mRingwheel[0]->getHinge()->enableAngularMotor(true, -800, 400);
 //				mRingwheel[0]->getHinge()->enableAngularMotor(true, -2000, 1000);
+				mFlywheelHinge->enableAngularMotor(true, -2000, 1000);
 			else
-				mRingwheel[0]->getHinge()->enableMotor(false);
+//				mRingwheel[0]->getHinge()->enableMotor(false);
+				mFlywheelHinge->enableMotor(false);
 	
 			break;
 		}
