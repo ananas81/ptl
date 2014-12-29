@@ -21,55 +21,55 @@ void ParallelRingwheels::createScene()
 	Ptl::Vector3 pos(POS_X, POS_Y, POS_Z);
 	Ptl::Quaternion orient(1., 0., 0., 0.);
 
-	sprintf(bodyName, "Flywheel_%d", ++mFlywheelElementsCnt);
-	mFlywheel = new Ptl::OgrePhysicalBody(mSceneMgr,
-						  bodyName,
-						  "resources/flywheel_rw.mesh",
-						  Ptl::Vector3(pos.mX - GEARWHEEL_RADIUS - FLYWHEEL_RADIUS, pos.mY,
-							       pos.mZ - GEARWHEEL_AXLE_LENGTH - RingwheelBodyComponent::RINGWHEEL_WIDTH/2),
-						  orient,
-						  new Ptl::BtOgreShapeDispatcher(NULL, Ptl::BtOgreShapeDispatcher::CONVEX_HULL),
-						  //new Ptl::BulletImporterShapeDispatcher("resources/flywheel_rw.bcs", 0),
-						  100.0,
-						  Ogre::Vector3(0, 0, 0),
-						  1.0,
-						  1.0);
-
-	btRigidBody *flywheelBody = static_cast<btRigidBody*>(mFlywheel->getCollisionObject());
-	flywheelBody->setActivationState(DISABLE_DEACTIVATION);
-
-	mWorld->addRigidBody(flywheelBody);
-
-	/* Add flywheel hinge */
-	mFlywheelHinge = new btHingeConstraint(*flywheelBody, btVector3(0., 0., 0.), btVector3(0., 0., 1.), true);
-	mWorld->addConstraint(mFlywheelHinge);
-
-	/* Add ringwheel gear */
-	sprintf(bodyName, "RingwheelGear_%d", ++mRingwheelGearElementsCnt);
-	mRingwheelGear = new Ptl::OgrePhysicalBody(mSceneMgr,
-						  bodyName,
-						  "resources/ringwheel_gear.mesh",
-						  Ptl::Vector3(pos.mX, pos.mY, pos.mZ + GEARWHEEL_AXLE_LENGTH),
-						  orient,
-//						  new Ptl::BulletImporterShapeDispatcher("resources/ringwheel_gear.bcs", 0),
-						  new Ptl::BtOgreShapeDispatcher(NULL, Ptl::BtOgreShapeDispatcher::CONVEX_HULL),
-						  1.0,
-						  Ogre::Vector3(0, 0, 0),
-						  1.0,
-						  1.0);
-
-	btRigidBody *rwgearBody = static_cast<btRigidBody*>(mRingwheelGear->getCollisionObject());
-	rwgearBody->setActivationState(DISABLE_DEACTIVATION);
-
-	mWorld->addRigidBody(rwgearBody);
-
-	/* Gear Constraint */
-	btVector3 axisA(0, 0, 1);
-	btVector3 axisB(0, 0, 1);
-
-	mFlywheelGearConstr = new btGearConstraint(*flywheelBody, *rwgearBody, axisA, axisB, 10.0);
-
-	mWorld->addConstraint(mFlywheelGearConstr);
+//	sprintf(bodyName, "Flywheel_%d", ++mFlywheelElementsCnt);
+//	mFlywheel = new Ptl::OgrePhysicalBody(mSceneMgr,
+//						  bodyName,
+//						  "resources/flywheel_rw.mesh",
+//						  Ptl::Vector3(pos.mX - GEARWHEEL_RADIUS - FLYWHEEL_RADIUS, pos.mY,
+//							       pos.mZ - GEARWHEEL_AXLE_LENGTH - RingwheelBodyComponent::RINGWHEEL_WIDTH/2),
+//						  orient,
+//						  new Ptl::BtOgreShapeDispatcher(NULL, Ptl::BtOgreShapeDispatcher::CONVEX_HULL),
+//						  //new Ptl::BulletImporterShapeDispatcher("resources/flywheel_rw.bcs", 0),
+//						  100.0,
+//						  Ogre::Vector3(0, 0, 0),
+//						  1.0,
+//						  1.0);
+//
+//	btRigidBody *flywheelBody = static_cast<btRigidBody*>(mFlywheel->getCollisionObject());
+//	flywheelBody->setActivationState(DISABLE_DEACTIVATION);
+//
+//	mWorld->addRigidBody(flywheelBody);
+//
+//	/* Add flywheel hinge */
+//	mFlywheelHinge = new btHingeConstraint(*flywheelBody, btVector3(0., 0., 0.), btVector3(0., 0., 1.), true);
+//	mWorld->addConstraint(mFlywheelHinge);
+//
+//	/* Add ringwheel gear */
+//	sprintf(bodyName, "RingwheelGear_%d", ++mRingwheelGearElementsCnt);
+//	mRingwheelGear = new Ptl::OgrePhysicalBody(mSceneMgr,
+//						  bodyName,
+//						  "resources/ringwheel_gear.mesh",
+//						  Ptl::Vector3(pos.mX, pos.mY, pos.mZ + GEARWHEEL_AXLE_LENGTH),
+//						  orient,
+////						  new Ptl::BulletImporterShapeDispatcher("resources/ringwheel_gear.bcs", 0),
+//						  new Ptl::BtOgreShapeDispatcher(NULL, Ptl::BtOgreShapeDispatcher::CONVEX_HULL),
+//						  1.0,
+//						  Ogre::Vector3(0, 0, 0),
+//						  1.0,
+//						  1.0);
+//
+//	btRigidBody *rwgearBody = static_cast<btRigidBody*>(mRingwheelGear->getCollisionObject());
+//	rwgearBody->setActivationState(DISABLE_DEACTIVATION);
+//
+//	mWorld->addRigidBody(rwgearBody);
+//
+//	/* Gear Constraint */
+//	btVector3 axisA(0, 0, 1);
+//	btVector3 axisB(0, 0, 1);
+//
+//	mFlywheelGearConstr = new btGearConstraint(*flywheelBody, *rwgearBody, axisA, axisB, 10.0);
+//
+//	mWorld->addConstraint(mFlywheelGearConstr);
 
 	mRingwheel[rwId] = new Ptl::RingwheelBodyComponent(mSceneMgr,
 						mWorld,
@@ -79,17 +79,17 @@ void ParallelRingwheels::createScene()
 	mRingwheel[rwId]->attachTo(mRingwheel[rwId]->getRootBody(), mRingwheel[rwId]->getRootAnchor());
 	++rwId;
 
-	/* Axle Constraint */
-	frameInA = btTransform::getIdentity();
-	frameInA.setOrigin(btVector3(0., 0., 0. + GEARWHEEL_AXLE_LENGTH));
-
-	mRwgearAxleConstr = new btGeneric6DofConstraint(*rwgearBody, *mRingwheel[0]->getRootBody(), frameInA, mRingwheel[0]->getRootAnchor(2), true);
-	mRwgearAxleConstr->setLinearUpperLimit(btVector3(0., 0., 0.));
-	mRwgearAxleConstr->setLinearLowerLimit(btVector3(0., 0., 0.));
-	mRwgearAxleConstr->setAngularUpperLimit(btVector3(0., 0., 0.));
-	mRwgearAxleConstr->setAngularLowerLimit(btVector3(0., 0., 0.));
-
-	mWorld->addConstraint(mRwgearAxleConstr);
+//	/* Axle Constraint */
+//	frameInA = btTransform::getIdentity();
+//	frameInA.setOrigin(btVector3(0., 0., 0. + GEARWHEEL_AXLE_LENGTH));
+//
+//	mRwgearAxleConstr = new btGeneric6DofConstraint(*rwgearBody, *mRingwheel[0]->getRootBody(), frameInA, mRingwheel[0]->getRootAnchor(2), true);
+//	mRwgearAxleConstr->setLinearUpperLimit(btVector3(0., 0., 0.));
+//	mRwgearAxleConstr->setLinearLowerLimit(btVector3(0., 0., 0.));
+//	mRwgearAxleConstr->setAngularUpperLimit(btVector3(0., 0., 0.));
+//	mRwgearAxleConstr->setAngularLowerLimit(btVector3(0., 0., 0.));
+//
+//	mWorld->addConstraint(mRwgearAxleConstr);
 
 	for (rwId = 1; rwId < NUM_RINGWHEELS; ++rwId) {
 		mRingwheel[rwId] = new Ptl::RingwheelBodyComponent(mSceneMgr,
