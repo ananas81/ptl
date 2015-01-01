@@ -32,12 +32,13 @@ class RingwheelBodyComponent : public BodyComponent
 
 		static const float RINGWHEEL_RADIUS = 20.0;
 		static const float RINGWHEEL_WIDTH = 12.0;
+		static const int NUM_SECTIONS = 5;
 
 	protected:
 		OgrePhysicalBody *mRingwheel;
 		OgrePhysicalBody *mRingweight;
-		OgrePhysicalBody *mRearBlocker[4];
-		OgrePhysicalBody *mFrontBlocker[4];
+		OgrePhysicalBody *mRearBlocker[5];
+		OgrePhysicalBody *mFrontBlocker[5];
 		OgrePhysicalBody *mLever;
 		btHingeConstraint *mRingwheelHinge;
 		btGeneric6DofConstraint *mLeverConstr;

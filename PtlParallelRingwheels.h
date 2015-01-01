@@ -19,7 +19,7 @@ class ParallelRingwheels : public BaseDeviceScene
 		virtual void keyPressed(const OIS::KeyEvent& evt);
 		virtual void postInit();
 
-		static const int NUM_RINGWHEELS = 6;
+		static const int NUM_RINGWHEELS = 1;
 		static const float GEARWHEEL_RADIUS = 2.5;
 		static const float GEARWHEEL_AXLE_LENGTH = 5.0;
 		static const float FLYWHEEL_RADIUS = 50.0;
