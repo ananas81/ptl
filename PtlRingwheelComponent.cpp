@@ -187,16 +187,17 @@ void RingwheelBodyComponent::addRingweight()
 	char bodyName[15];
 	double x, y, cur_rad;
 	Ogre::Quaternion cur_orient;
-        Ogre::Quaternion rad_180(0., 0., 0., 1.0);
-        Ogre::Quaternion rad_16_89(0.99, 0., 0., 0.11);
-        Ogre::Quaternion rad_163_11 = rad_180 * rad_16_89;
+        Ogre::Quaternion rad_n77_5(0.78, 0., 0., -0.63);
 
 	cur_orient = mRingwheel->getMotionState()->getNode()->getOrientation();
-	cur_orient = cur_orient * rad_163_11;
+	cur_orient = cur_orient * rad_n77_5;
 	cur_rad = cur_orient.getRoll().valueRadians();
 
 	x = cos((double) cur_rad) * 18.0,
 	y = sin((double) cur_rad) * 18.0;
+
+	double cur_angle = cur_rad * 180.0 / 3.14;
+	printf("cur_rad: %2.2f, cur_angle: %2.2f, x: %2.2f, y: %2.2f\n", cur_rad, cur_angle, x, y);
 
 	/* Create sphere weight */
 	sprintf(bodyName, "Ringweight_%d", ++mRingweightElementsCnt);
@@ -248,8 +249,8 @@ btTransform RingwheelBodyComponent::getRootAnchor(int anchorId)
 	switch (anchorId) {
 	case 1:
 		frame.setOrigin(btVector3(0, 0, RINGWHEEL_WIDTH/2.0));
-		frame.setRotation(Ptl::Quaternion(0.87, 0., 0., 0.5)); //60 degree shift
-//		frame.setRotation(Ptl::Quaternion(0.5, 0., 0., 0.866));//120 degree shift
+//		frame.setRotation(Ptl::Quaternion(0.87, 0., 0., 0.5)); //60 degree shift
+		frame.setRotation(Ptl::Quaternion(0.5, 0., 0., 0.866));//120 degree shift
 		break;
 	case 2:
 		frame.setOrigin(btVector3(0, 0, -RINGWHEEL_WIDTH/2.0));

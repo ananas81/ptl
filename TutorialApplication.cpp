@@ -128,7 +128,7 @@ void TutorialApplication::initPhysics()
 	mDeviceScene->createScene();
 
 	mDebugDrawer = new DebugDrawer(mSceneMgr, mWorld);
-	mDebugDrawer->setDebugMode(1);
+	mDebugDrawer->setDebugMode(0);
 	mWorld->setDebugDrawer(mDebugDrawer);
 }
 
