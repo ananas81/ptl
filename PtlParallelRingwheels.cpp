@@ -119,8 +119,8 @@ void ParallelRingwheels::keyPressed(const OIS::KeyEvent& evt)
 			static bool motorOn = false;
 			motorOn = !motorOn;
 			if (motorOn)
-//				mRingwheel[0]->getHinge()->enableAngularMotor(true, -800, 400);
-				mRingwheel[0]->getHinge()->enableAngularMotor(true, -2000, 1000);
+				mRingwheel[0]->getHinge()->enableAngularMotor(true, -1200, 300);
+//				mRingwheel[0]->getHinge()->enableAngularMotor(true, -2000, 1000);
 //				mFlywheelHinge->enableAngularMotor(true, -2000, 1000);
 			else
 				mRingwheel[0]->getHinge()->enableMotor(false);
