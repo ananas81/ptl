@@ -255,6 +255,12 @@ btTransform RingwheelBodyComponent::getRootAnchor(int anchorId)
 	case 2:
 		frame.setOrigin(btVector3(0, 0, -RINGWHEEL_WIDTH/2.0));
 		break;
+	case 3:
+		frame.setOrigin(btVector3(-0.5, 0, -RINGWHEEL_WIDTH/2.0));
+		break;
+	case 4:
+		frame.setOrigin(btVector3(0.5, 0, -RINGWHEEL_WIDTH/2.0));
+		break;
 	}
 
 	return frame;

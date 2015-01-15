@@ -20,9 +20,9 @@ class ParallelRingwheels : public BaseDeviceScene
 		virtual void postInit();
 
 		static const int NUM_RINGWHEELS = 1;
-		static const float GEARWHEEL_RADIUS = 2.5;
-		static const float GEARWHEEL_AXLE_LENGTH = 5.0;
-		static const float FLYWHEEL_RADIUS = 50.0;
+		static const double GEARWHEEL_RADIUS = 2.5;
+		static const double GEARWHEEL_AXLE_LENGTH = 5.0;
+		static const double FLYWHEEL_RADIUS = 50.0;
 
 	private:
 		OgrePhysicalBody *mFlywheel;
