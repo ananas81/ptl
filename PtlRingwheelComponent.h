@@ -15,7 +15,8 @@ class RingwheelBodyComponent : public BodyComponent
 		RingwheelBodyComponent(Ogre::SceneManager *aSceneMgr,
 			      btDiscreteDynamicsWorld *aWorld,
 			      const Ogre::Vector3& aPos,
-			      const Ogre::Quaternion& aOrient
+			      const Ogre::Quaternion& aOrient,
+			      bool createBodies = true
 			     );
 
 		virtual ~RingwheelBodyComponent();

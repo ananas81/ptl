@@ -25,6 +25,7 @@ SET(SRC
     "PtlRackComponent.cpp"
     "PtlFlywheelChainWeights.cpp"
     "PtlRingwheelComponent.cpp"
+    "PtlRingwheelGearComponent.cpp"
     "PtlParallelRingwheels.cpp"
     "PtlLeverComponent.cpp"
     "PtlSlotBlockerComponent.cpp"
