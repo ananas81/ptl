@@ -257,7 +257,8 @@ btTransform RingwheelBodyComponent::getRootAnchor(int anchorId)
 //		frame.setRotation(Ptl::Quaternion(0.87, 0., 0., 0.5)); //60 degree shift
 //		frame.setRotation(Ptl::Quaternion(0.5, 0., 0., 0.866));//120 degree shift
 //		frame.setRotation(Ptl::Quaternion(1., 0., 0., 0.09));//10 degree shift
-		frame.setRotation(Ptl::Quaternion(1., 0., 0., 0.04));//5 degree shift
+//		frame.setRotation(Ptl::Quaternion(1., 0., 0., 0.04));//5 degree shift
+		frame.setRotation(Ptl::Quaternion(1., 0., 0., 0.01));//1 degree shift
 		break;
 	case 2:
 		frame.setOrigin(btVector3(0, 0, -RINGWHEEL_WIDTH/2.0));
